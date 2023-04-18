@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  tri-lari-scoring:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile-rstudio
+    ports:
+      - "8787:8787"
+    environment:
+      PASSWORD: rstudio
+    volumes:
+      - ./:/home/rstudio/workspace
