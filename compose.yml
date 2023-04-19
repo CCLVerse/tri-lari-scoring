@@ -1,10 +1,10 @@
-version: "3.8"
+version: "3.9"
 
 services:
   tri-lari-scoring:
     build:
       context: .
-      dockerfile: ./docker/Dockerfile-rstudio
+      dockerfile: Dockerfile
     ports:
       - "8787:8787"
     environment:
