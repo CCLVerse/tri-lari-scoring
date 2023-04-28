@@ -17,6 +17,7 @@ RUN install2.r remotes \
                 knitr \
                 config \
                 kableExtra \
+                lavaan \
                 rlang \
                 log4r \
                 lm.beta \
