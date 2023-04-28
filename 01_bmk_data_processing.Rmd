@@ -1,0 +1,38 @@
+---
+title: "01_BMK_data_processing"
+author: "Sirish Shrestha"
+date: "2023-04-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+
+source("./src/init.R")
+
+```
+
+
+Read the available data for analysis
+
+
+```{r}
+
+# Read the data
+BMK2018_A <- readRDS("./data/BMK2018_A.RData")
+BMK2018_B <- readRDS("./data/BMK2018_B.RData")
+
+
+```
+
+
+```{r}
+
+set_demo_cols(columns = c("FormActualKey", "DM_Key", "IM_Key", "ES_Key", "Gender", "Age", "Race", "NumYearsInSchool", "HighestDegreeEarned", "OrganizationType", "OrganizationSector", "Sector", "OrganizationLevel", "Functn", "NumEmployees", "NativeCountryCode", "NativeCountry", "NativeLanguageCode", "NativeLanguage", "GM_Name", "CurrentCountryCode", "CurrentCountry", "LevelExperience", "EventType", "EventName", "EventLocation","EventAbbreviation", "ParentSector", "SerialNum", "AdminMode", "FormLanguage",  "ReportPrintedDateTime", "Understand", "Start_Date"))
+
+
+
+```
+
+
