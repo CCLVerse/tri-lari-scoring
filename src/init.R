@@ -1,25 +1,24 @@
 source('./src/load_packages.R')
 ## Load all required packages
-load_packages(c('tidyverse', 'log4r', 'config','lm.beta'))
+load_packages(c('tidyverse', 
+                'log4r', 
+                'config',
+                'lm.beta', 
+                'kableExtra'))
 
-## source all functions from the lari folder
-ws.folder <- "./src/lari/"
-ws.files <- list.files(ws.folder)
+## source all functions from the folders
+dirs <- list.dirs("./src", full.names=TRUE, recursive=FALSE)
 
-# Load all files if exist
-if(length(ws.files > 0)){
-  invisible(sapply(file.path(ws.folder,ws.files), source))
-}
+invisible(sapply(dirs, function(x){
+  
+  files <- list.files(x)
 
+  # Load all files if exist
+  if(length(ws.files > 0)){
+    invisible(sapply(file.path(ws.folder,ws.files), source))
+  }
 
-## source all functions from the utils folder
-ut.folder <- "./src/utils/"
-ut.files <- list.files(ut.folder)
-
-# Load all files if exist
-if(length(ut.files > 0)){
-  invisible(sapply(file.path(ut.folder, ut.files), source))
-}
+}))
 
 ## logging 
 log_file <- file.path(getwd(),"logs", "log.txt")

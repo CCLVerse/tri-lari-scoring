@@ -29,7 +29,15 @@ BMK2018_B <- readRDS("./data/BMK2018_B.RData")
 
 ```{r}
 
-set_demo_cols(columns = c("FormActualKey", "DM_Key", "IM_Key", "ES_Key", "Gender", "Age", "Race", "NumYearsInSchool", "HighestDegreeEarned", "OrganizationType", "OrganizationSector", "Sector", "OrganizationLevel", "Functn", "NumEmployees", "NativeCountryCode", "NativeCountry", "NativeLanguageCode", "NativeLanguage", "GM_Name", "CurrentCountryCode", "CurrentCountry", "LevelExperience", "EventType", "EventName", "EventLocation","EventAbbreviation", "ParentSector", "SerialNum", "AdminMode", "FormLanguage",  "ReportPrintedDateTime", "Understand", "Start_Date"))
+set_current_df(df=BMK2018_A)
+
+## all competency columns from the database
+competency_cols <- get_column_names(pattern = COMPETENCY_COL_PATTERN)
+
+## all item columns that make up the competency columns
+competency_item_cols <- get_column_names(pattern = ITEM_COL_PATTERN)
+
+research_cols <- get_column_names(pattern = RESEARCH_COL_PATTERN)
 
 
 
