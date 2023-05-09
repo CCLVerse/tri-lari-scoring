@@ -12,14 +12,20 @@ pivot_df <- function(df=NULL, var=NULL, id_column=NULL){
         validate_df(df)
     }
 
-    var <- enquo(var)
-    id_column <- enquo(id_column)
-
     df <- df %>% 
-        pivot_wider(
+        tidyr::pivot_wider(
             names_from = var,
-            values_from = c(everything(), -id_column, -var)
+            values_from = c(everything()
+                          , -id_column
+                          , -var)
         )
+
+    ## replace nan with na
+    ## rename the columns to remove spaces
+    df <- df %>% 
+        dplyr::mutate_all(~ifelse(is.nan(.), NA, .)) %>%
+        dplyr::rename_all(~ str_replace_all(.x, "\\s+", "_"))
+
         
     return(df)
 }

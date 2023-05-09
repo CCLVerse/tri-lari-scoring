@@ -10,7 +10,7 @@ get_column_names <- function(pattern=NULL){
     }
 
     columns <- get_current_df() %>% 
-            select(matches(pattern)) %>%
+            dplyr::select(matches(pattern)) %>%
             colnames()
 
     return(columns)

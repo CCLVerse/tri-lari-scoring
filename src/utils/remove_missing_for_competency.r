@@ -7,7 +7,7 @@
 remove_missing_from_competency <- function(df=data.frame(),column_names=character()){
 
     df <- df %>% 
-        drop_na(!!! syms(column_names))
+        tidyr::drop_na(!!! syms(column_names))
 
     return(df)
 

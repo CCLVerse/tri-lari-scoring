@@ -6,10 +6,9 @@
 #' @param competency_cols A character vector of colum names of competency scores in the dataframe
 #' @param research_cols A character vector of column names that are used to capture research questions. 
 #' @param grouping_cols A character vector of columns that are used in grouping the dataframe
-#' @param centroid A centroid function to use in averaging the scores between raters. Default is mean.  
 #' @return A dataframe that consists of all items, competency cols, and research columns averaged across raters and spread out in the dataframe
 #' @export 
-avg_scores_by_raters <- function(df=NULL, required_cols=NULL, item_cols=NULL, competency_cols=NULL, research_cols=NULL, grouping_cols=NULL, centroid="mean"){
+avg_scores_by_raters <- function(df=NULL, required_cols=NULL, item_cols=NULL, competency_cols=NULL, research_cols=NULL, grouping_cols=NULL){
 
     # Validate the dataframes and columns used in aggregation
     validate_df(df)
@@ -18,9 +17,8 @@ avg_scores_by_raters <- function(df=NULL, required_cols=NULL, item_cols=NULL, co
     validate_cols(df=df, columns=competency_cols)
     validate_cols(df=df, columns=research_cols)
     validate_cols(df=df, columns=grouping_cols)
-
-    centroid <- match.fun(centroid)
     
+    ## group by id and rater columns to aggregate the data using the given centroid method. Default centroid is mean
     df <- df %>% 
         dplyr::select(!!! syms(required_cols), 
                       !!! syms(item_cols), 
@@ -30,7 +28,10 @@ avg_scores_by_raters <- function(df=NULL, required_cols=NULL, item_cols=NULL, co
         dplyr::summarise_at(vars(item_cols
                                 ,competency_cols
                                 ,research_cols), 
-                            list(~centroid(.,na.rm=TRUE))) %>% 
+                        list(mean=mean), na.rm=TRUE) %>% 
+
         dplyr::ungroup()
+
+    return(df)
 
 }

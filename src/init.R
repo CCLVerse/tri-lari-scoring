@@ -31,10 +31,3 @@ lari_env <- new.env()
 
 ## load any environment variables
 dotenv::load_dot_env()
-
-## load the environment variables
-DEMOGRAPHIC_COLS <- Sys.getenv("DEMOGRAPHIC_COLS")
-COMPETENCY_COL_PATTERN <- Sys.getenv("COMPETENCY_COL_PATTERN")
-ITEM_COL_PATTERN <- Sys.getenv("ITEM_COL_PATTERN")
-RESEARCH_COL_PATTERN <- Sys.getenv("RESEARCH_COL_PATTERN")
-

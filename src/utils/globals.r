@@ -1,4 +1,7 @@
-# Creates variables that holds column names or patterns 
+#' @title Save Variables to lari_env Environment
+#' @description Creates variables that holds column names or patterns. It doesn't return any value but loads all required variables to the environment
+#' @export 
+
 
 ## COLUMN NAMES AND PATTERNS FOR EXTRACTING DATA
 DEMOGRAPHIC_COLS <- c(
@@ -39,6 +42,6 @@ DEMOGRAPHIC_COLS <- c(
 )
 
 COMPETENCY_COL_PATTERN <- "\\w+(S|D)\\d{2,}.*"
-ITEM_COL_PATTERN <- "(?i)\\w+s1.\\d{1,}$"
+ITEM_COL_PATTERN <- "(?i)\\w+s(1|2).\\d{1,}$"
 RESEARCH_COL_PATTERN <- "(?i)\\w+s5.\\d{1,}$"
 

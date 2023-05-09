@@ -24,7 +24,7 @@ get_regex_pattern_for_competency <- function(item_numbers=NULL, df=NULL, verify=
         message("Please ensure that the column names matches with the ones needed for the analyses.")
 
         cols <- df %>%
-            select(matches(item_col_pattern)) %>%
+            dplyr::select(matches(item_col_pattern)) %>%
             colnames()
         print(cols)
     }

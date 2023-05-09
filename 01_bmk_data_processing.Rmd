@@ -17,17 +17,17 @@ source("./src/init.R")
 Read the available data for analysis
 
 
-```{r}
+```{r data-read, echo=FALSE}
 
 # Read the data
 BMK2018_A <- readRDS("./data/BMK2018_A.RData")
-BMK2018_B <- readRDS("./data/BMK2018_B.RData")
+# BMK2018_B <- readRDS("./data/BMK2018_B.RData")
 
 
 ```
 
 
-```{r}
+```{r configure-cols, echo=FALSE}
 
 set_current_df(df=BMK2018_A)
 
@@ -39,8 +39,54 @@ competency_item_cols <- get_column_names(pattern = ITEM_COL_PATTERN)
 
 research_cols <- get_column_names(pattern = RESEARCH_COL_PATTERN)
 
-
+required_cols <- c("ESI_Key", "RaterType")
 
 ```
 
+
+
+```{r preprocess-df, echo=FALSE}
+
+## get average item scores by rater
+avg_scores_by_rater_df <- avg_scores_by_raters(df=BMK2018_A
+                                          , required_cols=required_cols
+                                          , item_cols=competency_item_cols
+                                          , competency_cols=competency_cols
+                                          , research_cols=research_cols
+                                          , grouping_cols = c("ESI_Key",
+                                                              "RaterType"))
+
+
+## Filter the rows for all leaders with all required raters
+avg_scores_by_rater_df <- filter_rows_with_all_raters(df=avg_scores_by_rater_df
+                          , id_column = "ESI_Key"
+                          , raters=c("Self","Peer","Boss","Direct Report")
+                          , rater_colname = c("RaterType"))
+
+
+
+## Pivot the dataframe such that raters average scores are the columns
+avg_scores_by_rater_df <- pivot_df(df=avg_scores_by_rater_df
+                                 , var="RaterType"
+                                 , id_column = "ESI_Key")
+
+
+## set the clean dataframe as the current dataframe in the environment
+set_current_df(df=avg_scores_by_rater_df)
+
+```
+
+
+
+```{r basic-missing-statistic, echo=FALSE}
+
+source("./src/init.R")
+## TODO: 
+# 1. fix the table to display both sum and percentage. 
+# 2. paginate
+
+count_missing_values(df=avg_scores_by_rater_df)
+
+
+```
 
