@@ -3,18 +3,22 @@
 #' @param df The dataframe to work with
 #' @return A dataframe of missing counts and percentages
 #' @export 
-count_missing_values <- function(df=NULL){
+count_missing_values <- function(df=data.frame()){
 
-    missing_count_df <- df %>%
-        summarise(across(everything(), list(perc = ~mean(is.na(.)), 
-                                            total = ~sum(is.na(.))))) %>% 
-        t()
+    validate_df(df)
+
+    
+    missing_count_df <- data.frame( 
+        Percentage = sapply(df, function(x) paste0(round(mean(is.na(x)),2)*100,"%")),
+        Total = sapply(df, function(x) round(sum(is.na(x)),2))) %>% 
+        rownames_to_column(var='Variables') %>% 
+        arrange(desc(Total))
 
     missing_count_df <- missing_count_df %>%
         kable() %>% 
-        kable_material_dark(bootstrap_options=c("responsive"), 
-                            position = 'center', 
-                            full_width=F)
+        kable_material_dark(
+            bootstrap_options=c("responsive"), 
+            position = 'center', full_width=F)
 
     return(missing_count_df)
 
