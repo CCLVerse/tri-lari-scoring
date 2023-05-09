@@ -2,6 +2,7 @@ source('./src/load_packages.R')
 ## Load all required packages
 load_packages(c('tidyverse', 
                 'log4r', 
+                'dotenv',
                 'config',
                 'lm.beta', 
                 'kableExtra'))
@@ -14,8 +15,8 @@ invisible(sapply(dirs, function(x){
   files <- list.files(x)
 
   # Load all files if exist
-  if(length(ws.files > 0)){
-    invisible(sapply(file.path(ws.folder,ws.files), source))
+  if(length(files > 0)){
+    invisible(sapply(file.path(x,files), source))
   }
 
 }))
@@ -27,3 +28,13 @@ report <- logger(threshold="INFO"
 
 ## create an environment for storing variables
 lari_env <- new.env()
+
+## load any environment variables
+dotenv::load_dot_env()
+
+## load the environment variables
+DEMOGRAPHIC_COLS <- Sys.getenv("DEMOGRAPHIC_COLS")
+COMPETENCY_COL_PATTERN <- Sys.getenv("COMPETENCY_COL_PATTERN")
+ITEM_COL_PATTERN <- Sys.getenv("ITEM_COL_PATTERN")
+RESEARCH_COL_PATTERN <- Sys.getenv("RESEARCH_COL_PATTERN")
+

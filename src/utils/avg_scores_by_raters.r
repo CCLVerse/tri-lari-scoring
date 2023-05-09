@@ -18,6 +18,8 @@ avg_scores_by_raters <- function(df=NULL, required_cols=NULL, item_cols=NULL, co
     validate_cols(df=df, columns=competency_cols)
     validate_cols(df=df, columns=research_cols)
     validate_cols(df=df, columns=grouping_cols)
+
+    centroid <- match.fun(centroid)
     
     df <- df %>% 
         dplyr::select(!!! syms(required_cols), 
@@ -26,9 +28,9 @@ avg_scores_by_raters <- function(df=NULL, required_cols=NULL, item_cols=NULL, co
                       !!! syms(research_cols)) %>%
         dplyr::group_by(!!! syms(grouping_cols)) %>%
         dplyr::summarise_at(vars(item_cols
-                                 ,competency_cols
-                                 ,research_cols), 
-                            funs(centroid), na.rm = TRUE) %>% 
+                                ,competency_cols
+                                ,research_cols), 
+                            list(~centroid(.,na.rm=TRUE))) %>% 
         dplyr::ungroup()
 
 }

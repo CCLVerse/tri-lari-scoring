@@ -29,7 +29,7 @@ validate_df <- function(df=NULL){
 #' @export 
 validate_cols <- function(df=NULL, columns=NULL){
 
-    validate(df)
+    validate_df(df)
 
     if(is.null(columns) && is.na(columns)){
         stop("The column names are required")
