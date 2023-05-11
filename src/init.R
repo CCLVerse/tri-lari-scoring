@@ -29,5 +29,3 @@ report <- logger(threshold="INFO"
 ## create an environment for storing variables
 lari_env <- new.env()
 
-## load any environment variables
-dotenv::load_dot_env()

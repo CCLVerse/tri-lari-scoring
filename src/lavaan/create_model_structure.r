@@ -18,7 +18,8 @@ create_model_structure <- function(factor_name, suffix, items){
 #' @return A Lavaan model part
 create_model_part_by_rater <- function(column_names, rater){
 
-    rater_col <- column_names[grepl(paste0("*.", rater), column_names)] %>% 
+    rater_col <- column_names[grepl(paste0("*.", rater),
+                              column_names)] %>% 
                 paste0(., collapse = " + ")
 
     return(rater_col)
@@ -35,11 +36,15 @@ create_model_part_by_rater <- function(column_names, rater){
 #' @return model
 create_ari_model_by_rater <- function(column_names, raters, factor_name, suffix) {
 
+    if(suffix == "reputation"){
+        raters <- raters[raters != 'Self']
+    }
     model <- create_model_part_by_rater(column_names=column_names, rater=paste0("(", raters, ")", collapse="|"))
 
     model <- create_model_structure(factor_name=factor_name, suffix=suffix, items=model)
 
-    return(model)
+
+    return(unlist(model))
 
 
 }
