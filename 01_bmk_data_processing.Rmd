@@ -32,12 +32,12 @@ BMK2018_A <- readRDS("./data/BMK2018_A.RData")
 set_current_df(df=BMK2018_A)
 
 ## all competency columns from the database
-competency_cols <- get_column_names(pattern = COMPETENCY_COL_PATTERN)
+competency_cols <- get_column_names(df=BMK2018_A, pattern = COMPETENCY_COL_PATTERN)
 
 ## all item columns that make up the competency columns
-competency_item_cols <- get_column_names(pattern = ITEM_COL_PATTERN)
+competency_item_cols <- get_column_names(df=BMK2018_A, pattern = ITEM_COL_PATTERN)
 
-research_cols <- get_column_names(pattern = RESEARCH_COL_PATTERN)
+research_cols <- get_column_names(df=BMK2018_A, pattern = RESEARCH_COL_PATTERN)
 
 required_cols <- c("ESI_Key", "RaterType")
 
@@ -74,16 +74,12 @@ avg_scores_by_rater_df <- pivot_df(df=avg_scores_by_rater_df
 ## set the clean dataframe as the current dataframe in the environment
 set_current_df(df=avg_scores_by_rater_df)
 
+
 ```
 
 
 
 ```{r basic-missing-statistic, echo=FALSE}
-
-source("./src/init.R")
-## TODO: 
-# 1. fix the table to display both sum and percentage. 
-# 2. paginate
 
 count_missing_values(df=avg_scores_by_rater_df)
 

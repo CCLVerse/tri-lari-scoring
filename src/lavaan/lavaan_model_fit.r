@@ -25,6 +25,8 @@ lavaan_model_fit <- function(df=data.frame(), model=as.character()){
     ortho.summary <- get_fit_summary(fit=ortho.fit)
     ortho.fitted <- lavaan::lavPredict(ortho.fit, fsm=TRUE, method="regression")
 
+    print(ortho.fitted)
+
     orthogonal <- list(fit=ortho.fit, 
                        summary=ortho.summary, 
                        fitted=ortho.fitted)
@@ -33,7 +35,10 @@ lavaan_model_fit <- function(df=data.frame(), model=as.character()){
 }
 
 
-
+#' @title Fit Summary
+#' @description Get the summary of the fit
+#' @param fit The model fit from lavaan
+#' 
 get_fit_summary <- function(fit=NULL){
     
     if(is.null(fit) && is.na(fit)){
