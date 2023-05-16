@@ -67,11 +67,10 @@ avg_scores_by_rater_df <- avg_scores_by_rater_df %>%
 
 ```{r factory-weights, echo=FALSE}
 
-source("./src/init.R")
 
 factor_weights_decisiveness <- get_factor_scoring_weights(df=avg_scores_by_rater_df
-                                                  , fitted_values=bifactor_fits$orthogonal$fitted
-                                                  , which="fsm")
+                                  , fitted_values=bifactor_fits$orthogonal$fitted
+                                  , which="fsm")
 
 ## merge the factor weights with the raw item responses
 avg_scores_by_rater_df <- avg_scores_by_rater_df %>% 
@@ -80,8 +79,8 @@ avg_scores_by_rater_df <- avg_scores_by_rater_df %>%
 
 
 avg_scores_by_rater_df_merged <- scale_and_center_columns(df=avg_scores_by_rater_df
-                                            , column_names = colnames(factor_weights_decisiveness)
-                                            , center = FALSE)
+                              , column_names = colnames(factor_weights_decisiveness)
+                              , center = FALSE)
 
 
 ```

@@ -8,12 +8,14 @@ calculate_factor_scores <- function(df=data.frame(), factor_score_equations=char
 
     validate_df(df)
 
-    df <- lapply(names(factor_score_equations), function(name, eq) {
+    df <- purrr::map_dfc(factor_score_equations, ~ evaluate_function(df, .))
 
-        result <- df %>% mutate(!!name := eval(parse(text=factor_score_equations[[name]])))
-
-        }, factor_score_equations)
 
     return(df)
-    
+}
+
+
+evaluate_function <- function(df, eq){
+    result <- eval(parse(text=eq), envir=df)
+    return(result)
 }
