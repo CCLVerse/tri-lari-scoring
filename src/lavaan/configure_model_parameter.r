@@ -18,7 +18,7 @@ configure_model_parameters <- function(df=data.frame(), raters=NULL, factor_name
         validate_cols(df, column_names)
     }
 
-    raters <- raters %>% str_replace_all(., "\\s+", "_")
+    raters <- clean_raters(raters)
     
     model_params <- list(
         raters = raters, 

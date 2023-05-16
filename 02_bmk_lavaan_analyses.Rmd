@@ -11,6 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 source("./src/init.R")
 
+raters <- c("Self", "Direct Report", "Peer", "Boss")
+
 ```
 
 
@@ -21,8 +23,7 @@ source("./src/init.R")
 first_level <- build_first_level_model(competency_cols="BMK_S1_34|BMK_S1_73|BMK_S1_77"
                                      , df=avg_scores_by_rater_df
                                      , factor_name="decisive"
-                                     , raters=c("Self", "Direct Report",
-                                                "Peer", "Boss")
+                                     , raters=raters
                                      , regex_pattern = TRUE)
 
 
@@ -37,13 +38,12 @@ fits <- lavaan_model_fit(df=avg_scores_by_rater_df, model=first_level)
 bifactor <- build_bifactor_model(competency_cols="BMK_S1_34|BMK_S1_73|BMK_S1_77"
                                , df=avg_scores_by_rater_df
                                , factor_name="decisive"
-                               , raters=c("Self", "Direct Report",
-                                          "Peer", "Boss")
+                               , raters=raters
                                , regex_pattern = TRUE)
 
 bifactor_fits <- lavaan_model_fit(df=avg_scores_by_rater_df, model=bifactor)
 
-bifactor_fits$orthogonal$fitted
+# bifactor_fits$orthogonal$fitted
 
 ## TODO: 
 ## fix the fitted value scores for arena and reputation
@@ -90,35 +90,35 @@ avg_scores_by_rater_df_merged <- scale_and_center_columns(df=avg_scores_by_rater
 
 ```{r}
 
-source("./src/init.R")
+# source("./src/init.R")
 
 factor_score_equations <- generate_factor_scores(df=avg_scores_by_rater_df_merged
                       , competency_cols = "\\w+_S1_(34|73|77)(?!.*decisive).*"
                       , factor_weights_cols = "\\w+_S1_(34|73|77)(.*decisive)."
                       , factor_name = "decisive"
                       , latent_variables=c("Self", "Direct_Report", "Boss", 
-                                           "Peer", "arena", "reputation")
-                      , latent_variable_names=c("selfLV", "drLV", "bossLV", 
-                                                "peerLV", "arenaLV", "reputationLV")
+                                  "Peer", "arena", "reputation")
                       , regex_pattern = TRUE)
 
 
-avg_scores_by_rater_df_merged <- calculate_factor_scores(df=avg_scores_by_rater_df_merged
-                                                    , factor_score_equations=factor_score_equations)
+avg_scores_by_rater_df_merged <- calculate_factor_scores(
+  df=avg_scores_by_rater_df_merged
+, factor_score_equations=factor_score_equations)
 
 
-class(avg_scores_by_rater_df_merged)
+(avg_scores_by_rater_df_merged %>% select(names(factor_score_equations)))
 
 ```
 
 
 
-```{r factor-scoring, echo=FALSE}
+```{r correlation, echo=FALSE}
 
-df <- purrr::reduce(names(avg_scores_by_rater_df_merged), function(df, col_name){
-        df %>% mutate(!!col_name := rowMeans(select(., avg_scores_by_rater_df_merged[[col_name]])))
-    }, .init = df)
+source("./src/init.R")
 
+compute_factor_score_correlation(df=avg_scores_by_rater_df_merged
+                               , latent_variables = c(raters, "arena", "reputation")
+                               , fitted_values = bifactor_fits$orthogonal$fitted)
 
 ```
 
