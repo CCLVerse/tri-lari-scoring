@@ -114,11 +114,55 @@ avg_scores_by_rater_df_merged <- calculate_factor_scores(
 
 ```{r correlation, echo=FALSE}
 
-source("./src/init.R")
+compute_factor_score_correlation(df=avg_scores_by_rater_df_merged
+                               , x = c(raters, "arena", "reputation")
+                               , y = bifactor_fits$orthogonal$fitted
+                               , suffix = "LV")
+
+```
+
+
+```{r performance-item, echo=FALSE}
+
+## Create new var for performance item 1 containing the average across the three rater groups.
+avg_scores_by_rater_df_merged <- aggregate_competency_cols(df=avg_scores_by_rater_df_merged
+                                                  , columns=c("BMK_S5_1_mean_Boss"
+                                                            , "BMK_S5_1_mean_Direct_Report"
+                                                            , "BMK_S5_1_mean_Peer")
+                                                  , aggregated_column_name="BMK_S5_1_mean_all_rater")
+
+
+
+avg_scores_by_rater_df_merged %>% select(c(names(factor_score_equations), BMK_S5_1_mean_all_rater)) %>% cor() 
 
 compute_factor_score_correlation(df=avg_scores_by_rater_df_merged
-                               , latent_variables = c(raters, "arena", "reputation")
-                               , fitted_values = bifactor_fits$orthogonal$fitted)
+                               , x = names(factor_score_equations)
+                               , y = avg_scores_by_rater_df_merged$BMK_S5_1_mean_all_rater)
+
+```
+
+
+
+```{r}
+compute_factor_score_correlation(df=avg_scores_by_rater_df_merged
+                               , x = names(factor_score_equations)
+                               , y = avg_scores_by_rater_df_merged$BMK_S5_1_mean_all_rater)
+```
+
+
+```{r competency-colmeans, echo=FALSE}
+
+source("./src/init.R")
+
+compute_statistics(df=avg_scores_by_rater_df_merged
+                 , columns = "BMK_S1_(34|73|77)(?!.*decisive).*"
+                 , regex_pattern = TRUE)
+
+
+```
+
+```{r}
+
 
 ```
 

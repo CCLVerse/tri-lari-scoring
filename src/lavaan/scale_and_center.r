@@ -9,7 +9,7 @@ scale_and_center_columns <- function(df=data.frame(), column_names=character(), 
 
     # center and scale the columns using dplyr
     df <- df %>% 
-        mutate(across(all_of(column_names)
+        dplyr::mutate(across(all_of(column_names)
                     , ~ scale(.x
                         , center = center
                         , scale = FALSE)))

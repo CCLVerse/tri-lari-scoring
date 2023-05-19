@@ -8,8 +8,9 @@ calculate_factor_scores <- function(df=data.frame(), factor_score_equations=char
 
     validate_df(df)
 
-    df <- purrr::map_dfc(factor_score_equations, ~ evaluate_function(df, .))
+    edf <- purrr::map_dfc(factor_score_equations, ~ evaluate_function(df, .))
 
+    df <- cbind(df, edf)
 
     return(df)
 }
