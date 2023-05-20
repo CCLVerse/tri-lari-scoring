@@ -1,0 +1,227 @@
+---
+title: "01_BMK_data_processing"
+author: "Sirish Shrestha"
+date: "2023-04-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+
+source("./src/init.R")
+
+
+```
+
+
+## Lavaan Analysis
+
+```{r first-order, echo=FALSE}
+
+first_level <- build_first_level_model(competency_cols="BMK_S1_34|BMK_S1_73|BMK_S1_77"
+                                     , df=avg_scores_by_rater_df
+                                     , factor_name="decisive"
+                                     , raters=raters
+                                     , regex_pattern = TRUE)
+
+
+fits <- lavaan_model_fit(df=avg_scores_by_rater_df, model=first_level)
+
+```
+
+
+
+```{r bifactor,echo=FALSE}
+
+bifactor <- build_bifactor_model(competency_cols="BMK_S1_34|BMK_S1_73|BMK_S1_77"
+                               , df=avg_scores_by_rater_df
+                               , factor_name="decisive"
+                               , raters=raters
+                               , regex_pattern = TRUE)
+
+bifactor_fits <- lavaan_model_fit(df=avg_scores_by_rater_df, model=bifactor)
+
+bifactor_fits$orthogonal$fitted
+
+## TODO: 
+## fix the fitted value scores for arena and reputation
+
+```
+
+
+
+```{r remove-missing-values, echo=FALSE}
+
+avg_scores_by_rater_df <- avg_scores_by_rater_df %>% 
+                        select(matches("ESI_Key|BMK_S1_34|BMK_S1_73|BMK_S1_77|BMK_S2_8|BMK_S2_13|BMK_S2_15|BMK_S2_19|BMK_S2_22|BMK_S2_17|BMK_S2_25|BMK_S2_35|BMK_S2_18|BMK_S2_21|BMK_S2_23|BMK_S2_28|BMK_S2_30|BMK_S2_34|BMK_S2_36|BMK_S2_6|BMK_S2_7|BMK_S2_12|BMK_S2_14|BMK_S2_10|BMK_S2_5|BMK_S2_16|BMK_S2_26|BMK_S2_24|BMK_S2_33|BMK_S2_2|BMK_S2_20|BMK_S2_27|BMK_S2_29|BMK_S2_31|BMK_S2_32|BMK_S2_3|BMK_S2_4|BMK_S2_1|BMK_S2_11|BMK_S2_9|BMK_S5_1|BMK_S5_2|BMK_S5_3|BMK_S5_4|BMK_S5_5|BMK_S5_6|BMK_S5_7|BMK_S5_8|BMK_S5_9")) %>% 
+                        remove_missing_from_competency(df=.
+                                            , column_names= "ESI_Key|BMK_S1_34|BMK_S1_73|BMK_S1_77"
+                                            , regex_pattern = TRUE)
+
+
+```
+
+
+
+```{r factory-weights, echo=FALSE}
+
+
+factor_weights_decisiveness <- get_factor_scoring_weights(df=avg_scores_by_rater_df
+                                  , fitted_values=bifactor_fits$orthogonal$fitted
+                                  , which="fsm")
+
+## merge the factor weights with the raw item responses
+avg_scores_by_rater_df <- avg_scores_by_rater_df %>% 
+                            dplyr::bind_cols(factor_weights_decisiveness) %>%
+                            as.data.frame()
+
+
+avg_scores_by_rater_df_merged <- scale_and_center_columns(df=avg_scores_by_rater_df
+                              , column_names = colnames(factor_weights_decisiveness)
+                              , center = FALSE)
+
+
+```
+
+
+
+
+
+```{r}
+
+# source("./src/init.R")
+
+factor_score_equations <- generate_factor_scores(df=avg_scores_by_rater_df_merged
+                      , competency_cols = "\\w+_S1_(34|73|77)(?!.*decisive).*"
+                      , factor_weights_cols = "\\w+_S1_(34|73|77)(.*decisive)."
+                      , factor_name = "decisive"
+                      , latent_variables=c("Self", "Direct_Report", "Boss", 
+                                  "Peer", "arena", "reputation")
+                      , regex_pattern = TRUE
+                      , suffix = "LV")
+
+
+avg_scores_by_rater_df_merged <- calculate_factor_scores(
+  df=avg_scores_by_rater_df_merged
+, factor_score_equations=factor_score_equations)
+
+
+(avg_scores_by_rater_df_merged %>% select(names(factor_score_equations)))
+
+```
+
+
+
+```{r correlation, echo=FALSE}
+
+compute_correlation(df=avg_scores_by_rater_df_merged
+                               , x = c(raters, "arena", "reputation")
+                               , y = bifactor_fits$orthogonal$fitted
+                               , suffix = "LV")
+
+```
+
+
+```{r performance-item, echo=FALSE}
+
+## Create new var for performance item 1 containing the average across the three rater groups.
+avg_scores_by_rater_df_merged <- aggregate_competency_cols(df=avg_scores_by_rater_df_merged
+                                                  , columns=c("BMK_S5_1_mean_Boss"
+                                                            , "BMK_S5_1_mean_Direct_Report"
+                                                            , "BMK_S5_1_mean_Peer")
+                                                  , aggregated_column_name="BMK_S5_1_mean_all_rater")
+
+
+```
+
+
+
+```{r}
+
+compute_correlation(df=avg_scores_by_rater_df_merged
+                               , x = c(names(factor_score_equations),
+                                       "BMK_S5_1_mean_all_rater")
+                               )
+```
+
+
+
+```{r competency-colmeans, echo=FALSE}
+
+
+compute_statistics(df=avg_scores_by_rater_df_merged
+                 , columns = "BMK_S1_(34|73|77)(?!.*decisive).*"
+                 , regex_pattern = TRUE)
+
+
+```
+
+
+
+```{r conventional-average,echo=FALSE}
+
+avg_scores_by_rater_df_merged <- calculate_rowmeans(df=avg_scores_by_rater_df_merged
+                 , new_cols=c("Self_Avg", "Direct_Report_Avg", "Boss_Avg", 
+                              "Peer_Avg", "Inf_Avg", "All_Avg")
+                 , mean_cols=list(
+                   c("BMK_S1_34_mean_Self", "BMK_S1_73_mean_Self", "BMK_S1_77_mean_Self"),
+                   c("BMK_S1_34_mean_Direct_Report", 
+                     "BMK_S1_73_mean_Direct_Report", 
+                     "BMK_S1_77_mean_Direct_Report"),
+                   c("BMK_S1_34_mean_Boss", "BMK_S1_73_mean_Boss", "BMK_S1_77_mean_Boss"),
+                   c("BMK_S1_34_mean_Peer", "BMK_S1_73_mean_Peer", "BMK_S1_77_mean_Peer"),
+                   c("BMK_S1_34_mean_Direct_Report", "BMK_S1_73_mean_Direct_Report",
+                     "BMK_S1_77_mean_Direct_Report", 
+                     "BMK_S1_34_mean_Boss", "BMK_S1_73_mean_Boss", "BMK_S1_77_mean_Boss", 
+                     "BMK_S1_34_mean_Peer", "BMK_S1_73_mean_Peer", "BMK_S1_77_mean_Peer"),
+                   c("BMK_S1_34_mean_Self", "BMK_S1_73_mean_Self", "BMK_S1_77_mean_Self", 
+                     "BMK_S1_34_mean_Direct_Report", "BMK_S1_73_mean_Direct_Report",
+                     "BMK_S1_77_mean_Direct_Report", "BMK_S1_34_mean_Boss", 
+                     "BMK_S1_73_mean_Boss", "BMK_S1_77_mean_Boss", "BMK_S1_34_mean_Peer", 
+                     "BMK_S1_73_mean_Peer", "BMK_S1_77_mean_Peer")
+                   ))
+
+
+```
+
+
+
+```{r tri-lari-correlation, echo=FALSE}
+
+compute_correlation(df=avg_scores_by_rater_df_merged
+                   , x = ".*_Avg|.*_LV|BMK_S5_1_mean_all_rater"
+                   , regex_pattern = TRUE
+                   )
+
+```
+
+
+
+```{r linear-model, echo=FALSE}
+
+mod1 <- linear_model(formula="BMK_S5_1_mean_all_rater ~ Self_LV + Direct_Report_LV + 
+                              Boss_LV + Peer_LV + reputation_LV + arena_LV"
+                   , df=avg_scores_by_rater_df_merged)
+
+mod1$summary
+
+
+mod2 <- linear_model(formula="BMK_S5_1_mean_all_rater ~ Self_Avg + Direct_Report_Avg +
+                              Boss_Avg + Peer_Avg", 
+                     df=avg_scores_by_rater_df_merged)
+
+mod2$summary
+
+mod3 <- linear_model(formula="BMK_S5_1_mean_all_rater ~ Self_Avg + Direct_Report_Avg + 
+                              Boss_Avg + Peer_Avg + Self_LV + Direct_Report_LV + Boss_LV + 
+                              Peer_LV + reputation_LV + arena_LV",
+                      df=avg_scores_by_rater_df_merged)
+
+mod3$summary
+
+
+anova(mod2$model, mod3$model)
+
+```
+

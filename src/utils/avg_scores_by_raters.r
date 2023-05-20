@@ -20,16 +20,15 @@ avg_scores_by_raters <- function(df=NULL, required_cols=NULL, item_cols=NULL, co
     
     ## group by id and rater columns to aggregate the data using the given centroid method. Default centroid is mean
     df <- df %>% 
-        dplyr::select(!!! syms(required_cols), 
-                      !!! syms(item_cols), 
-                      !!! syms(competency_cols), 
-                      !!! syms(research_cols)) %>%
+        dplyr::select(!!! all_of(required_cols), 
+                      !!! all_of(item_cols), 
+                      !!! all_of(competency_cols), 
+                      !!! all_of(research_cols)) %>%
         dplyr::group_by(!!! syms(grouping_cols)) %>%
         dplyr::summarise_at(vars(item_cols
                                 ,competency_cols
                                 ,research_cols), 
                         list(mean=mean), na.rm=TRUE) %>% 
-
         dplyr::ungroup()
 
     return(df)

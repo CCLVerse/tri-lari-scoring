@@ -22,7 +22,7 @@ build_bifactor_model <- function(competency_cols=NULL, df=NULL, factor_name=NULL
              
     model <- c(model, arena, reputation)
     
-    model <- paste0(model, collapse="\n")
+    model <- paste0(model, collapse=" \n ")
 
     return(model)
 

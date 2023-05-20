@@ -26,6 +26,5 @@ pivot_df <- function(df=NULL, var=NULL, id_column=NULL){
         dplyr::mutate_all(~ifelse(is.nan(.), NA, .)) %>%
         dplyr::rename_all(~ str_replace_all(.x, "\\s+", "_"))
 
-        
     return(df)
 }

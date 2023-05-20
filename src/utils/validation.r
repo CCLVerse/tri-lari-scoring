@@ -8,8 +8,8 @@ validate_df <- function(df=NULL){
         stop("No dataframe was provided to validate.")
     }
 
-    if(!is.data.frame(df) || !is_tibble(df)){
-        stop(sprintf("Argument %s must be of class `data.frame`` or `tibble`", deparse(substitute(df))))
+    if(!(is.data.frame(df) || is_tibble(df))){
+        stop(sprintf("Argument %s must be of class `data.frame` or `tibble`", deparse(substitute(df))))
     }
 
     if(nrow(df) < 1){
