@@ -9,6 +9,7 @@ RUN apt-get -y update && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY ./docker/rstudio-prefs.json /home/rstudio/.config/rstudio/
+RUN chown rstudio:rstudio /home/rstudio/.config/rstudio/rstudio-prefs.json
 
 ## Install R Package
 RUN install2.r remotes \

@@ -5,5 +5,8 @@
   "posix_terminal_shell": "bash",
   "initial_working_directory": "~",
   "font_size_points": 12,
-  "editor_theme": "Solarized Dark"
+  "editor_theme": "Solarized Dark",
+  "highlight_r_function_calls": true,
+  "rainbow_parentheses": true,
+  "auto_save_on_blur": true
 }

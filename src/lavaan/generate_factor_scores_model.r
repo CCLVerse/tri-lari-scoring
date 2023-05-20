@@ -45,11 +45,13 @@ factor_name=character(), regex_pattern=FALSE){
 #' @param factor_name The name of the competency or the name of the factor 
 #' @param latent_variables Character vector of latent variable names used in naming columns with factor_weights. 
 #' @param regex_pattern Boolean value to indicate if the col names are regex pattern or column names
-generate_factor_scores <- function(df=data.frame(), competency_cols=character(), factor_weights_cols=character(), latent_variables=character(), factor_name=character(), regex_pattern=FALSE){
+#' @param suffix Suffix to use if renaming the columns 
+#' @export 
+generate_factor_scores <- function(df=data.frame(), competency_cols=character(), factor_weights_cols=character(), latent_variables=character(), factor_name=character(), regex_pattern=FALSE, suffix="LV"){
 
     latent_variables <- clean_raters(latent_variables)
 
-    latent_variable_names <- sprintf("%sLV", latent_variables)
+    latent_variable_names <- sprintf("%s_%s", latent_variables, suffix)
 
     result <- invisible(
         lapply(latent_variables, function(x) {
