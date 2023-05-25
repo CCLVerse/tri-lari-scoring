@@ -3,15 +3,11 @@
 #' @param df The dataframe to set as the current dataframe
 #' @return NULL
 set_current_df <- function(df=NULL){
+    
     validate_df(df)
 
-    if(!exists("lari_env")){
-        message("Creating lari_env environment")
-        lari_env <<- new.env()
-    }
+    save_to_env(variable=df, name="current_df", env="lari_env"){
 
-    message("Storing the dataframe in the new environment")
-    assign("current_df", df, envir = lari_env)
 }
 
 

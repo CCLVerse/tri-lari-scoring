@@ -106,65 +106,8 @@ lavaan_analyses_wrapper <- function(df=data.frame()){
                         , suffix = "LV")
 
 
-    ## Create new var for performance item 1 containing the average across the three rater groups.
-    df_merged <- aggregate_competency_cols(df=df_merged
-                            , columns=c("BMK_S5_1_mean_Boss"
-                                    , "BMK_S5_1_mean_Direct_Report"
-                                    , "BMK_S5_1_mean_Peer")
-                            , aggregated_column_name="BMK_S5_1_mean_all_rater")
-
-
-    ## save the merged dataframe to the environment variable
-    save_to_env(variable=df_merged, name=paste0(df_name,"_merged"), env=lari_env)
-
-
-    ## compute correlation
-    compute_correlation(df=df_merged
-                    , x = c(names(factor_score_equations),
-                            "BMK_S5_1_mean_all_rater")
-                    )
-
-    ## compentency colmeans
-    compute_statistics(df=df_merged
-                 , columns = "BMK_S1_(34|73|77)(?!.*decisive).*"
-                 , regex_pattern = TRUE)
-
-
-
-
-
-
-}
-
-
-#' @title Store value to environment
-#' @description A wrapper function to store any variable in the environment variable
-#' @param env Name of the environment variable
-#' @param variable
-save_to_env <- function(variable=NULL, name=NULL, env=NULL){
-
-    if(is.null(env) && is.na(env) && missing(env)){
-        stop("env name is required.")
-    }
-
-    if(is.null(variable) && is.na(variable)){
-        stop("variable is required.")
-    }
-
-    if(!exists(env)){
-        message("Creating lari_env environment")
-        lari_env <<- new.env()
-    }
-
-    if(is.null(name) && is.na(name)){
-        arg_name <- deparse(substitute(variable))
-    } else {
-        arg_name <- name
-    }
-
+    return(df_merged)
     
-
-    message("Storing the dataframe in the new environment")
-    assign(arg_name, variable, envir = env)
-
 }
+
+
