@@ -1,5 +1,17 @@
-
-
+#' @title Build Bifactor Model
+#' @description Constructs a bifactor structural equation model (SEM) for analyzing competency assessments using lavaan.
+#'
+#' This function generates a bifactor SEM to examine competency assessments, considering multiple raters' perspectives. The bifactor model includes a general competency factor and specific factors (arena and reputation).
+#  You can specify the competency columns, the factor name (competency name), and the raters to include in the model.
+#
+#' @param competency_cols A character vector of column names representing competency assessments.
+#' @param df Dataframe containing competency assessment data.
+#' @param factor_name A descriptive name for the general competency factor.
+#' @param raters A character vector specifying the types of raters to incorporate in the model.
+#' @param regex_pattern Boolean indicating whether competency_cols are regular expression patterns or column names.
+#' Default is FALSE.
+#' @return A character string representing the bifactor SEM structure for competency analysis.
+#' @export
 build_bifactor_model <- function(competency_cols=NULL, df=NULL, factor_name=NULL, raters=NULL, regex_pattern=FALSE){
 
     validate_df(df)

@@ -1,9 +1,9 @@
 #' @title Save Variables to lari_env Environment
-#' @description Creates variables that holds column names or patterns. It doesn't return any value but loads all required variables to the environment
-#' @export 
+#' @description
+#'   Creates variables that hold column names or patterns. It doesn't return any value but loads all required variables to the environment.
+#'
 
-
-## COLUMN NAMES AND PATTERNS FOR EXTRACTING DATA
+## column names and patterns for extracting data
 DEMOGRAPHIC_COLS <- c(
     "AdminMode",
     "Age",

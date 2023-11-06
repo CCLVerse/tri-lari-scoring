@@ -1,11 +1,20 @@
-#' @title Compute correlation
-#' @description The correlation helps determine if the generated factor scores are equal to lavaan-generated factor scores. 
-#' @param df The dataframe which contains the variable.
-#' @param x String or character vector of variable names. 
-#' @param y Variable to correlate
-#' @param suffix Suffix to use if renaming the columns 
-#' @param regex_pattern Boolean value to indicate whether the columns in x argument contains pattern. Default is FALSE
-#' @return A dataframe of correlation
+#' @title Compute Correlation
+#' @description
+#'   Computes the correlation between one or more variables and a target variable.
+#'
+#' @param df The dataframe containing the variables.
+#' @param x String or character vector of variable names to compute the correlation.
+#' @param y The target variable to correlate with.
+#' @param suffix (optional) Suffix to append to the variable names if renaming the columns.
+#' @param regex_pattern Boolean value to indicate whether the columns in the `x` argument contain a pattern. Default is FALSE.
+#'
+#' @return A dataframe with correlation coefficients.
+#'
+#' @examples
+#' # Example usage for computing correlation:
+#' df <- read.csv("data.csv")
+#' correlation_df <- compute_correlation(df, x = c("Variable1", "Variable2", "Variable3"), y = df$Target, suffix = "Factor")
+# 
 compute_correlation <- function(df=data.frame(), x=character(), y=NULL, suffix=character(), regex_pattern=FALSE){
 
     validate_df(df)

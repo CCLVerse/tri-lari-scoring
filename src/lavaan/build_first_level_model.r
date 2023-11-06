@@ -1,12 +1,18 @@
 #' @title Build First Level Model
-#' @description Creates a model structure that is required for running LAVAAN analyses
-#' @param df Dataframe to work with
-#' @param competency_cols_pattern A regular expression pattern to identify the required cols. It is ignored  
-#' @param competency_cols A character vector of required columns for building the model. It is optional if `competency_cols_patter` is provided. 
-#' @param factor_name A name that describes the compentency or the factor for which the model is being created. 
-#' @param raters A character vector of all raters that are required in the model. 
-#' @param regex_pattern Boolean to indicate whether the column_names consists of regular expression pattern or column names vector. Default is FALSE.
-#' @return Returns the character of the model
+#' @description Constructs a structural equation model (SEM) for analyzing competency assessments using lavaan.
+#'
+#' This function generates a SEM to examine competency assessments, considering multiple raters' perspectives.
+#  The SEM is created with the lavaan package in R and is designed to capture relationships between competency items, latent factors (competencies), and various raters.
+#  You can specify the competency columns, the factor name (competency name), and the raters to include in the model.
+#
+#' @param df Dataframe containing competency assessment data.
+#' @param competency_cols A character vector of column names representing competency assessments.
+#' @param factor_name A descriptive name for the competency or latent factor.
+#' @param raters A character vector specifying the types of raters to incorporate in the model.
+#' @param regex_pattern Boolean indicating whether competency_cols are regular expression patterns or column names.
+#' Default is FALSE.
+#  
+#' @return A character string representing the SEM structure for competency analysis.
 #' @export
 build_first_level_model <- function(df=data.frame(), competency_cols=NULL, factor_name=NULL, raters=NULL, regex_pattern=FALSE){
 

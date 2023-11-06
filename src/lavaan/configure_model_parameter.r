@@ -1,11 +1,26 @@
 #' @title Configure Model Parameters
-#' @description Configuring parameters needed to build the model by checking and validating, and by conforming the structure before applying to the model. This is a helper function.
-#' @param df Dataframe to work with
-#' @param competency_cols A character vector of required columns for building the model. It is optional if `competency_cols_patter` is provided. 
-#' @param factor_name A name that describes the compentency or the factor for which the model is being created. 
-#' @param raters A character vector of all raters that are required in the model. 
-#' @param regex_pattern Boolean to indicate whether the column_names consists of regular expression pattern or column names vector. Default is FALSE.
-#' @return Returns the character of the model
+#' @description
+#'   Configure parameters needed to build a model by validating and structuring them before applying to the model.
+#'
+#' @param df Dataframe to work with.
+#' @param competency_cols A character vector of required columns for building the model. It is optional if `competency_cols_pattern` is provided.
+#' @param factor_name A name that describes the competency or the factor for which the model is being created.
+#' @param raters A character vector of all raters that are required in the model.
+#' @param regex_pattern Boolean to indicate whether the column names consist of a regular expression pattern or a column names vector. Default is FALSE.
+#'
+#' @return A character string representing the model structure.
+#'
+#' @examples
+#' # Example usage for configuring model parameters:
+#' df <- read.csv("data.csv")
+#' model_params <- configure_model_parameters(df, competency_cols = c("Self1", "Self2", "Peer1", "Peer2"), 
+#'                                           factor_name = "Competency", 
+#'                                           raters = c("Self", "Peer"), 
+#'                                           regex_pattern = FALSE)
+# 
+#' Generates a character string representing the model structure for the specified parameters.
+# 
+#' @importFrom dplyr
 configure_model_parameters <- function(df=data.frame(), raters=NULL, factor_name=NULL, competency_cols=NULL,regex_pattern=FALSE){
 
     column_names <- as.character()
