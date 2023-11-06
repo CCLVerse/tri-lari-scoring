@@ -11,8 +11,6 @@ source('./src/load_packages.R')
 # load all required packages
 load_packages(c('tidyverse', 
                 'log4r', 
-                'dotenv',
-                'config',
                 'lm.beta', 
                 'kableExtra'))
 
