@@ -17,7 +17,7 @@ get_column_names <- function(df=data.frame(), pattern=NULL){
     columns <- df %>% 
         dplyr::select(tidyselect::matches(pattern, perl=TRUE)) %>%
         colnames()
-    
+    message("Columns ^^^^^^: ", columns)
     return(columns)
 
 }

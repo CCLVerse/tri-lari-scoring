@@ -19,10 +19,15 @@ Read the available data for analysis
 
 ```{r data-read, echo=FALSE}
 
+## this ordering is important to generate consistent lavaan results. Based on the ordering of the raters, the results will be different.
+raters <- c("Self","Direct Report","Boss","Peer")
+
 # Read the data
 BMK2018_A <- readRDS("./data/BMK2018_A.RData")
 # BMK2018_B <- readRDS("./data/BMK2018_B.RData")
 
+BMK2018_A$ESI_Key <- factor(BMK2018_A$ESI_Key)
+BMK2018_A$RaterType <- factor(BMK2018_A$RaterType, levels = raters)
 
 ```
 
@@ -60,7 +65,7 @@ avg_scores_by_rater_df <- avg_scores_by_raters(df=BMK2018_A
 ## Filter the rows for all leaders with all required raters
 avg_scores_by_rater_df <- filter_rows_with_all_raters(df=avg_scores_by_rater_df
                           , id_column = "ESI_Key"
-                          , raters=c("Self","Peer","Boss","Direct Report")
+                          , raters=raters
                           , rater_colname = c("RaterType"))
 
 

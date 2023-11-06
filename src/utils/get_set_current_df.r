@@ -6,7 +6,7 @@ set_current_df <- function(df=NULL){
     
     validate_df(df)
 
-    save_to_env(variable=df, name="current_df", env="lari_env"){
+    save_to_env(variable=df, name="current_df", env="lari_env")
 
 }
 

@@ -14,15 +14,14 @@ pivot_df <- function(df=NULL, var=NULL, id_column=NULL){
 
     df <- df %>% 
         tidyr::pivot_wider(
-            names_from = var,
-            values_from = c(everything()
-                          , -id_column
-                          , -var)
+              id_cols = c(id_column)
+            , names_from = var
+            , values_from = setdiff(names(df), c(id_column, var))
         )
 
     ## replace nan with na
     ## rename the columns to remove spaces
-    df <- df %>% 
+    df <- df %>%
         dplyr::mutate_all(~ifelse(is.nan(.), NA, .)) %>%
         dplyr::rename_all(~ str_replace_all(.x, "\\s+", "_"))
 

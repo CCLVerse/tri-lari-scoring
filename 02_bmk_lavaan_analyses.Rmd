@@ -44,9 +44,6 @@ bifactor_fits <- lavaan_model_fit(df=avg_scores_by_rater_df, model=bifactor)
 
 bifactor_fits$orthogonal$fitted
 
-## TODO: 
-## fix the fitted value scores for arena and reputation
-
 ```
 
 
@@ -222,6 +219,7 @@ mod3$summary
 
 
 anova(mod2$model, mod3$model)
+
 
 ```
 
