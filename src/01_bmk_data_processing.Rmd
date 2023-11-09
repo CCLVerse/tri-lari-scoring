@@ -1,65 +1,40 @@
 ---
-title: "01_BMK_data_processing"
+title: "BMK Data Processing for TRI/LARI Analyses"
 author: "Sirish Shrestha"
 date: "2023-04-28"
 output: html_document
+params: 
+  data: NULL
+  raters: !r c("Self", "Direct Report", "Peers", "Boss")
+  grouping_cols: NULL
 ---
 
 ```{r setup, include=FALSE}
 
 knitr::opts_chunk$set(echo = TRUE)
 
-source("./src/init.R")
-
 ```
-
-
-Read the available data for analysis
 
 
 ```{r data-read, echo=FALSE}
 
-## this ordering is important to generate consistent lavaan results. Based on the ordering of the raters, the results will be different.
-raters <- c("Self","Direct Report","Boss","Peer")
-
-# Read the data
-BMK2018_A <- readRDS("./data/BMK2018_A.RData")
-# BMK2018_B <- readRDS("./data/BMK2018_B.RData")
-
-BMK2018_A$ESI_Key <- factor(BMK2018_A$ESI_Key)
-BMK2018_A$RaterType <- factor(BMK2018_A$RaterType, levels = raters)
+df <- params$data
+raters <- params$raters
+grouping_cols <- params$grouping_cols
 
 ```
 
 
-```{r configure-cols, echo=FALSE}
-
-set_current_df(df=BMK2018_A)
-
-## all competency columns from the database
-competency_cols <- get_column_names(df=BMK2018_A, pattern = COMPETENCY_COL_PATTERN)
-
-## all item columns that make up the competency columns
-competency_item_cols <- get_column_names(df=BMK2018_A, pattern = ITEM_COL_PATTERN)
-
-research_cols <- get_column_names(df=BMK2018_A, pattern = RESEARCH_COL_PATTERN)
-
-required_cols <- c("ESI_Key", "RaterType")
-
-```
-
-
-
+Pre-process the dataframe and aggregate the columns
 ```{r preprocess-df, echo=FALSE}
 
 ## get average item scores by rater
-avg_scores_by_rater_df <- avg_scores_by_raters(df=BMK2018_A
+avg_scores_by_rater_df <- avg_scores_by_raters(df=df
                                           , required_cols=required_cols
                                           , item_cols=competency_item_cols
                                           , competency_cols=competency_cols
                                           , research_cols=research_cols
-                                          , grouping_cols = c("ESI_Key",
-                                                              "RaterType"))
+                                          , grouping_cols=grouping_cols)
 
 
 ## Filter the rows for all leaders with all required raters
@@ -79,14 +54,27 @@ avg_scores_by_rater_df <- pivot_df(df=avg_scores_by_rater_df
 ## set the clean dataframe as the current dataframe in the environment
 set_current_df(df=avg_scores_by_rater_df)
 
-
 ```
 
 
 
 ```{r basic-missing-statistic, echo=FALSE}
 
-count_missing_values(df=avg_scores_by_rater_df)
+count_missing_values(df=avg_scores_by_rater_df) %>%
+  DT::datatable(filter = 'top', 
+                style = "bootstrap4",
+                class = "table table-striped table-bordered",
+                options = list(paging = TRUE, 
+                               pageLength = 10, 
+                               autoWidth = TRUE),
+                caption = htmltools::tags$caption(
+                  style = 'caption-side: bottom; text-align: center;',
+                  'Table 2: ', htmltools::em('Missing data count.'))) %>%
+  DT::formatStyle(
+    'Percentage',
+    color = DT::styleInterval(0.70, c('green', 'red')),
+  ) %>% 
+  DT::formatPercentage(2) 
 
 
 ```

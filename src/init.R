@@ -5,8 +5,11 @@
 # from various directories, configuring logging, and creating an environment for variable storage. 
 
 # load the 'load_packages' function from the 'load_packages.R' script
-source('./src/load_packages.R')
+source('./src/utils/load_R_scripts_recursive.r')
+load_R_scripts_recursive("./src")
 
+# load all global variables
+source("./src/globals.r")
 
 # load all required packages
 load_packages(c('tidyverse', 
@@ -14,19 +17,7 @@ load_packages(c('tidyverse',
                 'lm.beta', 
                 'kableExtra'))
 
-# source all functions from the 'src' directory and its subdirectories
-dirs <- list.dirs("./src", full.names=TRUE, recursive=FALSE)
 
-invisible(sapply(dirs, function(x){
-  
-  files <- list.files(x)
-
-  # load all R script files in the directory
-  if(length(files > 0)){
-    invisible(sapply(file.path(x,files), source))
-  }
-
-}))
 
 # configure logging 
 log_file <- file.path(getwd(),"logs", "log.txt")

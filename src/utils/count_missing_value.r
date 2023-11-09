@@ -22,17 +22,10 @@ count_missing_values <- function(df=data.frame()){
 
     
     missing_count_df <- data.frame( 
-        Percentage = sapply(df, function(x) paste0(round(mean(is.na(x)),2)*100,"%")),
+        Percentage = sapply(df, function(x) round(mean(is.na(x)),2)),
         Total = sapply(df, function(x) round(sum(is.na(x)),2))) %>% 
         rownames_to_column(var='Variables') %>% 
-        arrange(desc(Total))
-
-    missing_count_df <- missing_count_df %>%
-        kable() %>% 
-        kable_material_dark(
-            bootstrap_options=c("responsive"), 
-            position = 'center', 
-            full_width=F)
+        arrange(Total)
 
     return(missing_count_df)
 

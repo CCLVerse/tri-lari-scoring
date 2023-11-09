@@ -28,14 +28,13 @@ save_to_env <- function(variable=NULL, name=NULL, env=NULL){
     }
   
     if(!is.environment(env)){
-        message("Creating the environment")
-        env <- new.env(parent=parent.frame())
-
+        assign(env, new.env(parent=parent.frame()))
+        env <- base::get(env)
+      
     }
-    
-    arg_name <- if (is.null(name)) deparse(substitute(variable)) else name
-    
-    message("Storing the dataframe in the new environment")
-    assign(arg_name, variable, envir = env)
+    # print(head(variable))
+    # arg_name <- if (is.null(name)) deparse(substitute(variable)) else name
+    # env[[arg_name]] <- variable
+    # assign(arg_name, variable, envir = env)
 
 }

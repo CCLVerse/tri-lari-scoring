@@ -14,6 +14,7 @@ RUN chown rstudio:rstudio /home/rstudio/.config/rstudio/rstudio-prefs.json
 ## Install R Package
 RUN install2.r remotes \
                 devtools \
+                DT \
                 rmarkdown \
                 tidyverse \
                 knitr \

@@ -1,32 +1,68 @@
 ---
-title: "01_BMK_data_processing"
+title: "Lavaan TRI/LARI Analyses"
 author: "Sirish Shrestha"
 date: "2023-04-28"
 output: html_document
+params: 
+  data: NULL
+  competency_cols: ""
+  factor_name: ""
+  regex_pattern: TRUE
+  raters: NULL
+  show_model: FALSE
+  columns_for_analyses: NULL
+  columns_to_remove_missing_values: NULL
+  factor_weights_competency_cols: NULL
+  factor_weights_cols: NULL
 ---
+
+
 
 ```{r setup, include=FALSE}
 
 knitr::opts_chunk$set(echo = TRUE)
 
-source("./src/init.R")
+```
 
+
+```{r assign-values, echo=FALSE}
+
+df <- params$data
+competency_cols <- params$competency_cols
+factor_name <- params$factor_name
+raters <- params$raters
+regex_pattern <- params$regex_pattern
+show_model <- params$show_model
+columns_for_analyses <- params$columns_for_analyses
+columns_to_remove_missing_values <- params$columns_to_remove_missing_values
+factor_weights_competency_cols <- params$factor_weights_competency_cols
+factor_weights_cols <- params$factor_weights_cols
 
 ```
 
 
-## Lavaan Analysis
+### Perform Lavaan Analysis
+
+There are two models to build: first level and bifactor models. Both models require the following values
+ - competency_cols: Column names that make up the competency or the regex pattern to identify the columns. When providing regex pattern, `regex_pattern` value must be set to TRUE. Example: "BMK_S1_34|BMK_S1_73|BMK_S1_77"
+ - factor_name: Name of the competency. This name is added in the lavaan analysis results
+ - regex_pattern: Indicate whether the `competency_cols` value is regex pattern or column names
+ - raters: All the raters required in the analyses
 
 ```{r first-order, echo=FALSE}
 
-first_level <- build_first_level_model(competency_cols="BMK_S1_34|BMK_S1_73|BMK_S1_77"
-                                     , df=avg_scores_by_rater_df
-                                     , factor_name="decisive"
-                                     , raters=raters
-                                     , regex_pattern = TRUE)
+first_level <- build_first_level_model(competency_cols=competency_cols
+                                       , df=df
+                                       , factor_name=factor_name
+                                       , raters=raters
+                                       , regex_pattern = regex_pattern)
+
+if(show_model){
+  print(first_level)
+}
 
 
-fits <- lavaan_model_fit(df=avg_scores_by_rater_df, model=first_level)
+fits <- lavaan_model_fit(df=df, model=first_level)
 
 ```
 
@@ -34,15 +70,15 @@ fits <- lavaan_model_fit(df=avg_scores_by_rater_df, model=first_level)
 
 ```{r bifactor,echo=FALSE}
 
-bifactor <- build_bifactor_model(competency_cols="BMK_S1_34|BMK_S1_73|BMK_S1_77"
-                               , df=avg_scores_by_rater_df
-                               , factor_name="decisive"
-                               , raters=raters
-                               , regex_pattern = TRUE)
+bifactor <- build_bifactor_model(competency_cols=competency_cols
+                                 , df=df
+                                 , factor_name=factor_name
+                                 , raters=raters
+                                 , regex_pattern = regex_pattern)
 
-bifactor_fits <- lavaan_model_fit(df=avg_scores_by_rater_df, model=bifactor)
+bifactor_fits <- lavaan_model_fit(df=df, model=bifactor)
 
-bifactor_fits$orthogonal$fitted
+# bifactor_fits$orthogonal$fitted
 
 ```
 
@@ -50,11 +86,11 @@ bifactor_fits$orthogonal$fitted
 
 ```{r remove-missing-values, echo=FALSE}
 
-avg_scores_by_rater_df <- avg_scores_by_rater_df %>% 
-                        select(matches("ESI_Key|BMK_S1_34|BMK_S1_73|BMK_S1_77|BMK_S2_8|BMK_S2_13|BMK_S2_15|BMK_S2_19|BMK_S2_22|BMK_S2_17|BMK_S2_25|BMK_S2_35|BMK_S2_18|BMK_S2_21|BMK_S2_23|BMK_S2_28|BMK_S2_30|BMK_S2_34|BMK_S2_36|BMK_S2_6|BMK_S2_7|BMK_S2_12|BMK_S2_14|BMK_S2_10|BMK_S2_5|BMK_S2_16|BMK_S2_26|BMK_S2_24|BMK_S2_33|BMK_S2_2|BMK_S2_20|BMK_S2_27|BMK_S2_29|BMK_S2_31|BMK_S2_32|BMK_S2_3|BMK_S2_4|BMK_S2_1|BMK_S2_11|BMK_S2_9|BMK_S5_1|BMK_S5_2|BMK_S5_3|BMK_S5_4|BMK_S5_5|BMK_S5_6|BMK_S5_7|BMK_S5_8|BMK_S5_9")) %>% 
-                        remove_missing_from_competency(df=.
-                                            , column_names= "ESI_Key|BMK_S1_34|BMK_S1_73|BMK_S1_77"
-                                            , regex_pattern = TRUE)
+df <- df %>% 
+  select(matches(columns_for_analyses)) %>% 
+  remove_missing_from_competency(df=.
+                                , column_names=columns_to_remove_missing_values
+                                , regex_pattern = TRUE)
 
 
 ```
@@ -64,82 +100,20 @@ avg_scores_by_rater_df <- avg_scores_by_rater_df %>%
 ```{r factory-weights, echo=FALSE}
 
 
-factor_weights_decisiveness <- get_factor_scoring_weights(df=avg_scores_by_rater_df
+factor_weights <- get_factor_scoring_weights(df=df
                                   , fitted_values=bifactor_fits$orthogonal$fitted
                                   , which="fsm")
 
 ## merge the factor weights with the raw item responses
-avg_scores_by_rater_df <- avg_scores_by_rater_df %>% 
-                            dplyr::bind_cols(factor_weights_decisiveness) %>%
-                            as.data.frame()
+df <- df %>% 
+      dplyr::bind_cols(factor_weights) %>%
+      as.data.frame()
 
 
-avg_scores_by_rater_df_merged <- scale_and_center_columns(df=avg_scores_by_rater_df
-                              , column_names = colnames(factor_weights_decisiveness)
+df_merged <- scale_and_center_columns(df=df
+                              , column_names = colnames(factor_weights)
                               , center = FALSE)
 
-
-```
-
-
-
-
-
-```{r}
-
-# source("./src/init.R")
-
-factor_score_equations <- generate_factor_scores(df=avg_scores_by_rater_df_merged
-                      , competency_cols = "\\w+_S1_(34|73|77)(?!.*decisive).*"
-                      , factor_weights_cols = "\\w+_S1_(34|73|77)(.*decisive)."
-                      , factor_name = "decisive"
-                      , latent_variables=c("Self", "Direct_Report", "Boss", 
-                                  "Peer", "arena", "reputation")
-                      , regex_pattern = TRUE
-                      , suffix = "LV")
-
-
-avg_scores_by_rater_df_merged <- calculate_factor_scores(
-  df=avg_scores_by_rater_df_merged
-, factor_score_equations=factor_score_equations)
-
-
-(avg_scores_by_rater_df_merged %>% select(names(factor_score_equations)))
-
-```
-
-
-
-```{r correlation, echo=FALSE}
-
-compute_correlation(df=avg_scores_by_rater_df_merged
-                               , x = c(raters, "arena", "reputation")
-                               , y = bifactor_fits$orthogonal$fitted
-                               , suffix = "LV")
-
-```
-
-
-```{r performance-item, echo=FALSE}
-
-## Create new var for performance item 1 containing the average across the three rater groups.
-avg_scores_by_rater_df_merged <- aggregate_competency_cols(df=avg_scores_by_rater_df_merged
-                                                  , columns=c("BMK_S5_1_mean_Boss"
-                                                            , "BMK_S5_1_mean_Direct_Report"
-                                                            , "BMK_S5_1_mean_Peer")
-                                                  , aggregated_column_name="BMK_S5_1_mean_all_rater")
-
-
-```
-
-
-
-```{r}
-
-compute_correlation(df=avg_scores_by_rater_df_merged
-                               , x = c(names(factor_score_equations),
-                                       "BMK_S5_1_mean_all_rater")
-                               )
 ```
 
 
@@ -147,18 +121,110 @@ compute_correlation(df=avg_scores_by_rater_df_merged
 ```{r competency-colmeans, echo=FALSE}
 
 
-compute_statistics(df=avg_scores_by_rater_df_merged
-                 , columns = "BMK_S1_(34|73|77)(?!.*decisive).*"
-                 , regex_pattern = TRUE)
+statistics <- compute_statistics(df=df_merged
+                                 , columns = sprintf("BMK_S1_(34|73|77)(?!.*%s).*", factor_name)
+                                 , regex_pattern = TRUE)
+
+
+```
+
+
+### Table 1
+
+```{r statistics-table, echo=FALSE}
+
+t_factor_weights <- t(factor_weights) %>% as.data.frame() %>% rownames_to_column(var="Item")
+
+# Extract trait/arena names
+trait_names <- unique(gsub(sprintf(".*_mean_(\\w+)_%s_.*", factor_name), "\\1", t_factor_weights$Item))
+
+# Merge data using dplyr and tidyr
+result_df <- t_factor_weights %>%
+  separate(Item, into = c("Trait", "Factor"), sep = "_decisive_") %>%
+  pivot_wider(names_from = "Factor", values_from = "V1") %>%
+  left_join(statistics, by = c("Trait" = "Variables")) %>%
+  mutate(`Mean (SD)` = sprintf("%s (%s)", Mean, SD)) %>%
+  select(Item = Trait, `Mean (SD)`, Self, Direct_Report, Boss, Peer, reputation, arena) %>% 
+  mutate(Self = formatC(round(Self, 3), format = "f", digits=3), 
+         Direct_Report = formatC(round(Direct_Report, 3), format="f", digits=3), 
+         Boss = formatC(round(Boss, 3), format="f", digits=3), 
+         Peer = formatC(round(Peer, 3), format="f", digits=3), 
+         reputation = formatC(round(reputation, 3), format="f", digits=3), 
+         arena = formatC(round(arena, 3), format="f", digits=3))
+
+colnames(result_df) <- c("Item", "Mean (SD)", "Self", "Direct Report", "Boss", "Peer", "Reputation", "Trait/Arena")
+
+# 
+# result_df %>% 
+#   kable(caption='Table 1: Item Means, Standard Deviations, and Factor Scoring Weights Derived from the TRI/LARI Model (Normative Sample)') %>%
+#   kable_styling(bootstrap_options = c("striped", "hover", "responsive")) %>% 
+#   add_header_above(c(" " = 2, "Factor Scoring Weights" = 6)) %>%
+#   footnote(general = sprintf("N = %s", format(nrow(df_merged), big.mark=", "))) 
+#   
+
+```
+
+
+
+```{r factor-score, echo=FALSE}
+
+factor_score_equations <- generate_factor_scores(df=df_merged
+                      , competency_cols = factor_weights_competency_cols
+                      , factor_weights_cols = factor_weights_cols
+                      , factor_name = factor_name
+                      , latent_variables=c(raters, "arena", "reputation")
+                      , regex_pattern = TRUE
+                      , suffix = "LV")
+
+
+df_merged <- calculate_factor_scores(df=df_merged
+                                     , factor_score_equations=factor_score_equations)
+
 
 
 ```
 
 
 
+```{r correlation, echo=FALSE}
+
+correlation <-  compute_correlation(df=df_merged
+                                   , x = c(raters, "arena", "reputation")
+                                   , y = bifactor_fits$orthogonal$fitted
+                                   , suffix = "LV")
+
+```
+
+
+```{r performance-item, echo=FALSE}
+
+## Create new var for performance item 1 containing the average across the three rater groups.
+df_merged <- aggregate_competency_cols(df=df_merged
+                                    , columns=c("BMK_S5_1_mean_Boss"
+                                              , "BMK_S5_1_mean_Direct_Report"
+                                              , "BMK_S5_1_mean_Peer")
+                                    , aggregated_column_name="BMK_S5_1_mean_all_rater")
+
+
+```
+
+
+
+```{r compute-correlation, echo=FALSE}
+
+correlation <- compute_correlation(df=df_merged
+                             , x = c(names(factor_score_equations),
+                                     "BMK_S5_1_mean_all_rater")
+                             )
+```
+
+
+
+
+
 ```{r conventional-average,echo=FALSE}
 
-avg_scores_by_rater_df_merged <- calculate_rowmeans(df=avg_scores_by_rater_df_merged
+df_merged <- calculate_rowmeans(df=df_merged
                  , new_cols=c("Self_Avg", "Direct_Report_Avg", "Boss_Avg", 
                               "Peer_Avg", "Inf_Avg", "All_Avg")
                  , mean_cols=list(
@@ -186,10 +252,10 @@ avg_scores_by_rater_df_merged <- calculate_rowmeans(df=avg_scores_by_rater_df_me
 
 ```{r tri-lari-correlation, echo=FALSE}
 
-compute_correlation(df=avg_scores_by_rater_df_merged
-                   , x = ".*_Avg|.*_LV|BMK_S5_1_mean_all_rater"
-                   , regex_pattern = TRUE
-                   )
+correlation <- compute_correlation(df=df_merged
+                                   , x = ".*_Avg|.*_LV|BMK_S5_1_mean_all_rater"
+                                   , regex_pattern = TRUE
+                                   )
 
 ```
 
@@ -199,27 +265,27 @@ compute_correlation(df=avg_scores_by_rater_df_merged
 
 mod1 <- linear_model(formula="BMK_S5_1_mean_all_rater ~ Self_LV + Direct_Report_LV + 
                               Boss_LV + Peer_LV + reputation_LV + arena_LV"
-                   , df=avg_scores_by_rater_df_merged)
+                   , df=df_merged)
 
 mod1$summary
 
 
 mod2 <- linear_model(formula="BMK_S5_1_mean_all_rater ~ Self_Avg + Direct_Report_Avg +
                               Boss_Avg + Peer_Avg", 
-                     df=avg_scores_by_rater_df_merged)
+                     df=df_merged)
 
 mod2$summary
 
 mod3 <- linear_model(formula="BMK_S5_1_mean_all_rater ~ Self_Avg + Direct_Report_Avg + 
                               Boss_Avg + Peer_Avg + Self_LV + Direct_Report_LV + Boss_LV + 
                               Peer_LV + reputation_LV + arena_LV",
-                      df=avg_scores_by_rater_df_merged)
+                      df=df_merged)
 
 mod3$summary
 
 
-anova(mod2$model, mod3$model)
-
+aov <- anova(mod2$model, mod3$model)
+aov$summary
 
 ```
 

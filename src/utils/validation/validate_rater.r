@@ -29,7 +29,7 @@ validate_rater <- function(df=NULL, raters=NULL, rater_colname=NULL){
     # Check if the rater column exists in the dataframe
     validate_cols(df=df, columns=rater_colname)
 
-    if(is.null(raters) || is.na(raters)){
+    if(is.null(raters) && is.na(raters)){
         stop("Raters are required.")
     }
 

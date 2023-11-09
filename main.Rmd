@@ -1,0 +1,97 @@
+---
+title: "TRI/LARI Analyses"
+author: "Sirish Shrestha"
+date: "2023-11-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+source("./src/init.R")
+
+```
+
+The ordering of the raters is important to generate consistent `lavaan` results. Based on the ordering of the raters, the calculations may be different.
+
+
+```{r main}
+
+# Read the data
+BMK2018_A <- readRDS("./data/BMK2018_A.RData")
+# BMK2018_B <- readRDS("./data/BMK2018_B.RData")
+
+BMK2018_A$ESI_Key <- factor(BMK2018_A$ESI_Key)
+BMK2018_A$RaterType <- factor(BMK2018_A$RaterType, levels = raters)
+
+data <- BMK2018_A
+
+```
+
+
+```{r configure-cols, echo=FALSE}
+
+## all competency columns from the database
+competency_cols <- get_column_names(df=data, pattern = COMPETENCY_COL_PATTERN)
+
+## all item columns that make up the competency columns
+competency_item_cols <- get_column_names(df=data, pattern = ITEM_COL_PATTERN)
+
+research_cols <- get_column_names(df=data, pattern = RESEARCH_COL_PATTERN)
+
+required_cols <- c("ESI_Key", "RaterType")
+
+column_pattern_for_analyses <- "ESI_Key|BMK_S1_34|BMK_S1_73|BMK_S1_77|BMK_S2_8|BMK_S2_13|BMK_S2_15|BMK_S2_19|BMK_S2_22|BMK_S2_17|BMK_S2_25|BMK_S2_35|BMK_S2_18|BMK_S2_21|BMK_S2_23|BMK_S2_28|BMK_S2_30|BMK_S2_34|BMK_S2_36|BMK_S2_6|BMK_S2_7|BMK_S2_12|BMK_S2_14|BMK_S2_10|BMK_S2_5|BMK_S2_16|BMK_S2_26|BMK_S2_24|BMK_S2_33|BMK_S2_2|BMK_S2_20|BMK_S2_27|BMK_S2_29|BMK_S2_31|BMK_S2_32|BMK_S2_3|BMK_S2_4|BMK_S2_1|BMK_S2_11|BMK_S2_9|BMK_S5_1|BMK_S5_2|BMK_S5_3|BMK_S5_4|BMK_S5_5|BMK_S5_6|BMK_S5_7|BMK_S5_8|BMK_S5_9"
+
+## also in ./src/globals.r
+raters <- c("Self", "Direct Report", "Peer", "Boss")
+
+grouping_cols <- c("ESI_Key", "RaterType")
+
+factor_name <- "decisive"
+
+set_current_df(df=data)
+
+```
+
+
+
+```{r}
+
+## process data
+rmarkdown::render(input = "./src/01_bmk_data_processing.Rmd", 
+                  output_dir = "./output",
+                  params = list(
+                    data = data, 
+                    raters = raters, 
+                    grouping_cols = grouping_cols
+                  ))
+
+```
+
+
+## Run Lavaan Analyses
+
+```{r lavaan, echo=FALSE}
+
+## decisiveness
+rmarkdown::render(input = "./src/02_bmk_lavaan_analyses.Rmd", 
+                  output_dir = "./output", 
+                  params = list(
+                    data = avg_scores_by_rater_df,
+                    competency_cols = "BMK_S1_34|BMK_S1_73|BMK_S1_77",
+                    factor_name = "decisive",
+                    raters = raters, 
+                    regex_pattern = TRUE,
+                    show_model = TRUE, 
+                    columns_for_analyses = column_pattern_for_analyses,
+                    columns_to_remove_missing_values = "ESI_Key|BMK_S1_34|BMK_S1_73|BMK_S1_77", 
+                    factor_weights_competency_cols = sprintf("\\w+_S1_(34|73|77)(?!.*%s).*", factor_name), 
+                    factor_weights_cols = sprintf("\\w+_S1_(34|73|77)(.*%s).", factor_name)
+                  ))
+
+
+```
+
+
+

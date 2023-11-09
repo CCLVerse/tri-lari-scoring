@@ -39,7 +39,7 @@ avg_scores_by_raters <- function(df=NULL, required_cols=NULL, item_cols=NULL, co
     validate_cols(df=df, columns=research_cols)
     validate_cols(df=df, columns=grouping_cols)
     
-    ## group by id and rater columns to aggregate the data using the given centroid method. Default centroid is mean
+    ## group by id and rater columns to aggregate the data
     df <- df %>% 
         dplyr::select(!!! all_of(required_cols), 
                       !!! all_of(item_cols), 

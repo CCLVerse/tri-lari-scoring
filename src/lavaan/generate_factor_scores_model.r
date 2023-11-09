@@ -92,7 +92,7 @@ generate_factor_scores <- function(df=data.frame(), competency_cols=character(),
 
     result <- invisible(
         lapply(latent_variables, function(x) {
-            create_factor_scores_model(df=avg_scores_by_rater_df_merged
+            create_factor_scores_model(df=df
             , competency_cols = competency_cols
             , factor_weights_cols = sprintf("%s%s", factor_weights_cols,x)
             , factor_name = factor_name

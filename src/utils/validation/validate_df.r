@@ -18,7 +18,7 @@
 #
 validate_df <- function(df=NULL){
 
-    if(is.null(df) || is.na(df)){
+    if(is.null(df) && is.na(df)){
         stop("No dataframe was provided to validate.")
     }
 
