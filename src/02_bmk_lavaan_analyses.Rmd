@@ -1,9 +1,10 @@
 ---
-title: "Lavaan TRI/LARI Analyses"
+title: "`r params$title`"
 author: "Sirish Shrestha"
 date: "2023-04-28"
 output: html_document
 params: 
+  title: NULL
   data: NULL
   competency_cols: ""
   factor_name: ""
@@ -15,6 +16,9 @@ params:
   columns_to_remove_missing_values: NULL
   factor_weights_competency_cols: NULL
   factor_weights_cols: NULL
+  competency_cols_with_factor_weights: NULL
+  outcome_raters: NULL
+  outcome_colname: NULL
 ---
 
 
@@ -39,6 +43,10 @@ columns_for_analyses <- params$columns_for_analyses
 columns_to_remove_missing_values <- params$columns_to_remove_missing_values
 factor_weights_competency_cols <- params$factor_weights_competency_cols
 factor_weights_cols <- params$factor_weights_cols
+competency_cols_with_factor_weights <- params$competency_cols_with_factor_weights
+outcome_raters <- params$outcome_raters
+outcome_colname <- params$outcome_colname
+
 
 ```
 
@@ -108,7 +116,6 @@ if(show_model){
 
 bifactor_fits <- lavaan_model_fit(df=df, model=bifactor)
 
-# bifactor_fits$orthogonal$fitted
 
 ```
 
@@ -152,7 +159,7 @@ df_merged <- scale_and_center_columns(df=df
 
 
 statistics <- compute_statistics(df=df_merged
-                                 , columns = sprintf("BMK_S1_(34|73|77)(?!.*%s).*", factor_name)
+                                 , columns = competency_cols_with_factor_weights
                                  , regex_pattern = TRUE)
 
 
@@ -267,12 +274,12 @@ df_merged <- calculate_rowmeans(df=df_merged
 
 ```{r performance-item, echo=FALSE, warning=FALSE}
 
+outcome_rater_cols = get_column_names(df=df_merged, pattern=outcome_raters)
+
 ## Create new var for performance item 1 containing the average across the three rater groups.
 df_merged <- aggregate_competency_cols(df=df_merged
-                                    , columns=c("BMK_S5_1_mean_Boss"
-                                              , "BMK_S5_1_mean_Direct_Report"
-                                              , "BMK_S5_1_mean_Peer")
-                                    , aggregated_column_name="BMK_S5_1_mean_all_rater")
+                                    , columns=outcome_rater_cols
+                                    , aggregated_column_name=outcome_colname)
 
 
 ```
@@ -301,7 +308,7 @@ correlation %>%
   kable(caption = "Correlations Among Decisiveness Scores: TRI/LARI-based Scores and Avergaed Scores") %>% 
   kable_styling(bootstrap_options = c("striped", "hover")) %>%
   column_spec(1, bold=TRUE) %>% 
-  footnote(sprintf("Correlations above the diagonal in each matrix are from the Normative sample, those below the diagonal are from the cross-validation sample.$N_{normative}$ = %s; $N_{cross-validation}$ = %s. Correlations ≥ |.03| are significant at p < .05. ", n_normative, n_cv))
+  footnote(sprintf("Correlations above the diagonal in each matrix are from the Normative sample, those below the diagonal are from the cross-validation sample.$N_{normative}$ = %s. Correlations ≥ |.03| are significant at p < .05. ", n_normative))
 
 
 ```
@@ -328,7 +335,6 @@ perf_correlation <- correlation %>%
   rownames_to_column(var = "Var") %>%
   select(Var, BMK_S5_1_mean_all_rater)
 
-diag(correlation) <- "-"
 rownames(correlation) <- c("Self", "Direct Report", "Peer", "Boss", "Reputation", "Trait/Arena")
 colnames(correlation) <- c("Self", "Direct Report", "Boss", "Peer", "All Informants", "All Raters", "Performance")
 
@@ -348,8 +354,11 @@ correlation %>%
 
 ```{r linear-model1, results="asis", echo=FALSE, warning=FALSE}
 
-mod1 <- linear_model(formula="BMK_S5_1_mean_all_rater ~ Self_LV + Direct_Report_LV + Boss_LV + Peer_LV + reputation_LV + arena_LV"
-                   , df=df_merged)
+lv_cols <- get_column_names(df_merged, ".*_LV") %>% paste0(., collapse = " + ")
+formula <- as.formula(sprintf("%s ~ %s", outcome_colname, lv_cols))
+
+
+mod1 <- linear_model(formula=formula, df=df_merged)
 
 summary1 <- mod1$summary
 
@@ -384,8 +393,12 @@ std1 <- coefs1 %>%
 
 ```{r linear-model2, results="asis", echo=FALSE}
 
-mod2 <- linear_model(formula="BMK_S5_1_mean_all_rater ~ Self_Avg + Direct_Report_Avg + Boss_Avg + Peer_Avg", 
-                     df=df_merged)
+pattern = sprintf(".*(%s)_Avg", paste0(stringr::str_replace_all(raters, " ", "_"), collapse = "|"))
+
+avg_cols <- get_column_names(df_merged, pattern) %>% paste0(., collapse = " + ")
+formula <- as.formula(sprintf("%s ~ %s", outcome_colname, lv_cols))
+
+mod2 <- linear_model(formula=formula, df=df_merged)
 
 summary2 <- mod2$summary
 
@@ -409,10 +422,10 @@ std2 <- coefs2 %>%
 
 ```{r linear-model3, results="asis", echo=FALSE}
 
-mod3 <- linear_model(formula="BMK_S5_1_mean_all_rater ~ Self_Avg + Direct_Report_Avg + 
-                              Boss_Avg + Peer_Avg + Self_LV + Direct_Report_LV + Boss_LV + 
-                              Peer_LV + reputation_LV + arena_LV",
-                      df=df_merged)
+lv_avg_cols <- paste0(c(avg_cols, lv_cols), collapse=" + ")
+formula <- as.formula(sprintf("%s ~ %s", outcome_colname, lv_avg_cols))
+
+mod3 <- linear_model(formula=formula, df=df_merged)
 
 summary3 <- mod3$summary
 
@@ -458,11 +471,11 @@ reg_weights_avg <- avg_perf_correlation %>%
   left_join(std1,by = "Var") %>%
   left_join(std3, by = "Var") %>%
   rename(
-    `r with perf` = BMK_S5_1_mean_all_rater,
+    `r with perf` = !! outcome_colname,
     `1` = Standardized.x, 
     `2` = Standardized.y, 
     `3` = Standardized) %>%
-  filter(Var != "BMK_S5_1_mean_all_rater") %>%
+  filter(Var != outcome_colname) %>%
   bind_rows(r2)
 
 reg_weights_lv %>%

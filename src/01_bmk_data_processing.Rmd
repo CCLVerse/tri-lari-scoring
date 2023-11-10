@@ -6,6 +6,10 @@ output: html_document
 params: 
   data: NULL
   raters: !r c("Self", "Direct Report", "Peers", "Boss")
+  required_cols: NULL
+  competency_item_cols: NULL
+  competency_cols: NULL
+  research_cols: NULL
   grouping_cols: NULL
 ---
 
@@ -21,6 +25,10 @@ knitr::opts_chunk$set(echo = TRUE)
 df <- params$data
 raters <- params$raters
 grouping_cols <- params$grouping_cols
+required_cols <- params$required_cols
+competency_item_cols <- params$competency_item_cols
+competency_cols <- params$competency_cols
+research_cols <- params$research_cols
 
 ```
 
