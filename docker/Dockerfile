@@ -3,7 +3,7 @@ FROM rocker/tidyverse:4.3.0
 RUN apt-get -y update && \
     apt-get -y upgrade && \
     apt-get -y install \
-    build-essential && \
+    build-essential libxt6 && \
     apt-get -y purge && \
     apt-get clean all && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

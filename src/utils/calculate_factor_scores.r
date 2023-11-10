@@ -19,7 +19,7 @@
 calculate_factor_scores <- function(df=data.frame(), factor_score_equations=character()){
 
     validate_df(df)
-    message(df)
+
     edf <- purrr::map_dfc(factor_score_equations, ~ evaluate_function(df, .))
 
     df <- cbind(df, edf)
@@ -38,8 +38,6 @@ calculate_factor_scores <- function(df=data.frame(), factor_score_equations=char
 #'
 #' @return The result of the evaluation.
 evaluate_function <- function(df, eq){
-    message(eq)
-    message(df)
     result <- eval(parse(text=eq), envir=df)
     return(result)
 }

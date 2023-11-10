@@ -30,8 +30,9 @@ compute_correlation <- function(df=data.frame(), x=character(), y=NULL, suffix=c
 
     }
 
-    correlation <- cor(df[x], y) %>%
-        as.data.frame()
+    correlation <- cor(df[x], y, use="pairwise.complete.obs") %>%
+        as.data.frame() %>%
+        mutate(across(where(is.numeric), ~ formatC(., format = "f", digits = 2)))
 
     return(correlation)
 

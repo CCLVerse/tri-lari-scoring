@@ -35,7 +35,7 @@ build_first_level_model <- function(df=data.frame(), competency_cols=NULL, facto
     
         })) %>% unname() 
 
-    model <- paste(model, collapse="\n")
+    model <- paste(model, collapse=" \n ")
     
     return(model)
 

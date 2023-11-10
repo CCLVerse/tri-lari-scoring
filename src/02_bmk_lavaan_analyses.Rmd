@@ -9,6 +9,7 @@ params:
   factor_name: ""
   regex_pattern: TRUE
   raters: NULL
+  sample_name: ""
   show_model: FALSE
   columns_for_analyses: NULL
   columns_to_remove_missing_values: NULL
@@ -32,6 +33,7 @@ competency_cols <- params$competency_cols
 factor_name <- params$factor_name
 raters <- params$raters
 regex_pattern <- params$regex_pattern
+sample_name <- params$sample_name
 show_model <- params$show_model
 columns_for_analyses <- params$columns_for_analyses
 columns_to_remove_missing_values <- params$columns_to_remove_missing_values
@@ -43,22 +45,43 @@ factor_weights_cols <- params$factor_weights_cols
 
 ### Perform Lavaan Analysis
 
-There are two models to build: first level and bifactor models. Both models require the following values
- - competency_cols: Column names that make up the competency or the regex pattern to identify the columns. When providing regex pattern, `regex_pattern` value must be set to TRUE. Example: "BMK_S1_34|BMK_S1_73|BMK_S1_77"
- - factor_name: Name of the competency. This name is added in the lavaan analysis results
- - regex_pattern: Indicate whether the `competency_cols` value is regex pattern or column names
- - raters: All the raters required in the analyses
+#### Models to Build
 
-```{r first-order, echo=FALSE}
+There are two models to build:
 
-first_level <- build_first_level_model(competency_cols=competency_cols
-                                       , df=df
+1. First Level Model
+2. Bifactor Model
+
+#### Required Values
+
+Both models require the following values:
+
+- **competency_cols:** Column names that make up the competency or the regex pattern to identify the columns. When providing a regex pattern, set `regex_pattern` to TRUE. 
+
+   *Example: "BMK_S1_34|BMK_S1_73|BMK_S1_77"*
+
+- **factor_name:** Name of the competency. This name is added in the `lavaan` analysis results.
+
+- **regex_pattern:** Indicate whether the `competency_cols` value is a regex pattern or column names.
+
+- **raters:** All the raters required in the analyses.
+
+
+
+### First level model
+
+```{r first-order, results="asis", echo=FALSE, warning=FALSE}
+
+first_level <- build_first_level_model(df=df
+                                       , competency_cols=competency_cols
                                        , factor_name=factor_name
                                        , raters=raters
                                        , regex_pattern = regex_pattern)
 
 if(show_model){
-  print(first_level)
+  first_level %>% 
+    kable(col.names = "") %>%
+    kable_styling()
 }
 
 
@@ -67,14 +90,21 @@ fits <- lavaan_model_fit(df=df, model=first_level)
 ```
 
 
+### Bifactor model
 
-```{r bifactor,echo=FALSE}
+```{r bifactor, results="asis", warning=FALSE, echo=FALSE}
 
 bifactor <- build_bifactor_model(competency_cols=competency_cols
                                  , df=df
                                  , factor_name=factor_name
                                  , raters=raters
                                  , regex_pattern = regex_pattern)
+
+if(show_model){
+  bifactor %>% 
+    kable(col.names = "") %>%
+    kable_styling()
+}
 
 bifactor_fits <- lavaan_model_fit(df=df, model=bifactor)
 
@@ -84,7 +114,7 @@ bifactor_fits <- lavaan_model_fit(df=df, model=bifactor)
 
 
 
-```{r remove-missing-values, echo=FALSE}
+```{r remove-missing-values, echo=FALSE, warning=FALSE}
 
 df <- df %>% 
   select(matches(columns_for_analyses)) %>% 
@@ -97,7 +127,7 @@ df <- df %>%
 
 
 
-```{r factory-weights, echo=FALSE}
+```{r factory-weights, echo=FALSE, warning=FALSE}
 
 
 factor_weights <- get_factor_scoring_weights(df=df
@@ -118,7 +148,7 @@ df_merged <- scale_and_center_columns(df=df
 
 
 
-```{r competency-colmeans, echo=FALSE}
+```{r competency-colmeans, echo=FALSE, warning=FALSE}
 
 
 statistics <- compute_statistics(df=df_merged
@@ -128,6 +158,7 @@ statistics <- compute_statistics(df=df_merged
 
 ```
 
+---
 
 ### Table 1
 
@@ -143,36 +174,31 @@ result_df <- t_factor_weights %>%
   separate(Item, into = c("Trait", "Factor"), sep = "_decisive_") %>%
   pivot_wider(names_from = "Factor", values_from = "V1") %>%
   left_join(statistics, by = c("Trait" = "Variables")) %>%
+  mutate(across(where(is.numeric), ~ formatC(., format="f", digits = 3))) %>%
   mutate(`Mean (SD)` = sprintf("%s (%s)", Mean, SD)) %>%
-  select(Item = Trait, `Mean (SD)`, Self, Direct_Report, Boss, Peer, reputation, arena) %>% 
-  mutate(Self = formatC(round(Self, 3), format = "f", digits=3), 
-         Direct_Report = formatC(round(Direct_Report, 3), format="f", digits=3), 
-         Boss = formatC(round(Boss, 3), format="f", digits=3), 
-         Peer = formatC(round(Peer, 3), format="f", digits=3), 
-         reputation = formatC(round(reputation, 3), format="f", digits=3), 
-         arena = formatC(round(arena, 3), format="f", digits=3))
-
+  select(Item = Trait, `Mean (SD)`, Self, Direct_Report, Boss, Peer, reputation, arena)
+  
 colnames(result_df) <- c("Item", "Mean (SD)", "Self", "Direct Report", "Boss", "Peer", "Reputation", "Trait/Arena")
 
-# 
-# result_df %>% 
-#   kable(caption='Table 1: Item Means, Standard Deviations, and Factor Scoring Weights Derived from the TRI/LARI Model (Normative Sample)') %>%
-#   kable_styling(bootstrap_options = c("striped", "hover", "responsive")) %>% 
-#   add_header_above(c(" " = 2, "Factor Scoring Weights" = 6)) %>%
-#   footnote(general = sprintf("N = %s", format(nrow(df_merged), big.mark=", "))) 
-#   
+
+result_df %>%
+  kable(caption='Table 1: Item Means, Standard Deviations, and Factor Scoring Weights Derived from the TRI/LARI Model (Normative Sample)') %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "responsive")) %>%
+  add_header_above(c(" " = 2, "Factor Scoring Weights" = 6)) %>%
+  footnote(general = sprintf("N = %s", format(nrow(df_merged), big.mark=", ")))
+
 
 ```
 
 
 
-```{r factor-score, echo=FALSE}
+```{r factor-score, echo=FALSE, warning=FALSE}
 
 factor_score_equations <- generate_factor_scores(df=df_merged
                       , competency_cols = factor_weights_competency_cols
                       , factor_weights_cols = factor_weights_cols
                       , factor_name = factor_name
-                      , latent_variables=c(raters, "arena", "reputation")
+                      , latent_variables=c(raters, "reputation", "arena")
                       , regex_pattern = TRUE
                       , suffix = "LV")
 
@@ -181,45 +207,34 @@ df_merged <- calculate_factor_scores(df=df_merged
                                      , factor_score_equations=factor_score_equations)
 
 
+n_normative = nrow(df_merged)
 
 ```
 
+---
 
+### Table 2
 
+#### 2a. TRI<span style="color:gold;">/</span>LARI-Based Scores
 ```{r correlation, echo=FALSE}
 
-correlation <-  compute_correlation(df=df_merged
-                                   , x = c(raters, "arena", "reputation")
+lv_correlation <-  compute_correlation(df=df_merged
+                                   , x = c(raters, "reputation", "arena")
                                    , y = bifactor_fits$orthogonal$fitted
                                    , suffix = "LV")
 
-```
+diag(lv_correlation) <- "-"
+rownames(lv_correlation) <- c("Self", "Direct Report", "Peer", "Boss", "Reputation", 
+                         "Trait/Arena")
+colnames(lv_correlation) <- c("Self", "Direct Report", "Peer", "Boss", "Reputation", 
+                         "Trait/Arena")
 
-
-```{r performance-item, echo=FALSE}
-
-## Create new var for performance item 1 containing the average across the three rater groups.
-df_merged <- aggregate_competency_cols(df=df_merged
-                                    , columns=c("BMK_S5_1_mean_Boss"
-                                              , "BMK_S5_1_mean_Direct_Report"
-                                              , "BMK_S5_1_mean_Peer")
-                                    , aggregated_column_name="BMK_S5_1_mean_all_rater")
-
+lv_correlation %>% 
+  kable(caption = "Correlations Among Decisiveness Scores: TRI/LARI-based Scores and Avergaed Scores") %>% 
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  column_spec(1, bold=TRUE)
 
 ```
-
-
-
-```{r compute-correlation, echo=FALSE}
-
-correlation <- compute_correlation(df=df_merged
-                             , x = c(names(factor_score_equations),
-                                     "BMK_S5_1_mean_all_rater")
-                             )
-```
-
-
-
 
 
 ```{r conventional-average,echo=FALSE}
@@ -246,46 +261,236 @@ df_merged <- calculate_rowmeans(df=df_merged
                    ))
 
 
+
 ```
 
 
+```{r performance-item, echo=FALSE, warning=FALSE}
 
-```{r tri-lari-correlation, echo=FALSE}
+## Create new var for performance item 1 containing the average across the three rater groups.
+df_merged <- aggregate_competency_cols(df=df_merged
+                                    , columns=c("BMK_S5_1_mean_Boss"
+                                              , "BMK_S5_1_mean_Direct_Report"
+                                              , "BMK_S5_1_mean_Peer")
+                                    , aggregated_column_name="BMK_S5_1_mean_all_rater")
 
-correlation <- compute_correlation(df=df_merged
-                                   , x = ".*_Avg|.*_LV|BMK_S5_1_mean_all_rater"
+
+```
+
+
+#### 2b. Averaged Scores
+
+```{r tri-lari-avg-correlation, echo=FALSE}
+
+avg_correlation <- compute_correlation(df=df_merged
+                                   , x = ".*_Avg|all_rater"
                                    , regex_pattern = TRUE
                                    )
 
+avg_perf_correlation <- avg_correlation %>%
+  rownames_to_column(var = "Var") %>%
+  select(Var, BMK_S5_1_mean_all_rater)
+
+diag(correlation) <- "-"
+rownames(correlation) <- c("Self", "Direct Report", "Peer", "Boss", "All Informants",
+                         "All Raters")
+colnames(correlation) <- c("Self", "Direct Report", "Peer", "Boss", "All Informants",
+                         "All Raters")
+
+correlation %>% 
+  kable(caption = "Correlations Among Decisiveness Scores: TRI/LARI-based Scores and Avergaed Scores") %>% 
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  column_spec(1, bold=TRUE) %>% 
+  footnote(sprintf("Correlations above the diagonal in each matrix are from the Normative sample, those below the diagonal are from the cross-validation sample.$N_{normative}$ = %s; $N_{cross-validation}$ = %s. Correlations ≥ |.03| are significant at p < .05. ", n_normative, n_cv))
+
+
 ```
 
 
 
-```{r linear-model, echo=FALSE}
 
-mod1 <- linear_model(formula="BMK_S5_1_mean_all_rater ~ Self_LV + Direct_Report_LV + 
-                              Boss_LV + Peer_LV + reputation_LV + arena_LV"
+### Table 3
+
+#### 3a. Normative Sample
+
+```{r compute-norm-correlation, echo=FALSE, warning=FALSE}
+
+lv_x = get_column_names(df=df_merged, pattern = ".*_LV")
+avg_y = get_column_names(df=df_merged, pattern = ".*_(Avg|all_rater)")
+avg_y <- df_merged[avg_y]
+
+correlation <- compute_correlation(df=df_merged
+                             , x = lv_x
+                             , y = avg_y
+                             )
+
+perf_correlation <- correlation %>% 
+  rownames_to_column(var = "Var") %>%
+  select(Var, BMK_S5_1_mean_all_rater)
+
+diag(correlation) <- "-"
+rownames(correlation) <- c("Self", "Direct Report", "Peer", "Boss", "Reputation", "Trait/Arena")
+colnames(correlation) <- c("Self", "Direct Report", "Boss", "Peer", "All Informants", "All Raters", "Performance")
+
+correlation %>%
+  kable(caption = "Correlations Among TRI/LARI-based Scores, Averaged Scores, and Performance Criterion.") %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  column_spec(1, bold=TRUE) %>%
+  add_header_above(c(" " = 1, "Averaged Scores" = 7))
+
+```
+
+
+
+### Linear Models
+
+#### Model 1: `r sample_name` Sample
+
+```{r linear-model1, results="asis", echo=FALSE, warning=FALSE}
+
+mod1 <- linear_model(formula="BMK_S5_1_mean_all_rater ~ Self_LV + Direct_Report_LV + Boss_LV + Peer_LV + reputation_LV + arena_LV"
                    , df=df_merged)
 
-mod1$summary
+summary1 <- mod1$summary
+
+coefs1 <- summary1$coefficients %>% 
+  as.data.frame() %>%
+  mutate(across(where(is.numeric), ~ formatC(., format="f", digits=2))) %>%
+  rownames_to_column(var = "Var") 
+
+std1 <- coefs1 %>% 
+  mutate(
+    Standardized = case_when(
+    `Pr(>|t|)` > 0.05 ~ sprintf("$%s^{NS}$",Standardized),
+    TRUE ~ Standardized
+  )) %>% 
+  select(Var, Standardized) %>%
+  filter(Var != "(Intercept)")
 
 
-mod2 <- linear_model(formula="BMK_S5_1_mean_all_rater ~ Self_Avg + Direct_Report_Avg +
-                              Boss_Avg + Peer_Avg", 
+std1 <- coefs1 %>% 
+  mutate(Standardized = as.numeric(Standardized),  # Convert to numeric
+         Standardized = case_when(
+           `Pr(>|t|)` > 0.05 ~ paste0(formatC(Standardized, format="f", digits=2), "*"), 
+           TRUE ~ formatC(Standardized, format="f", digits=2)
+         )) %>% 
+  select(Var, Standardized) %>%
+  filter(Var != "(Intercept)")
+
+```
+
+
+
+
+```{r linear-model2, results="asis", echo=FALSE}
+
+mod2 <- linear_model(formula="BMK_S5_1_mean_all_rater ~ Self_Avg + Direct_Report_Avg + Boss_Avg + Peer_Avg", 
                      df=df_merged)
 
-mod2$summary
+summary2 <- mod2$summary
+
+
+coefs2 <- summary2$coefficients %>% 
+  as.data.frame() %>%
+  mutate(across(where(is.numeric), ~ formatC(., format="f", digits=2))) %>%
+  rownames_to_column(var = "Var")
+
+std2 <- coefs2 %>%   
+  mutate(Standardized = case_when(
+    `Pr(>|t|)` > 0.05 ~ sprintf("$%s^{NS}$",Standardized),
+    TRUE ~ Standardized
+  )) %>% 
+  select(Var, Standardized) %>%
+  filter(Var != "(Intercept)")
+
+```
+
+
+
+```{r linear-model3, results="asis", echo=FALSE}
 
 mod3 <- linear_model(formula="BMK_S5_1_mean_all_rater ~ Self_Avg + Direct_Report_Avg + 
                               Boss_Avg + Peer_Avg + Self_LV + Direct_Report_LV + Boss_LV + 
                               Peer_LV + reputation_LV + arena_LV",
                       df=df_merged)
 
-mod3$summary
+summary3 <- mod3$summary
 
+coefs3 <- summary3$coefficients %>% 
+  as.data.frame() %>%
+  mutate(across(where(is.numeric), ~ formatC(., format="f", digits=2))) %>%
+  rownames_to_column(var = "Var")
 
-aov <- anova(mod2$model, mod3$model)
-aov$summary
+std3 <- coefs3 %>% 
+    mutate(Standardized = case_when(
+    `Pr(>|t|)` > 0.05 ~ sprintf("$%s^{NS}$",Standardized), 
+    TRUE ~ Standardized
+  )) %>% 
+  select(Var, Standardized) %>%
+  filter(Var != "(Intercept)")
 
 ```
+
+
+
+```{r reg-weights, echo=FALSE, warning=FALSE}
+
+r2 <- data.frame(Var = "$R^{2}$", 
+                `1` = summary1$r.squared, 
+                `2` = summary2$r.squared, 
+                `3` = summary3$r.squared) %>%
+  rename(`1` = X1, `2` = X2, `3` = X3) %>% 
+  mutate(across(where(is.numeric), ~ formatC(., format="f", digits=2)))
+
+reg_weights_lv <- perf_correlation %>% 
+  left_join(std1, by = "Var") %>%
+  left_join(std2, by="Var") %>% 
+  left_join(std3, by="Var") %>% 
+  rename(
+    `r with perf` = BMK_S5_1_mean_all_rater,
+    `1` = Standardized.x, 
+    `2` = Standardized.y, 
+    `3` = Standardized) 
+
+
+reg_weights_avg <- avg_perf_correlation %>% 
+  left_join(std2, by = "Var") %>%
+  left_join(std1,by = "Var") %>%
+  left_join(std3, by = "Var") %>%
+  rename(
+    `r with perf` = BMK_S5_1_mean_all_rater,
+    `1` = Standardized.x, 
+    `2` = Standardized.y, 
+    `3` = Standardized) %>%
+  filter(Var != "BMK_S5_1_mean_all_rater") %>%
+  bind_rows(r2)
+
+reg_weights_lv %>%
+  bind_rows(reg_weights_avg) %>%
+  mutate(Var = case_when(
+    str_detect(Var, regex("Self_(LV|Avg)", ignore_case=TRUE)) ~ "Self", 
+    str_detect(Var, regex("Direct_Report_(LV|Avg)", ignore_case=TRUE)) ~ "Direct Report", 
+    str_detect(Var, regex("Peer_(LV|Avg)", ignore_case=TRUE)) ~ "Peer", 
+    str_detect(Var, regex("Boss_(LV|Avg)", ignore_case=TRUE)) ~ "Boss",
+    str_detect(Var, regex("reputation", ignore_case=TRUE)) ~ "Reputation",
+    str_detect(Var, regex("arena", ignore_case=TRUE)) ~ "Trait/Arena",
+    str_detect(Var, regex("inf_avg", ignore_case=TRUE)) ~ "All Informants",
+    str_detect(Var, regex("All_avg", ignore_case=TRUE)) ~ "All",
+    TRUE ~ Var
+  )) %>%
+  mutate(Var = str_replace(Var, "_LV", "")) %>%
+  mutate_all(~ ifelse(is.na(.), "-", .)) %>%
+  kable(caption="Associations Between Decisiveness Scores and Performance Criterion: Correlations and Regression") %>% 
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  add_header_above(c(" " = 2, "Standardized Weights from Regression Models" = 3)) %>%
+  pack_rows("TRI/LARI", start_row = 1, end_row = 6) %>% 
+  pack_rows("Averaged", start_row = 7, end_row = 12) %>%
+  footnote(general = sprintf("N = %s. Correlations ≥ |.03| are significant at p < .05.", format(nrow(df_merged), big.mark=", ")))
+
+
+
+```
+
+
+
 

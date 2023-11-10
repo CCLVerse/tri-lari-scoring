@@ -27,8 +27,8 @@ compute_statistics <- function(df=data.frame(), columns=character(), regex_patte
     validate_cols(df=df, columns=columns)
 
      result <- data.frame( 
-        Mean = sapply(df[,columns], function(x) paste0(round(mean(x, na.rm=T),3))),
-        SD = sapply(df[,columns], function(x) round(sd(x, na.rm=T),3))) %>% 
+        Mean = sapply(df[,columns], function(x) formatC(mean(x, na.rm=T), format="f", digits = 3)),
+        SD = sapply(df[,columns], function(x) formatC(sd(x, na.rm=T), format="f", digits = 3))) %>% 
         rownames_to_column(var='Variables') 
   
     return(result)
