@@ -29,6 +29,5 @@ aggregate_competency_cols <- function(df=data.frame(), columns=character(), aggr
     df <- df %>%
         dplyr::mutate(!!aggregated_column_name := rowMeans(across(all_of(columns)), na.rm = TRUE))
         
-        
     return(df)
 }

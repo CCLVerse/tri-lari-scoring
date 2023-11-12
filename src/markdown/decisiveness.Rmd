@@ -1,0 +1,119 @@
+---
+title: "TRI/LARI Analyses: Decisiveness"
+author: "Sirish Shrestha"
+date: "2023-11-06"
+output: none
+params: 
+  data: NULL
+  sample_name: ""
+---
+
+
+## Normative Sample 
+
+```{r main}
+
+data <- params$data
+sample_name <- params$sample_name
+
+variables <- load_global_variables(data=data)
+
+competency_cols <- variables$competency_cols
+competency_item_cols <- variables$competency_item_cols
+research_cols <- variables$research_cols
+required_cols <- variables$required_cols
+grouping_cols <- variables$grouping_cols
+
+# The ordering of the raters is important to generate consistent `lavaan` results. Based on the ordering of the raters, the calculations may be different.
+raters <- variables$raters
+
+
+```
+
+
+
+```{r}
+
+#1. Decisiveness
+
+## Lavaan analysis
+column_pattern_for_analyses <- columns_for_analyses <-  "ESI_Key|BMK_S1_34|BMK_S1_73|BMK_S1_77|BMK_S2_8|BMK_S2_13|BMK_S2_15|BMK_S2_19|BMK_S2_22|BMK_S2_17|BMK_S2_25|BMK_S2_35|BMK_S2_18|BMK_S2_21|BMK_S2_23|BMK_S2_28|BMK_S2_30|BMK_S2_34|BMK_S2_36|BMK_S2_6|BMK_S2_7|BMK_S2_12|BMK_S2_14|BMK_S2_10|BMK_S2_5|BMK_S2_16|BMK_S2_26|BMK_S2_24|BMK_S2_33|BMK_S2_2|BMK_S2_20|BMK_S2_27|BMK_S2_29|BMK_S2_31|BMK_S2_32|BMK_S2_3|BMK_S2_4|BMK_S2_1|BMK_S2_11|BMK_S2_9|BMK_S5_1|BMK_S5_2|BMK_S5_3|BMK_S5_4|BMK_S5_5|BMK_S5_6|BMK_S5_7|BMK_S5_8|BMK_S5_9"
+
+rowmeans_columns_list <- list(
+  c("BMK_S1_34_mean_Self", "BMK_S1_73_mean_Self", "BMK_S1_77_mean_Self"),
+  c(
+    "BMK_S1_34_mean_Direct_Report",
+    "BMK_S1_73_mean_Direct_Report",
+    "BMK_S1_77_mean_Direct_Report"
+  ),
+  c("BMK_S1_34_mean_Boss", "BMK_S1_73_mean_Boss", "BMK_S1_77_mean_Boss"),
+  c("BMK_S1_34_mean_Peer", "BMK_S1_73_mean_Peer", "BMK_S1_77_mean_Peer"),
+  c(
+    "BMK_S1_34_mean_Direct_Report",
+    "BMK_S1_73_mean_Direct_Report",
+    "BMK_S1_77_mean_Direct_Report",
+    "BMK_S1_34_mean_Boss",
+    "BMK_S1_73_mean_Boss",
+    "BMK_S1_77_mean_Boss",
+    "BMK_S1_34_mean_Peer",
+    "BMK_S1_73_mean_Peer",
+    "BMK_S1_77_mean_Peer"
+  ),
+  c(
+    "BMK_S1_34_mean_Self",
+    "BMK_S1_73_mean_Self",
+    "BMK_S1_77_mean_Self",
+    "BMK_S1_34_mean_Direct_Report",
+    "BMK_S1_73_mean_Direct_Report",
+    "BMK_S1_77_mean_Direct_Report",
+    "BMK_S1_34_mean_Boss",
+    "BMK_S1_73_mean_Boss",
+    "BMK_S1_77_mean_Boss",
+    "BMK_S1_34_mean_Peer",
+    "BMK_S1_73_mean_Peer",
+    "BMK_S1_77_mean_Peer"
+  )
+)
+
+
+factor_name <- "decisive" 
+show_model <- TRUE
+regex_pattern <- TRUE
+competency_cols_pattern <- "BMK_S1_34|BMK_S1_73|BMK_S1_77"
+competency_cols_with_factor_weights <- "BMK_S1_(34|73|77)(?!.*decisive).*" 
+columns_to_remove_missing_values <- "ESI_Key|BMK_S1_34|BMK_S1_73|BMK_S1_77"
+factor_weights_competency_cols <- "\\w+_S1_(34|73|77)(?!.*decisive).*" 
+factor_weights_cols <- "\\w+_S1_(34|73|77)(.*decisive)."
+outcome_raters <- "BMK_S5_1_mean_(?!Self)"
+outcome_colname <- "BMK_S5_1_mean_all_rater"
+
+
+```
+
+
+
+```{r}
+
+
+## data processing
+render_data_processing(data=data, sample_name = sample_name, factor_name = factor_name)
+
+
+
+## lavan analyses for decisiveness
+render_lavaan_analyses(factor_name=factor_name,
+              sample_name=sample_name,
+              show_model=show_model,
+              regex_pattern=regex_pattern,
+              rowmeans_columns_list=rowmeans_columns_list,
+              column_pattern_for_analyses=column_pattern_for_analyses,
+              competency_cols=competency_cols_pattern,
+              competency_cols_with_factor_weights=competency_cols_with_factor_weights,
+              columns_to_remove_missing_values=columns_to_remove_missing_values,
+              factor_weights_competency_cols=factor_weights_competency_cols,
+              factor_weights_cols=factor_weights_cols,
+              outcome_raters=outcome_raters,
+              outcome_colname=outcome_colname)
+
+
+```

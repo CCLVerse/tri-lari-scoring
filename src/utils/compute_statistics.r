@@ -29,7 +29,7 @@ compute_statistics <- function(df=data.frame(), columns=character(), regex_patte
      result <- data.frame( 
         Mean = sapply(df[,columns], function(x) formatC(mean(x, na.rm=T), format="f", digits = 3)),
         SD = sapply(df[,columns], function(x) formatC(sd(x, na.rm=T), format="f", digits = 3))) %>% 
-        rownames_to_column(var='Variables') 
+        rownames_to_column(var='Trait') 
   
     return(result)
 }

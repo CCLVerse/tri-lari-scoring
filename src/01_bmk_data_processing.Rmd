@@ -1,10 +1,11 @@
 ---
-title: "BMK Data Processing for TRI/LARI Analyses"
+title: "`r sprintf('BMK Data Processing for TRI/LARI Analyses: %s', params$factor_name)`"
 author: "Sirish Shrestha"
 date: "2023-04-28"
 output: html_document
 params: 
   data: NULL
+  factor_name: NULL
   raters: !r c("Self", "Direct Report", "Peers", "Boss")
   required_cols: NULL
   competency_item_cols: NULL
@@ -23,6 +24,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r data-read, echo=FALSE}
 
 df <- params$data
+factor_name <- params$factor_name
 raters <- params$raters
 grouping_cols <- params$grouping_cols
 required_cols <- params$required_cols
@@ -54,13 +56,14 @@ avg_scores_by_rater_df <- filter_rows_with_all_raters(df=avg_scores_by_rater_df
 
 
 ## Pivot the dataframe such that raters average scores are the columns
-avg_scores_by_rater_df <- pivot_df(df=avg_scores_by_rater_df
+avg_scores_by_rater_df <<- pivot_df(df=avg_scores_by_rater_df
                                  , var="RaterType"
                                  , id_column = "ESI_Key")
 
 
 ## set the clean dataframe as the current dataframe in the environment
 set_current_df(df=avg_scores_by_rater_df)
+
 
 ```
 

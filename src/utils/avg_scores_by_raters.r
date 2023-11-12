@@ -40,17 +40,23 @@ avg_scores_by_raters <- function(df=NULL, required_cols=NULL, item_cols=NULL, co
     validate_cols(df=df, columns=grouping_cols)
     
     ## group by id and rater columns to aggregate the data
-    df <- df %>% 
-        dplyr::select(!!! all_of(required_cols), 
-                      !!! all_of(item_cols), 
-                      !!! all_of(competency_cols), 
-                      !!! all_of(research_cols)) %>%
-        dplyr::group_by(!!! syms(grouping_cols)) %>%
-        dplyr::summarise_at(vars(item_cols
-                                ,competency_cols
-                                ,research_cols), 
-                        list(mean=mean), na.rm=TRUE) %>% 
-        dplyr::ungroup()
+    # df <- df %>% 
+    #     dplyr::select(!!! all_of(required_cols), 
+    #                   !!! all_of(item_cols), 
+    #                   !!! all_of(competency_cols), 
+    #                   !!! all_of(research_cols)) %>%
+    #     dplyr::group_by(!!! syms(grouping_cols)) %>%
+    #     dplyr::summarise_at(vars(item_cols
+    #                             ,competency_cols
+    #                             ,research_cols), 
+    #                     list(mean=mean), na.rm=TRUE) %>% 
+    #     dplyr::ungroup()
+    
+    df <- df %>%
+      select(c(all_of(required_cols), all_of(item_cols), all_of(competency_cols), all_of(research_cols))) %>%
+      group_by(across(all_of(grouping_cols))) %>%
+      summarise(across(c(item_cols, competency_cols, research_cols), list(mean = ~mean(.x, na.rm = TRUE)))) %>%
+      ungroup()
 
     return(df)
 

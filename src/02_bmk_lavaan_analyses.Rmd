@@ -6,12 +6,13 @@ output: html_document
 params: 
   title: NULL
   data: NULL
-  competency_cols: ""
+  competency_cols_pattern: ""
   factor_name: ""
   regex_pattern: TRUE
   raters: NULL
   sample_name: ""
   show_model: FALSE
+  rowmeans_columns_list: NULL
   columns_for_analyses: NULL
   columns_to_remove_missing_values: NULL
   factor_weights_competency_cols: NULL
@@ -33,12 +34,13 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r assign-values, echo=FALSE}
 
 df <- params$data
-competency_cols <- params$competency_cols
+competency_cols <- params$competency_cols_pattern
 factor_name <- params$factor_name
 raters <- params$raters
 regex_pattern <- params$regex_pattern
 sample_name <- params$sample_name
 show_model <- params$show_model
+rowmeans_columns_list <- params$rowmeans_columns_list
 columns_for_analyses <- params$columns_for_analyses
 columns_to_remove_missing_values <- params$columns_to_remove_missing_values
 factor_weights_competency_cols <- params$factor_weights_competency_cols
@@ -88,8 +90,8 @@ first_level <- build_first_level_model(df=df
 
 if(show_model){
   first_level %>% 
-    kable(col.names = "") %>%
-    kable_styling()
+    kableExtra::kable(col.names = "") %>%
+    kableExtra::kable_styling()
 }
 
 
@@ -110,14 +112,16 @@ bifactor <- build_bifactor_model(competency_cols=competency_cols
 
 if(show_model){
   bifactor %>% 
-    kable(col.names = "") %>%
-    kable_styling()
+    kableExtra::kable(col.names = "") %>%
+    kableExtra::kable_styling()
 }
 
 bifactor_fits <- lavaan_model_fit(df=df, model=bifactor)
 
+bifactor_fits <- bifactor_fits
 
 ```
+
 
 
 
@@ -131,7 +135,6 @@ df <- df %>%
 
 
 ```
-
 
 
 ```{r factory-weights, echo=FALSE, warning=FALSE}
@@ -150,6 +153,28 @@ df <- df %>%
 df_merged <- scale_and_center_columns(df=df
                               , column_names = colnames(factor_weights)
                               , center = FALSE)
+
+```
+
+
+
+
+```{r factor-score, echo=FALSE, warning=FALSE}
+
+factor_score_equations <- generate_factor_scores(df=df_merged
+                      , competency_cols = factor_weights_competency_cols
+                      , factor_weights_cols = factor_weights_cols
+                      , factor_name = factor_name
+                      , latent_variables=c(raters, "reputation", "arena")
+                      , regex_pattern = TRUE
+                      , suffix = "LV")
+
+
+df_merged <- calculate_factor_scores(df=df_merged
+                                     , factor_score_equations=factor_score_equations)
+
+
+n = nrow(df_merged)
 
 ```
 
@@ -178,9 +203,9 @@ trait_names <- unique(gsub(sprintf(".*_mean_(\\w+)_%s_.*", factor_name), "\\1", 
 
 # Merge data using dplyr and tidyr
 result_df <- t_factor_weights %>%
-  separate(Item, into = c("Trait", "Factor"), sep = "_decisive_") %>%
+  separate(Item, into = c("Trait", "Factor"), sep = paste0("_", factor_name, "_")) %>%
   pivot_wider(names_from = "Factor", values_from = "V1") %>%
-  left_join(statistics, by = c("Trait" = "Variables")) %>%
+  left_join(statistics, by = "Trait") %>%
   mutate(across(where(is.numeric), ~ formatC(., format="f", digits = 3))) %>%
   mutate(`Mean (SD)` = sprintf("%s (%s)", Mean, SD)) %>%
   select(Item = Trait, `Mean (SD)`, Self, Direct_Report, Boss, Peer, reputation, arena)
@@ -189,57 +214,11 @@ colnames(result_df) <- c("Item", "Mean (SD)", "Self", "Direct Report", "Boss", "
 
 
 result_df %>%
-  kable(caption='Table 1: Item Means, Standard Deviations, and Factor Scoring Weights Derived from the TRI/LARI Model (Normative Sample)') %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "responsive")) %>%
-  add_header_above(c(" " = 2, "Factor Scoring Weights" = 6)) %>%
-  footnote(general = sprintf("N = %s", format(nrow(df_merged), big.mark=", ")))
+  kableExtra::kable(caption=sprintf('Table 1: Item Means, Standard Deviations, and Factor Scoring Weights Derived from the TRI/LARI Model (%s Sample)',sample_name)) %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "responsive")) %>%
+  kableExtra::add_header_above(c(" " = 2, "Factor Scoring Weights" = 6)) %>%
+  kableExtra::footnote(general = sprintf("N = %s", format(nrow(df_merged), big.mark=", ")))
 
-
-```
-
-
-
-```{r factor-score, echo=FALSE, warning=FALSE}
-
-factor_score_equations <- generate_factor_scores(df=df_merged
-                      , competency_cols = factor_weights_competency_cols
-                      , factor_weights_cols = factor_weights_cols
-                      , factor_name = factor_name
-                      , latent_variables=c(raters, "reputation", "arena")
-                      , regex_pattern = TRUE
-                      , suffix = "LV")
-
-
-df_merged <- calculate_factor_scores(df=df_merged
-                                     , factor_score_equations=factor_score_equations)
-
-
-n_normative = nrow(df_merged)
-
-```
-
----
-
-### Table 2
-
-#### 2a. TRI<span style="color:gold;">/</span>LARI-Based Scores
-```{r correlation, echo=FALSE}
-
-lv_correlation <-  compute_correlation(df=df_merged
-                                   , x = c(raters, "reputation", "arena")
-                                   , y = bifactor_fits$orthogonal$fitted
-                                   , suffix = "LV")
-
-diag(lv_correlation) <- "-"
-rownames(lv_correlation) <- c("Self", "Direct Report", "Peer", "Boss", "Reputation", 
-                         "Trait/Arena")
-colnames(lv_correlation) <- c("Self", "Direct Report", "Peer", "Boss", "Reputation", 
-                         "Trait/Arena")
-
-lv_correlation %>% 
-  kable(caption = "Correlations Among Decisiveness Scores: TRI/LARI-based Scores and Avergaed Scores") %>% 
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  column_spec(1, bold=TRUE)
 
 ```
 
@@ -249,27 +228,12 @@ lv_correlation %>%
 df_merged <- calculate_rowmeans(df=df_merged
                  , new_cols=c("Self_Avg", "Direct_Report_Avg", "Boss_Avg", 
                               "Peer_Avg", "Inf_Avg", "All_Avg")
-                 , mean_cols=list(
-                   c("BMK_S1_34_mean_Self", "BMK_S1_73_mean_Self", "BMK_S1_77_mean_Self"),
-                   c("BMK_S1_34_mean_Direct_Report", 
-                     "BMK_S1_73_mean_Direct_Report", 
-                     "BMK_S1_77_mean_Direct_Report"),
-                   c("BMK_S1_34_mean_Boss", "BMK_S1_73_mean_Boss", "BMK_S1_77_mean_Boss"),
-                   c("BMK_S1_34_mean_Peer", "BMK_S1_73_mean_Peer", "BMK_S1_77_mean_Peer"),
-                   c("BMK_S1_34_mean_Direct_Report", "BMK_S1_73_mean_Direct_Report",
-                     "BMK_S1_77_mean_Direct_Report", 
-                     "BMK_S1_34_mean_Boss", "BMK_S1_73_mean_Boss", "BMK_S1_77_mean_Boss", 
-                     "BMK_S1_34_mean_Peer", "BMK_S1_73_mean_Peer", "BMK_S1_77_mean_Peer"),
-                   c("BMK_S1_34_mean_Self", "BMK_S1_73_mean_Self", "BMK_S1_77_mean_Self", 
-                     "BMK_S1_34_mean_Direct_Report", "BMK_S1_73_mean_Direct_Report",
-                     "BMK_S1_77_mean_Direct_Report", "BMK_S1_34_mean_Boss", 
-                     "BMK_S1_73_mean_Boss", "BMK_S1_77_mean_Boss", "BMK_S1_34_mean_Peer", 
-                     "BMK_S1_73_mean_Peer", "BMK_S1_77_mean_Peer")
-                   ))
+                 , mean_cols=rowmeans_columns_list)
 
 
 
 ```
+
 
 
 ```{r performance-item, echo=FALSE, warning=FALSE}
@@ -284,31 +248,64 @@ df_merged <- aggregate_competency_cols(df=df_merged
 
 ```
 
+---
+
+### Table 2
+
+#### 2a. TRI<span style="color:gold;">/</span>LARI-Based Scores
+```{r correlation, echo=FALSE}
+
+lv_correlation <-  compute_correlation(df=df_merged
+                                   , x = ".*_LV|all_rater"
+                                   , regex_pattern = TRUE)
+
+diag(lv_correlation) <- "-"
+rownames(lv_correlation) <- c("Self", "Direct Report", "Peer", "Boss", "Reputation", "Trait/Arena", "Performance")
+colnames(lv_correlation) <- c("Self", "Direct Report", "Peer", "Boss", "Reputation", "Trait/Arena", "Performance")
+
+
+if(sample_name == "Normative"){
+  lv_correlation[lower.tri(lv_correlation)] <- "-"
+} else {
+  lv_correlation[upper.tri(lv_correlation)] <- "-"
+}
+
+lv_correlation %>% 
+  kableExtra::kable(caption = "Correlations Among Decisiveness Scores: TRI/LARI-based Scores and Avergaed Scores") %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  kableExtra::column_spec(1, bold=TRUE)
+
+```
+
 
 #### 2b. Averaged Scores
 
 ```{r tri-lari-avg-correlation, echo=FALSE}
 
-avg_correlation <- compute_correlation(df=df_merged
+avg_perf_correlation <- compute_correlation(df=df_merged
                                    , x = ".*_Avg|all_rater"
                                    , regex_pattern = TRUE
                                    )
 
-avg_perf_correlation <- avg_correlation %>%
+avg_perf_correlation_mat <- avg_perf_correlation %>%
   rownames_to_column(var = "Var") %>%
-  select(Var, BMK_S5_1_mean_all_rater)
+  select(Var, outcome_colname)
 
-diag(correlation) <- "-"
-rownames(correlation) <- c("Self", "Direct Report", "Peer", "Boss", "All Informants",
-                         "All Raters")
-colnames(correlation) <- c("Self", "Direct Report", "Peer", "Boss", "All Informants",
-                         "All Raters")
+diag(avg_perf_correlation) <- "-"
+rownames(avg_perf_correlation) <- c("Self", "Direct Report", "Peer", "Boss", "All Informants", "All Raters", "Performance")
+colnames(avg_perf_correlation) <- c("Self", "Direct Report", "Peer", "Boss", "All Informants", "All Raters", "Performance")
 
-correlation %>% 
-  kable(caption = "Correlations Among Decisiveness Scores: TRI/LARI-based Scores and Avergaed Scores") %>% 
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  column_spec(1, bold=TRUE) %>% 
-  footnote(sprintf("Correlations above the diagonal in each matrix are from the Normative sample, those below the diagonal are from the cross-validation sample.$N_{normative}$ = %s. Correlations ≥ |.03| are significant at p < .05. ", n_normative))
+if(sample_name == "Normative"){
+  avg_perf_correlation[lower.tri(avg_perf_correlation)] <- "-"
+} else {
+  avg_perf_correlation[upper.tri(avg_perf_correlation)] <- "-"
+}
+
+avg_perf_correlation %>% 
+  kableExtra::kable(caption = "Correlations Among Decisiveness Scores: TRI/LARI-based Scores and Avergaed Scores") %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  kableExtra::column_spec(1, bold=TRUE) %>% 
+  kableExtra::footnote(sprintf("Correlations above the diagonal in each matrix are from the Normative sample, those below the diagonal are from the cross-validation sample.$N_{%s}$ = %s. Correlations ≥ |.03| are significant at p < .05. ", tolower(sample_name), n))
 
 
 ```
@@ -333,16 +330,16 @@ correlation <- compute_correlation(df=df_merged
 
 perf_correlation <- correlation %>% 
   rownames_to_column(var = "Var") %>%
-  select(Var, BMK_S5_1_mean_all_rater)
+  select(Var, outcome_colname)
 
 rownames(correlation) <- c("Self", "Direct Report", "Peer", "Boss", "Reputation", "Trait/Arena")
 colnames(correlation) <- c("Self", "Direct Report", "Boss", "Peer", "All Informants", "All Raters", "Performance")
 
 correlation %>%
-  kable(caption = "Correlations Among TRI/LARI-based Scores, Averaged Scores, and Performance Criterion.") %>%
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  column_spec(1, bold=TRUE) %>%
-  add_header_above(c(" " = 1, "Averaged Scores" = 7))
+  kableExtra::kable(caption = "Correlations Among TRI/LARI-based Scores, Averaged Scores, and Performance Criterion.") %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  kableExtra::column_spec(1, bold=TRUE) %>%
+  kableExtra::add_header_above(c(" " = 1, "Averaged Scores" = 7))
 
 ```
 
@@ -396,12 +393,11 @@ std1 <- coefs1 %>%
 pattern = sprintf(".*(%s)_Avg", paste0(stringr::str_replace_all(raters, " ", "_"), collapse = "|"))
 
 avg_cols <- get_column_names(df_merged, pattern) %>% paste0(., collapse = " + ")
-formula <- as.formula(sprintf("%s ~ %s", outcome_colname, lv_cols))
+formula <- as.formula(sprintf("%s ~ %s", outcome_colname, avg_cols))
 
 mod2 <- linear_model(formula=formula, df=df_merged)
 
 summary2 <- mod2$summary
-
 
 coefs2 <- summary2$coefficients %>% 
   as.data.frame() %>%
@@ -460,25 +456,25 @@ reg_weights_lv <- perf_correlation %>%
   left_join(std2, by="Var") %>% 
   left_join(std3, by="Var") %>% 
   rename(
-    `r with perf` = BMK_S5_1_mean_all_rater,
+    `r with perf` = outcome_colname,
     `1` = Standardized.x, 
     `2` = Standardized.y, 
     `3` = Standardized) 
 
 
-reg_weights_avg <- avg_perf_correlation %>% 
+reg_weights_avg <- avg_perf_correlation_mat %>% 
   left_join(std2, by = "Var") %>%
   left_join(std1,by = "Var") %>%
   left_join(std3, by = "Var") %>%
   rename(
-    `r with perf` = !! outcome_colname,
+    `r with perf` = outcome_colname,
     `1` = Standardized.x, 
     `2` = Standardized.y, 
     `3` = Standardized) %>%
   filter(Var != outcome_colname) %>%
   bind_rows(r2)
 
-reg_weights_lv %>%
+reg_weights_table <- reg_weights_lv %>%
   bind_rows(reg_weights_avg) %>%
   mutate(Var = case_when(
     str_detect(Var, regex("Self_(LV|Avg)", ignore_case=TRUE)) ~ "Self", 
@@ -492,13 +488,16 @@ reg_weights_lv %>%
     TRUE ~ Var
   )) %>%
   mutate(Var = str_replace(Var, "_LV", "")) %>%
-  mutate_all(~ ifelse(is.na(.), "-", .)) %>%
-  kable(caption="Associations Between Decisiveness Scores and Performance Criterion: Correlations and Regression") %>% 
-  kable_styling(bootstrap_options = c("striped", "hover")) %>%
-  add_header_above(c(" " = 2, "Standardized Weights from Regression Models" = 3)) %>%
-  pack_rows("TRI/LARI", start_row = 1, end_row = 6) %>% 
-  pack_rows("Averaged", start_row = 7, end_row = 12) %>%
-  footnote(general = sprintf("N = %s. Correlations ≥ |.03| are significant at p < .05.", format(nrow(df_merged), big.mark=", ")))
+  mutate_all(~ ifelse(is.na(.), "-", .))
+
+
+reg_weights_table %>%
+  kableExtra::kable(caption="Associations Between Decisiveness Scores and Performance Criterion: Correlations and Regression") %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  kableExtra::add_header_above(c(" " = 2, "Standardized Weights from Regression Models" = 3)) %>%
+  kableExtra::pack_rows("TRI/LARI", start_row = 1, end_row = 6) %>% 
+  kableExtra::pack_rows("Averaged", start_row = 7, end_row = 12) %>%
+  kableExtra::footnote(general = sprintf("N = %s. Correlations ≥ |.03| are significant at p < .05.", format(nrow(df_merged), big.mark=", ")))
 
 
 

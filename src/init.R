@@ -4,6 +4,8 @@
 # It includes functions for managing R packages, loading required packages, sourcing functions 
 # from various directories, configuring logging, and creating an environment for variable storage. 
 
+`%ni%` <- Negate(`%in%`)
+
 # load the 'load_packages' function from the 'load_packages.R' script
 source('./src/utils/load_R_scripts_recursive.r')
 load_R_scripts_recursive("./src")
@@ -14,8 +16,7 @@ source("./src/globals.r")
 # load all required packages
 load_packages(c('tidyverse', 
                 'log4r', 
-                'lm.beta', 
-                'kableExtra'))
+                'lm.beta'))
 
 
 

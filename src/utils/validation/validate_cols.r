@@ -25,10 +25,16 @@ validate_cols <- function(df=NULL, columns=NULL){
         stop("The column names are required")
     }
 
-    if (!all(columns %in% colnames(df))) {
-        
-        missing_cols <- columns[!columns %in% colnames(df)]
-        stop(sprintf("The following columns do not exist in the data frame: %s", paste(missing_cols, collapse = ", ")))
+    # if (!all(columns %in% colnames(df))) {
+    #     
+    #     missing_cols <- columns[!columns %in% colnames(df)]
+    #     stop(sprintf("The following columns do not exist in the data frame: %s", paste(missing_cols, collapse = ", ")))
+    # }
+  
+    missing_cols <- setdiff(columns, names(df))
+    
+    if (length(missing_cols) > 0) {
+      stop(sprintf("The following columns do not exist in the data frame: %s", paste(missing_cols, collapse = ", ")))
     }
 
     return(TRUE)
