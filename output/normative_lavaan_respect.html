@@ -13,7 +13,7 @@
 
 <meta name="date" content="2023-04-28" />
 
-<title>Lavaan TRI/LARI Analyses for Quick (Cross-Validation Sample)</title>
+<title>Lavaan TRI/LARI Analyses for Respect (Normative Sample)</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -3499,7 +3499,7 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Lavaan TRI<span style="color:gold;">/</span>LARI Analyses for Quick (Cross-Validation
+<h1 class="title toc-ignore">Lavaan TRI<span style="color:gold;">/</span>LARI Analyses for Respect (Normative
 Sample)</h1>
 <h4 class="author">Sirish Shrestha</h4>
 <h4 class="date">2023-04-28</h4>
@@ -3509,13 +3509,156 @@ Sample)</h1>
 
 <div id="perform-lavaan-analysis" class="section level3">
 <h3>Perform Lavaan Analysis</h3>
-<p>The lavaan first order and bifactor models are run only on the
-normative sample. Ideally, the factor weights from the normative samples
-generalize to new data samples with similar statistics as the normative
-samples. To test the generalizability, we use the same factor weights
-from normative sample on the cross-validation sample. Therefore, the
-first order and bifactor models are not run for cross-validation
-sample.</p>
+<hr />
+<div id="models-to-build" class="section level4">
+<h4>Models to Build</h4>
+<p>There are two models to build:</p>
+<ol style="list-style-type: decimal">
+<li><p>First Order Model</p></li>
+<li><p>Bifactor Model</p></li>
+</ol>
+<hr />
+</div>
+<div id="required-values" class="section level4">
+<h4>Required Values</h4>
+<p>Both models require the following values:</p>
+<ul>
+<li><strong>competency_cols_names:</strong> Column names that make up
+the competency or the regex pattern to identify the columns. When
+providing a regex pattern, set <code>regex_pattern</code> to TRUE.</li>
+</ul>
+<p><em>Example: “BMK_S1_34|BMK_S1_73|BMK_S1_77”</em></p>
+<ul>
+<li><p><strong>factor_name:</strong> Name of the competency. This name
+is added in the <code>lavaan</code> analysis results.</p></li>
+<li><p><strong>regex_pattern:</strong> Indicate whether the
+<code>competency_cols</code> value is a regex pattern or column
+names.</p></li>
+<li><p><strong>raters:</strong> All the raters required in the
+analyses.</p></li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="first-order-model" class="section level3">
+<h3>First order model</h3>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+Displaying <code>Lavaan</code> first order model used in analyses
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+respect_Self =~ BMK_S1_12_mean_Self + BMK_S1_15_mean_Self +
+BMK_S1_17_mean_Self + BMK_S1_18_mean_Self + BMK_S1_26_mean_Self +
+BMK_S1_37_mean_Self + BMK_S1_38_mean_Self + BMK_S1_39_mean_Self +
+BMK_S1_43_mean_Self + BMK_S1_47_mean_Self + BMK_S1_52_mean_Self +
+BMK_S1_68_mean_Self + BMK_S1_88_mean_Self<br />
+respect_Direct_Report =~ BMK_S1_12_mean_Direct_Report +
+BMK_S1_15_mean_Direct_Report + BMK_S1_17_mean_Direct_Report +
+BMK_S1_18_mean_Direct_Report + BMK_S1_26_mean_Direct_Report +
+BMK_S1_37_mean_Direct_Report + BMK_S1_38_mean_Direct_Report +
+BMK_S1_39_mean_Direct_Report + BMK_S1_43_mean_Direct_Report +
+BMK_S1_47_mean_Direct_Report + BMK_S1_52_mean_Direct_Report +
+BMK_S1_68_mean_Direct_Report + BMK_S1_88_mean_Direct_Report<br />
+respect_Peer =~ BMK_S1_12_mean_Peer + BMK_S1_15_mean_Peer +
+BMK_S1_17_mean_Peer + BMK_S1_18_mean_Peer + BMK_S1_26_mean_Peer +
+BMK_S1_37_mean_Peer + BMK_S1_38_mean_Peer + BMK_S1_39_mean_Peer +
+BMK_S1_43_mean_Peer + BMK_S1_47_mean_Peer + BMK_S1_52_mean_Peer +
+BMK_S1_68_mean_Peer + BMK_S1_88_mean_Peer<br />
+respect_Boss =~ BMK_S1_12_mean_Boss + BMK_S1_15_mean_Boss +
+BMK_S1_17_mean_Boss + BMK_S1_18_mean_Boss + BMK_S1_26_mean_Boss +
+BMK_S1_37_mean_Boss + BMK_S1_38_mean_Boss + BMK_S1_39_mean_Boss +
+BMK_S1_43_mean_Boss + BMK_S1_47_mean_Boss + BMK_S1_52_mean_Boss +
+BMK_S1_68_mean_Boss + BMK_S1_88_mean_Boss
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="bifactor-model" class="section level3">
+<h3>Bifactor model</h3>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+Displaying <code>Lavaan</code> Bifactor model used in analyses
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+respect_Self =~ BMK_S1_12_mean_Self + BMK_S1_15_mean_Self +
+BMK_S1_17_mean_Self + BMK_S1_18_mean_Self + BMK_S1_26_mean_Self +
+BMK_S1_37_mean_Self + BMK_S1_38_mean_Self + BMK_S1_39_mean_Self +
+BMK_S1_43_mean_Self + BMK_S1_47_mean_Self + BMK_S1_52_mean_Self +
+BMK_S1_68_mean_Self + BMK_S1_88_mean_Self<br />
+respect_Direct_Report =~ BMK_S1_12_mean_Direct_Report +
+BMK_S1_15_mean_Direct_Report + BMK_S1_17_mean_Direct_Report +
+BMK_S1_18_mean_Direct_Report + BMK_S1_26_mean_Direct_Report +
+BMK_S1_37_mean_Direct_Report + BMK_S1_38_mean_Direct_Report +
+BMK_S1_39_mean_Direct_Report + BMK_S1_43_mean_Direct_Report +
+BMK_S1_47_mean_Direct_Report + BMK_S1_52_mean_Direct_Report +
+BMK_S1_68_mean_Direct_Report + BMK_S1_88_mean_Direct_Report<br />
+respect_Peer =~ BMK_S1_12_mean_Peer + BMK_S1_15_mean_Peer +
+BMK_S1_17_mean_Peer + BMK_S1_18_mean_Peer + BMK_S1_26_mean_Peer +
+BMK_S1_37_mean_Peer + BMK_S1_38_mean_Peer + BMK_S1_39_mean_Peer +
+BMK_S1_43_mean_Peer + BMK_S1_47_mean_Peer + BMK_S1_52_mean_Peer +
+BMK_S1_68_mean_Peer + BMK_S1_88_mean_Peer<br />
+respect_Boss =~ BMK_S1_12_mean_Boss + BMK_S1_15_mean_Boss +
+BMK_S1_17_mean_Boss + BMK_S1_18_mean_Boss + BMK_S1_26_mean_Boss +
+BMK_S1_37_mean_Boss + BMK_S1_38_mean_Boss + BMK_S1_39_mean_Boss +
+BMK_S1_43_mean_Boss + BMK_S1_47_mean_Boss + BMK_S1_52_mean_Boss +
+BMK_S1_68_mean_Boss + BMK_S1_88_mean_Boss<br />
+respect_reputation =~ BMK_S1_12_mean_Direct_Report + BMK_S1_12_mean_Peer
++ BMK_S1_12_mean_Boss + BMK_S1_15_mean_Direct_Report +
+BMK_S1_15_mean_Peer + BMK_S1_15_mean_Boss + BMK_S1_17_mean_Direct_Report
++ BMK_S1_17_mean_Peer + BMK_S1_17_mean_Boss +
+BMK_S1_18_mean_Direct_Report + BMK_S1_18_mean_Peer + BMK_S1_18_mean_Boss
++ BMK_S1_26_mean_Direct_Report + BMK_S1_26_mean_Peer +
+BMK_S1_26_mean_Boss + BMK_S1_37_mean_Direct_Report + BMK_S1_37_mean_Peer
++ BMK_S1_37_mean_Boss + BMK_S1_38_mean_Direct_Report +
+BMK_S1_38_mean_Peer + BMK_S1_38_mean_Boss + BMK_S1_39_mean_Direct_Report
++ BMK_S1_39_mean_Peer + BMK_S1_39_mean_Boss +
+BMK_S1_43_mean_Direct_Report + BMK_S1_43_mean_Peer + BMK_S1_43_mean_Boss
++ BMK_S1_47_mean_Direct_Report + BMK_S1_47_mean_Peer +
+BMK_S1_47_mean_Boss + BMK_S1_52_mean_Direct_Report + BMK_S1_52_mean_Peer
++ BMK_S1_52_mean_Boss + BMK_S1_68_mean_Direct_Report +
+BMK_S1_68_mean_Peer + BMK_S1_68_mean_Boss + BMK_S1_88_mean_Direct_Report
++ BMK_S1_88_mean_Peer + BMK_S1_88_mean_Boss<br />
+respect_arena =~ BMK_S1_12_mean_Self + BMK_S1_12_mean_Direct_Report +
+BMK_S1_12_mean_Peer + BMK_S1_12_mean_Boss + BMK_S1_15_mean_Self +
+BMK_S1_15_mean_Direct_Report + BMK_S1_15_mean_Peer + BMK_S1_15_mean_Boss
++ BMK_S1_17_mean_Self + BMK_S1_17_mean_Direct_Report +
+BMK_S1_17_mean_Peer + BMK_S1_17_mean_Boss + BMK_S1_18_mean_Self +
+BMK_S1_18_mean_Direct_Report + BMK_S1_18_mean_Peer + BMK_S1_18_mean_Boss
++ BMK_S1_26_mean_Self + BMK_S1_26_mean_Direct_Report +
+BMK_S1_26_mean_Peer + BMK_S1_26_mean_Boss + BMK_S1_37_mean_Self +
+BMK_S1_37_mean_Direct_Report + BMK_S1_37_mean_Peer + BMK_S1_37_mean_Boss
++ BMK_S1_38_mean_Self + BMK_S1_38_mean_Direct_Report +
+BMK_S1_38_mean_Peer + BMK_S1_38_mean_Boss + BMK_S1_39_mean_Self +
+BMK_S1_39_mean_Direct_Report + BMK_S1_39_mean_Peer + BMK_S1_39_mean_Boss
++ BMK_S1_43_mean_Self + BMK_S1_43_mean_Direct_Report +
+BMK_S1_43_mean_Peer + BMK_S1_43_mean_Boss + BMK_S1_47_mean_Self +
+BMK_S1_47_mean_Direct_Report + BMK_S1_47_mean_Peer + BMK_S1_47_mean_Boss
++ BMK_S1_52_mean_Self + BMK_S1_52_mean_Direct_Report +
+BMK_S1_52_mean_Peer + BMK_S1_52_mean_Boss + BMK_S1_68_mean_Self +
+BMK_S1_68_mean_Direct_Report + BMK_S1_68_mean_Peer + BMK_S1_68_mean_Boss
++ BMK_S1_88_mean_Self + BMK_S1_88_mean_Direct_Report +
+BMK_S1_88_mean_Peer + BMK_S1_88_mean_Boss
+</td>
+</tr>
+</tbody>
+</table>
 <table class="kable_wrapper table" style="margin-left: auto; margin-right: auto;">
 <caption>
 Equations to calculate factor scores
@@ -3533,18 +3676,58 @@ Equations to calculate factor scores
 <tbody>
 <tr>
 <td style="text-align:left;">
-BMK_S1_11_mean_Self * BMK_S1_11_mean_Self_quick_Self +
-BMK_S1_11_mean_Direct_Report * BMK_S1_11_mean_Direct_Report_quick_Self +
-BMK_S1_11_mean_Peer * BMK_S1_11_mean_Peer_quick_Self +
-BMK_S1_11_mean_Boss * BMK_S1_11_mean_Boss_quick_Self +
-BMK_S1_30_mean_Self * BMK_S1_30_mean_Self_quick_Self +
-BMK_S1_30_mean_Direct_Report * BMK_S1_30_mean_Direct_Report_quick_Self +
-BMK_S1_30_mean_Peer * BMK_S1_30_mean_Peer_quick_Self +
-BMK_S1_30_mean_Boss * BMK_S1_30_mean_Boss_quick_Self +
-BMK_S1_45_mean_Self * BMK_S1_45_mean_Self_quick_Self +
-BMK_S1_45_mean_Direct_Report * BMK_S1_45_mean_Direct_Report_quick_Self +
-BMK_S1_45_mean_Peer * BMK_S1_45_mean_Peer_quick_Self +
-BMK_S1_45_mean_Boss * BMK_S1_45_mean_Boss_quick_Self
+BMK_S1_12_mean_Self * BMK_S1_12_mean_Self_respect_Self +
+BMK_S1_12_mean_Direct_Report * BMK_S1_12_mean_Direct_Report_respect_Self
++ BMK_S1_12_mean_Peer * BMK_S1_12_mean_Peer_respect_Self +
+BMK_S1_12_mean_Boss * BMK_S1_12_mean_Boss_respect_Self +
+BMK_S1_15_mean_Self * BMK_S1_15_mean_Self_respect_Self +
+BMK_S1_15_mean_Direct_Report * BMK_S1_15_mean_Direct_Report_respect_Self
++ BMK_S1_15_mean_Peer * BMK_S1_15_mean_Peer_respect_Self +
+BMK_S1_15_mean_Boss * BMK_S1_15_mean_Boss_respect_Self +
+BMK_S1_17_mean_Self * BMK_S1_17_mean_Self_respect_Self +
+BMK_S1_17_mean_Direct_Report * BMK_S1_17_mean_Direct_Report_respect_Self
++ BMK_S1_17_mean_Peer * BMK_S1_17_mean_Peer_respect_Self +
+BMK_S1_17_mean_Boss * BMK_S1_17_mean_Boss_respect_Self +
+BMK_S1_18_mean_Self * BMK_S1_18_mean_Self_respect_Self +
+BMK_S1_18_mean_Direct_Report * BMK_S1_18_mean_Direct_Report_respect_Self
++ BMK_S1_18_mean_Peer * BMK_S1_18_mean_Peer_respect_Self +
+BMK_S1_18_mean_Boss * BMK_S1_18_mean_Boss_respect_Self +
+BMK_S1_26_mean_Self * BMK_S1_26_mean_Self_respect_Self +
+BMK_S1_26_mean_Direct_Report * BMK_S1_26_mean_Direct_Report_respect_Self
++ BMK_S1_26_mean_Peer * BMK_S1_26_mean_Peer_respect_Self +
+BMK_S1_26_mean_Boss * BMK_S1_26_mean_Boss_respect_Self +
+BMK_S1_37_mean_Self * BMK_S1_37_mean_Self_respect_Self +
+BMK_S1_37_mean_Direct_Report * BMK_S1_37_mean_Direct_Report_respect_Self
++ BMK_S1_37_mean_Peer * BMK_S1_37_mean_Peer_respect_Self +
+BMK_S1_37_mean_Boss * BMK_S1_37_mean_Boss_respect_Self +
+BMK_S1_38_mean_Self * BMK_S1_38_mean_Self_respect_Self +
+BMK_S1_38_mean_Direct_Report * BMK_S1_38_mean_Direct_Report_respect_Self
++ BMK_S1_38_mean_Peer * BMK_S1_38_mean_Peer_respect_Self +
+BMK_S1_38_mean_Boss * BMK_S1_38_mean_Boss_respect_Self +
+BMK_S1_39_mean_Self * BMK_S1_39_mean_Self_respect_Self +
+BMK_S1_39_mean_Direct_Report * BMK_S1_39_mean_Direct_Report_respect_Self
++ BMK_S1_39_mean_Peer * BMK_S1_39_mean_Peer_respect_Self +
+BMK_S1_39_mean_Boss * BMK_S1_39_mean_Boss_respect_Self +
+BMK_S1_43_mean_Self * BMK_S1_43_mean_Self_respect_Self +
+BMK_S1_43_mean_Direct_Report * BMK_S1_43_mean_Direct_Report_respect_Self
++ BMK_S1_43_mean_Peer * BMK_S1_43_mean_Peer_respect_Self +
+BMK_S1_43_mean_Boss * BMK_S1_43_mean_Boss_respect_Self +
+BMK_S1_47_mean_Self * BMK_S1_47_mean_Self_respect_Self +
+BMK_S1_47_mean_Direct_Report * BMK_S1_47_mean_Direct_Report_respect_Self
++ BMK_S1_47_mean_Peer * BMK_S1_47_mean_Peer_respect_Self +
+BMK_S1_47_mean_Boss * BMK_S1_47_mean_Boss_respect_Self +
+BMK_S1_52_mean_Self * BMK_S1_52_mean_Self_respect_Self +
+BMK_S1_52_mean_Direct_Report * BMK_S1_52_mean_Direct_Report_respect_Self
++ BMK_S1_52_mean_Peer * BMK_S1_52_mean_Peer_respect_Self +
+BMK_S1_52_mean_Boss * BMK_S1_52_mean_Boss_respect_Self +
+BMK_S1_68_mean_Self * BMK_S1_68_mean_Self_respect_Self +
+BMK_S1_68_mean_Direct_Report * BMK_S1_68_mean_Direct_Report_respect_Self
++ BMK_S1_68_mean_Peer * BMK_S1_68_mean_Peer_respect_Self +
+BMK_S1_68_mean_Boss * BMK_S1_68_mean_Boss_respect_Self +
+BMK_S1_88_mean_Self * BMK_S1_88_mean_Self_respect_Self +
+BMK_S1_88_mean_Direct_Report * BMK_S1_88_mean_Direct_Report_respect_Self
++ BMK_S1_88_mean_Peer * BMK_S1_88_mean_Peer_respect_Self +
+BMK_S1_88_mean_Boss * BMK_S1_88_mean_Boss_respect_Self
 </td>
 </tr>
 </tbody>
@@ -3561,19 +3744,65 @@ BMK_S1_45_mean_Boss * BMK_S1_45_mean_Boss_quick_Self
 <tbody>
 <tr>
 <td style="text-align:left;">
-BMK_S1_11_mean_Self * BMK_S1_11_mean_Self_quick_Direct_Report +
-BMK_S1_11_mean_Direct_Report *
-BMK_S1_11_mean_Direct_Report_quick_Direct_Report + BMK_S1_11_mean_Peer *
-BMK_S1_11_mean_Peer_quick_Direct_Report + BMK_S1_11_mean_Boss *
-BMK_S1_11_mean_Boss_quick_Direct_Report + BMK_S1_30_mean_Self *
-BMK_S1_30_mean_Self_quick_Direct_Report + BMK_S1_30_mean_Direct_Report *
-BMK_S1_30_mean_Direct_Report_quick_Direct_Report + BMK_S1_30_mean_Peer *
-BMK_S1_30_mean_Peer_quick_Direct_Report + BMK_S1_30_mean_Boss *
-BMK_S1_30_mean_Boss_quick_Direct_Report + BMK_S1_45_mean_Self *
-BMK_S1_45_mean_Self_quick_Direct_Report + BMK_S1_45_mean_Direct_Report *
-BMK_S1_45_mean_Direct_Report_quick_Direct_Report + BMK_S1_45_mean_Peer *
-BMK_S1_45_mean_Peer_quick_Direct_Report + BMK_S1_45_mean_Boss *
-BMK_S1_45_mean_Boss_quick_Direct_Report
+BMK_S1_12_mean_Self * BMK_S1_12_mean_Self_respect_Direct_Report +
+BMK_S1_12_mean_Direct_Report *
+BMK_S1_12_mean_Direct_Report_respect_Direct_Report + BMK_S1_12_mean_Peer
+* BMK_S1_12_mean_Peer_respect_Direct_Report + BMK_S1_12_mean_Boss *
+BMK_S1_12_mean_Boss_respect_Direct_Report + BMK_S1_15_mean_Self *
+BMK_S1_15_mean_Self_respect_Direct_Report + BMK_S1_15_mean_Direct_Report
+* BMK_S1_15_mean_Direct_Report_respect_Direct_Report +
+BMK_S1_15_mean_Peer * BMK_S1_15_mean_Peer_respect_Direct_Report +
+BMK_S1_15_mean_Boss * BMK_S1_15_mean_Boss_respect_Direct_Report +
+BMK_S1_17_mean_Self * BMK_S1_17_mean_Self_respect_Direct_Report +
+BMK_S1_17_mean_Direct_Report *
+BMK_S1_17_mean_Direct_Report_respect_Direct_Report + BMK_S1_17_mean_Peer
+* BMK_S1_17_mean_Peer_respect_Direct_Report + BMK_S1_17_mean_Boss *
+BMK_S1_17_mean_Boss_respect_Direct_Report + BMK_S1_18_mean_Self *
+BMK_S1_18_mean_Self_respect_Direct_Report + BMK_S1_18_mean_Direct_Report
+* BMK_S1_18_mean_Direct_Report_respect_Direct_Report +
+BMK_S1_18_mean_Peer * BMK_S1_18_mean_Peer_respect_Direct_Report +
+BMK_S1_18_mean_Boss * BMK_S1_18_mean_Boss_respect_Direct_Report +
+BMK_S1_26_mean_Self * BMK_S1_26_mean_Self_respect_Direct_Report +
+BMK_S1_26_mean_Direct_Report *
+BMK_S1_26_mean_Direct_Report_respect_Direct_Report + BMK_S1_26_mean_Peer
+* BMK_S1_26_mean_Peer_respect_Direct_Report + BMK_S1_26_mean_Boss *
+BMK_S1_26_mean_Boss_respect_Direct_Report + BMK_S1_37_mean_Self *
+BMK_S1_37_mean_Self_respect_Direct_Report + BMK_S1_37_mean_Direct_Report
+* BMK_S1_37_mean_Direct_Report_respect_Direct_Report +
+BMK_S1_37_mean_Peer * BMK_S1_37_mean_Peer_respect_Direct_Report +
+BMK_S1_37_mean_Boss * BMK_S1_37_mean_Boss_respect_Direct_Report +
+BMK_S1_38_mean_Self * BMK_S1_38_mean_Self_respect_Direct_Report +
+BMK_S1_38_mean_Direct_Report *
+BMK_S1_38_mean_Direct_Report_respect_Direct_Report + BMK_S1_38_mean_Peer
+* BMK_S1_38_mean_Peer_respect_Direct_Report + BMK_S1_38_mean_Boss *
+BMK_S1_38_mean_Boss_respect_Direct_Report + BMK_S1_39_mean_Self *
+BMK_S1_39_mean_Self_respect_Direct_Report + BMK_S1_39_mean_Direct_Report
+* BMK_S1_39_mean_Direct_Report_respect_Direct_Report +
+BMK_S1_39_mean_Peer * BMK_S1_39_mean_Peer_respect_Direct_Report +
+BMK_S1_39_mean_Boss * BMK_S1_39_mean_Boss_respect_Direct_Report +
+BMK_S1_43_mean_Self * BMK_S1_43_mean_Self_respect_Direct_Report +
+BMK_S1_43_mean_Direct_Report *
+BMK_S1_43_mean_Direct_Report_respect_Direct_Report + BMK_S1_43_mean_Peer
+* BMK_S1_43_mean_Peer_respect_Direct_Report + BMK_S1_43_mean_Boss *
+BMK_S1_43_mean_Boss_respect_Direct_Report + BMK_S1_47_mean_Self *
+BMK_S1_47_mean_Self_respect_Direct_Report + BMK_S1_47_mean_Direct_Report
+* BMK_S1_47_mean_Direct_Report_respect_Direct_Report +
+BMK_S1_47_mean_Peer * BMK_S1_47_mean_Peer_respect_Direct_Report +
+BMK_S1_47_mean_Boss * BMK_S1_47_mean_Boss_respect_Direct_Report +
+BMK_S1_52_mean_Self * BMK_S1_52_mean_Self_respect_Direct_Report +
+BMK_S1_52_mean_Direct_Report *
+BMK_S1_52_mean_Direct_Report_respect_Direct_Report + BMK_S1_52_mean_Peer
+* BMK_S1_52_mean_Peer_respect_Direct_Report + BMK_S1_52_mean_Boss *
+BMK_S1_52_mean_Boss_respect_Direct_Report + BMK_S1_68_mean_Self *
+BMK_S1_68_mean_Self_respect_Direct_Report + BMK_S1_68_mean_Direct_Report
+* BMK_S1_68_mean_Direct_Report_respect_Direct_Report +
+BMK_S1_68_mean_Peer * BMK_S1_68_mean_Peer_respect_Direct_Report +
+BMK_S1_68_mean_Boss * BMK_S1_68_mean_Boss_respect_Direct_Report +
+BMK_S1_88_mean_Self * BMK_S1_88_mean_Self_respect_Direct_Report +
+BMK_S1_88_mean_Direct_Report *
+BMK_S1_88_mean_Direct_Report_respect_Direct_Report + BMK_S1_88_mean_Peer
+* BMK_S1_88_mean_Peer_respect_Direct_Report + BMK_S1_88_mean_Boss *
+BMK_S1_88_mean_Boss_respect_Direct_Report
 </td>
 </tr>
 </tbody>
@@ -3590,18 +3819,58 @@ BMK_S1_45_mean_Boss_quick_Direct_Report
 <tbody>
 <tr>
 <td style="text-align:left;">
-BMK_S1_11_mean_Self * BMK_S1_11_mean_Self_quick_Peer +
-BMK_S1_11_mean_Direct_Report * BMK_S1_11_mean_Direct_Report_quick_Peer +
-BMK_S1_11_mean_Peer * BMK_S1_11_mean_Peer_quick_Peer +
-BMK_S1_11_mean_Boss * BMK_S1_11_mean_Boss_quick_Peer +
-BMK_S1_30_mean_Self * BMK_S1_30_mean_Self_quick_Peer +
-BMK_S1_30_mean_Direct_Report * BMK_S1_30_mean_Direct_Report_quick_Peer +
-BMK_S1_30_mean_Peer * BMK_S1_30_mean_Peer_quick_Peer +
-BMK_S1_30_mean_Boss * BMK_S1_30_mean_Boss_quick_Peer +
-BMK_S1_45_mean_Self * BMK_S1_45_mean_Self_quick_Peer +
-BMK_S1_45_mean_Direct_Report * BMK_S1_45_mean_Direct_Report_quick_Peer +
-BMK_S1_45_mean_Peer * BMK_S1_45_mean_Peer_quick_Peer +
-BMK_S1_45_mean_Boss * BMK_S1_45_mean_Boss_quick_Peer
+BMK_S1_12_mean_Self * BMK_S1_12_mean_Self_respect_Peer +
+BMK_S1_12_mean_Direct_Report * BMK_S1_12_mean_Direct_Report_respect_Peer
++ BMK_S1_12_mean_Peer * BMK_S1_12_mean_Peer_respect_Peer +
+BMK_S1_12_mean_Boss * BMK_S1_12_mean_Boss_respect_Peer +
+BMK_S1_15_mean_Self * BMK_S1_15_mean_Self_respect_Peer +
+BMK_S1_15_mean_Direct_Report * BMK_S1_15_mean_Direct_Report_respect_Peer
++ BMK_S1_15_mean_Peer * BMK_S1_15_mean_Peer_respect_Peer +
+BMK_S1_15_mean_Boss * BMK_S1_15_mean_Boss_respect_Peer +
+BMK_S1_17_mean_Self * BMK_S1_17_mean_Self_respect_Peer +
+BMK_S1_17_mean_Direct_Report * BMK_S1_17_mean_Direct_Report_respect_Peer
++ BMK_S1_17_mean_Peer * BMK_S1_17_mean_Peer_respect_Peer +
+BMK_S1_17_mean_Boss * BMK_S1_17_mean_Boss_respect_Peer +
+BMK_S1_18_mean_Self * BMK_S1_18_mean_Self_respect_Peer +
+BMK_S1_18_mean_Direct_Report * BMK_S1_18_mean_Direct_Report_respect_Peer
++ BMK_S1_18_mean_Peer * BMK_S1_18_mean_Peer_respect_Peer +
+BMK_S1_18_mean_Boss * BMK_S1_18_mean_Boss_respect_Peer +
+BMK_S1_26_mean_Self * BMK_S1_26_mean_Self_respect_Peer +
+BMK_S1_26_mean_Direct_Report * BMK_S1_26_mean_Direct_Report_respect_Peer
++ BMK_S1_26_mean_Peer * BMK_S1_26_mean_Peer_respect_Peer +
+BMK_S1_26_mean_Boss * BMK_S1_26_mean_Boss_respect_Peer +
+BMK_S1_37_mean_Self * BMK_S1_37_mean_Self_respect_Peer +
+BMK_S1_37_mean_Direct_Report * BMK_S1_37_mean_Direct_Report_respect_Peer
++ BMK_S1_37_mean_Peer * BMK_S1_37_mean_Peer_respect_Peer +
+BMK_S1_37_mean_Boss * BMK_S1_37_mean_Boss_respect_Peer +
+BMK_S1_38_mean_Self * BMK_S1_38_mean_Self_respect_Peer +
+BMK_S1_38_mean_Direct_Report * BMK_S1_38_mean_Direct_Report_respect_Peer
++ BMK_S1_38_mean_Peer * BMK_S1_38_mean_Peer_respect_Peer +
+BMK_S1_38_mean_Boss * BMK_S1_38_mean_Boss_respect_Peer +
+BMK_S1_39_mean_Self * BMK_S1_39_mean_Self_respect_Peer +
+BMK_S1_39_mean_Direct_Report * BMK_S1_39_mean_Direct_Report_respect_Peer
++ BMK_S1_39_mean_Peer * BMK_S1_39_mean_Peer_respect_Peer +
+BMK_S1_39_mean_Boss * BMK_S1_39_mean_Boss_respect_Peer +
+BMK_S1_43_mean_Self * BMK_S1_43_mean_Self_respect_Peer +
+BMK_S1_43_mean_Direct_Report * BMK_S1_43_mean_Direct_Report_respect_Peer
++ BMK_S1_43_mean_Peer * BMK_S1_43_mean_Peer_respect_Peer +
+BMK_S1_43_mean_Boss * BMK_S1_43_mean_Boss_respect_Peer +
+BMK_S1_47_mean_Self * BMK_S1_47_mean_Self_respect_Peer +
+BMK_S1_47_mean_Direct_Report * BMK_S1_47_mean_Direct_Report_respect_Peer
++ BMK_S1_47_mean_Peer * BMK_S1_47_mean_Peer_respect_Peer +
+BMK_S1_47_mean_Boss * BMK_S1_47_mean_Boss_respect_Peer +
+BMK_S1_52_mean_Self * BMK_S1_52_mean_Self_respect_Peer +
+BMK_S1_52_mean_Direct_Report * BMK_S1_52_mean_Direct_Report_respect_Peer
++ BMK_S1_52_mean_Peer * BMK_S1_52_mean_Peer_respect_Peer +
+BMK_S1_52_mean_Boss * BMK_S1_52_mean_Boss_respect_Peer +
+BMK_S1_68_mean_Self * BMK_S1_68_mean_Self_respect_Peer +
+BMK_S1_68_mean_Direct_Report * BMK_S1_68_mean_Direct_Report_respect_Peer
++ BMK_S1_68_mean_Peer * BMK_S1_68_mean_Peer_respect_Peer +
+BMK_S1_68_mean_Boss * BMK_S1_68_mean_Boss_respect_Peer +
+BMK_S1_88_mean_Self * BMK_S1_88_mean_Self_respect_Peer +
+BMK_S1_88_mean_Direct_Report * BMK_S1_88_mean_Direct_Report_respect_Peer
++ BMK_S1_88_mean_Peer * BMK_S1_88_mean_Peer_respect_Peer +
+BMK_S1_88_mean_Boss * BMK_S1_88_mean_Boss_respect_Peer
 </td>
 </tr>
 </tbody>
@@ -3618,18 +3887,58 @@ BMK_S1_45_mean_Boss * BMK_S1_45_mean_Boss_quick_Peer
 <tbody>
 <tr>
 <td style="text-align:left;">
-BMK_S1_11_mean_Self * BMK_S1_11_mean_Self_quick_Boss +
-BMK_S1_11_mean_Direct_Report * BMK_S1_11_mean_Direct_Report_quick_Boss +
-BMK_S1_11_mean_Peer * BMK_S1_11_mean_Peer_quick_Boss +
-BMK_S1_11_mean_Boss * BMK_S1_11_mean_Boss_quick_Boss +
-BMK_S1_30_mean_Self * BMK_S1_30_mean_Self_quick_Boss +
-BMK_S1_30_mean_Direct_Report * BMK_S1_30_mean_Direct_Report_quick_Boss +
-BMK_S1_30_mean_Peer * BMK_S1_30_mean_Peer_quick_Boss +
-BMK_S1_30_mean_Boss * BMK_S1_30_mean_Boss_quick_Boss +
-BMK_S1_45_mean_Self * BMK_S1_45_mean_Self_quick_Boss +
-BMK_S1_45_mean_Direct_Report * BMK_S1_45_mean_Direct_Report_quick_Boss +
-BMK_S1_45_mean_Peer * BMK_S1_45_mean_Peer_quick_Boss +
-BMK_S1_45_mean_Boss * BMK_S1_45_mean_Boss_quick_Boss
+BMK_S1_12_mean_Self * BMK_S1_12_mean_Self_respect_Boss +
+BMK_S1_12_mean_Direct_Report * BMK_S1_12_mean_Direct_Report_respect_Boss
++ BMK_S1_12_mean_Peer * BMK_S1_12_mean_Peer_respect_Boss +
+BMK_S1_12_mean_Boss * BMK_S1_12_mean_Boss_respect_Boss +
+BMK_S1_15_mean_Self * BMK_S1_15_mean_Self_respect_Boss +
+BMK_S1_15_mean_Direct_Report * BMK_S1_15_mean_Direct_Report_respect_Boss
++ BMK_S1_15_mean_Peer * BMK_S1_15_mean_Peer_respect_Boss +
+BMK_S1_15_mean_Boss * BMK_S1_15_mean_Boss_respect_Boss +
+BMK_S1_17_mean_Self * BMK_S1_17_mean_Self_respect_Boss +
+BMK_S1_17_mean_Direct_Report * BMK_S1_17_mean_Direct_Report_respect_Boss
++ BMK_S1_17_mean_Peer * BMK_S1_17_mean_Peer_respect_Boss +
+BMK_S1_17_mean_Boss * BMK_S1_17_mean_Boss_respect_Boss +
+BMK_S1_18_mean_Self * BMK_S1_18_mean_Self_respect_Boss +
+BMK_S1_18_mean_Direct_Report * BMK_S1_18_mean_Direct_Report_respect_Boss
++ BMK_S1_18_mean_Peer * BMK_S1_18_mean_Peer_respect_Boss +
+BMK_S1_18_mean_Boss * BMK_S1_18_mean_Boss_respect_Boss +
+BMK_S1_26_mean_Self * BMK_S1_26_mean_Self_respect_Boss +
+BMK_S1_26_mean_Direct_Report * BMK_S1_26_mean_Direct_Report_respect_Boss
++ BMK_S1_26_mean_Peer * BMK_S1_26_mean_Peer_respect_Boss +
+BMK_S1_26_mean_Boss * BMK_S1_26_mean_Boss_respect_Boss +
+BMK_S1_37_mean_Self * BMK_S1_37_mean_Self_respect_Boss +
+BMK_S1_37_mean_Direct_Report * BMK_S1_37_mean_Direct_Report_respect_Boss
++ BMK_S1_37_mean_Peer * BMK_S1_37_mean_Peer_respect_Boss +
+BMK_S1_37_mean_Boss * BMK_S1_37_mean_Boss_respect_Boss +
+BMK_S1_38_mean_Self * BMK_S1_38_mean_Self_respect_Boss +
+BMK_S1_38_mean_Direct_Report * BMK_S1_38_mean_Direct_Report_respect_Boss
++ BMK_S1_38_mean_Peer * BMK_S1_38_mean_Peer_respect_Boss +
+BMK_S1_38_mean_Boss * BMK_S1_38_mean_Boss_respect_Boss +
+BMK_S1_39_mean_Self * BMK_S1_39_mean_Self_respect_Boss +
+BMK_S1_39_mean_Direct_Report * BMK_S1_39_mean_Direct_Report_respect_Boss
++ BMK_S1_39_mean_Peer * BMK_S1_39_mean_Peer_respect_Boss +
+BMK_S1_39_mean_Boss * BMK_S1_39_mean_Boss_respect_Boss +
+BMK_S1_43_mean_Self * BMK_S1_43_mean_Self_respect_Boss +
+BMK_S1_43_mean_Direct_Report * BMK_S1_43_mean_Direct_Report_respect_Boss
++ BMK_S1_43_mean_Peer * BMK_S1_43_mean_Peer_respect_Boss +
+BMK_S1_43_mean_Boss * BMK_S1_43_mean_Boss_respect_Boss +
+BMK_S1_47_mean_Self * BMK_S1_47_mean_Self_respect_Boss +
+BMK_S1_47_mean_Direct_Report * BMK_S1_47_mean_Direct_Report_respect_Boss
++ BMK_S1_47_mean_Peer * BMK_S1_47_mean_Peer_respect_Boss +
+BMK_S1_47_mean_Boss * BMK_S1_47_mean_Boss_respect_Boss +
+BMK_S1_52_mean_Self * BMK_S1_52_mean_Self_respect_Boss +
+BMK_S1_52_mean_Direct_Report * BMK_S1_52_mean_Direct_Report_respect_Boss
++ BMK_S1_52_mean_Peer * BMK_S1_52_mean_Peer_respect_Boss +
+BMK_S1_52_mean_Boss * BMK_S1_52_mean_Boss_respect_Boss +
+BMK_S1_68_mean_Self * BMK_S1_68_mean_Self_respect_Boss +
+BMK_S1_68_mean_Direct_Report * BMK_S1_68_mean_Direct_Report_respect_Boss
++ BMK_S1_68_mean_Peer * BMK_S1_68_mean_Peer_respect_Boss +
+BMK_S1_68_mean_Boss * BMK_S1_68_mean_Boss_respect_Boss +
+BMK_S1_88_mean_Self * BMK_S1_88_mean_Self_respect_Boss +
+BMK_S1_88_mean_Direct_Report * BMK_S1_88_mean_Direct_Report_respect_Boss
++ BMK_S1_88_mean_Peer * BMK_S1_88_mean_Peer_respect_Boss +
+BMK_S1_88_mean_Boss * BMK_S1_88_mean_Boss_respect_Boss
 </td>
 </tr>
 </tbody>
@@ -3646,19 +3955,59 @@ BMK_S1_45_mean_Boss * BMK_S1_45_mean_Boss_quick_Boss
 <tbody>
 <tr>
 <td style="text-align:left;">
-BMK_S1_11_mean_Self * BMK_S1_11_mean_Self_quick_reputation +
-BMK_S1_11_mean_Direct_Report *
-BMK_S1_11_mean_Direct_Report_quick_reputation + BMK_S1_11_mean_Peer *
-BMK_S1_11_mean_Peer_quick_reputation + BMK_S1_11_mean_Boss *
-BMK_S1_11_mean_Boss_quick_reputation + BMK_S1_30_mean_Self *
-BMK_S1_30_mean_Self_quick_reputation + BMK_S1_30_mean_Direct_Report *
-BMK_S1_30_mean_Direct_Report_quick_reputation + BMK_S1_30_mean_Peer *
-BMK_S1_30_mean_Peer_quick_reputation + BMK_S1_30_mean_Boss *
-BMK_S1_30_mean_Boss_quick_reputation + BMK_S1_45_mean_Self *
-BMK_S1_45_mean_Self_quick_reputation + BMK_S1_45_mean_Direct_Report *
-BMK_S1_45_mean_Direct_Report_quick_reputation + BMK_S1_45_mean_Peer *
-BMK_S1_45_mean_Peer_quick_reputation + BMK_S1_45_mean_Boss *
-BMK_S1_45_mean_Boss_quick_reputation
+BMK_S1_12_mean_Self * BMK_S1_12_mean_Self_respect_reputation +
+BMK_S1_12_mean_Direct_Report *
+BMK_S1_12_mean_Direct_Report_respect_reputation + BMK_S1_12_mean_Peer *
+BMK_S1_12_mean_Peer_respect_reputation + BMK_S1_12_mean_Boss *
+BMK_S1_12_mean_Boss_respect_reputation + BMK_S1_15_mean_Self *
+BMK_S1_15_mean_Self_respect_reputation + BMK_S1_15_mean_Direct_Report *
+BMK_S1_15_mean_Direct_Report_respect_reputation + BMK_S1_15_mean_Peer *
+BMK_S1_15_mean_Peer_respect_reputation + BMK_S1_15_mean_Boss *
+BMK_S1_15_mean_Boss_respect_reputation + BMK_S1_17_mean_Self *
+BMK_S1_17_mean_Self_respect_reputation + BMK_S1_17_mean_Direct_Report *
+BMK_S1_17_mean_Direct_Report_respect_reputation + BMK_S1_17_mean_Peer *
+BMK_S1_17_mean_Peer_respect_reputation + BMK_S1_17_mean_Boss *
+BMK_S1_17_mean_Boss_respect_reputation + BMK_S1_18_mean_Self *
+BMK_S1_18_mean_Self_respect_reputation + BMK_S1_18_mean_Direct_Report *
+BMK_S1_18_mean_Direct_Report_respect_reputation + BMK_S1_18_mean_Peer *
+BMK_S1_18_mean_Peer_respect_reputation + BMK_S1_18_mean_Boss *
+BMK_S1_18_mean_Boss_respect_reputation + BMK_S1_26_mean_Self *
+BMK_S1_26_mean_Self_respect_reputation + BMK_S1_26_mean_Direct_Report *
+BMK_S1_26_mean_Direct_Report_respect_reputation + BMK_S1_26_mean_Peer *
+BMK_S1_26_mean_Peer_respect_reputation + BMK_S1_26_mean_Boss *
+BMK_S1_26_mean_Boss_respect_reputation + BMK_S1_37_mean_Self *
+BMK_S1_37_mean_Self_respect_reputation + BMK_S1_37_mean_Direct_Report *
+BMK_S1_37_mean_Direct_Report_respect_reputation + BMK_S1_37_mean_Peer *
+BMK_S1_37_mean_Peer_respect_reputation + BMK_S1_37_mean_Boss *
+BMK_S1_37_mean_Boss_respect_reputation + BMK_S1_38_mean_Self *
+BMK_S1_38_mean_Self_respect_reputation + BMK_S1_38_mean_Direct_Report *
+BMK_S1_38_mean_Direct_Report_respect_reputation + BMK_S1_38_mean_Peer *
+BMK_S1_38_mean_Peer_respect_reputation + BMK_S1_38_mean_Boss *
+BMK_S1_38_mean_Boss_respect_reputation + BMK_S1_39_mean_Self *
+BMK_S1_39_mean_Self_respect_reputation + BMK_S1_39_mean_Direct_Report *
+BMK_S1_39_mean_Direct_Report_respect_reputation + BMK_S1_39_mean_Peer *
+BMK_S1_39_mean_Peer_respect_reputation + BMK_S1_39_mean_Boss *
+BMK_S1_39_mean_Boss_respect_reputation + BMK_S1_43_mean_Self *
+BMK_S1_43_mean_Self_respect_reputation + BMK_S1_43_mean_Direct_Report *
+BMK_S1_43_mean_Direct_Report_respect_reputation + BMK_S1_43_mean_Peer *
+BMK_S1_43_mean_Peer_respect_reputation + BMK_S1_43_mean_Boss *
+BMK_S1_43_mean_Boss_respect_reputation + BMK_S1_47_mean_Self *
+BMK_S1_47_mean_Self_respect_reputation + BMK_S1_47_mean_Direct_Report *
+BMK_S1_47_mean_Direct_Report_respect_reputation + BMK_S1_47_mean_Peer *
+BMK_S1_47_mean_Peer_respect_reputation + BMK_S1_47_mean_Boss *
+BMK_S1_47_mean_Boss_respect_reputation + BMK_S1_52_mean_Self *
+BMK_S1_52_mean_Self_respect_reputation + BMK_S1_52_mean_Direct_Report *
+BMK_S1_52_mean_Direct_Report_respect_reputation + BMK_S1_52_mean_Peer *
+BMK_S1_52_mean_Peer_respect_reputation + BMK_S1_52_mean_Boss *
+BMK_S1_52_mean_Boss_respect_reputation + BMK_S1_68_mean_Self *
+BMK_S1_68_mean_Self_respect_reputation + BMK_S1_68_mean_Direct_Report *
+BMK_S1_68_mean_Direct_Report_respect_reputation + BMK_S1_68_mean_Peer *
+BMK_S1_68_mean_Peer_respect_reputation + BMK_S1_68_mean_Boss *
+BMK_S1_68_mean_Boss_respect_reputation + BMK_S1_88_mean_Self *
+BMK_S1_88_mean_Self_respect_reputation + BMK_S1_88_mean_Direct_Report *
+BMK_S1_88_mean_Direct_Report_respect_reputation + BMK_S1_88_mean_Peer *
+BMK_S1_88_mean_Peer_respect_reputation + BMK_S1_88_mean_Boss *
+BMK_S1_88_mean_Boss_respect_reputation
 </td>
 </tr>
 </tbody>
@@ -3675,18 +4024,59 @@ BMK_S1_45_mean_Boss_quick_reputation
 <tbody>
 <tr>
 <td style="text-align:left;">
-BMK_S1_11_mean_Self * BMK_S1_11_mean_Self_quick_arena +
-BMK_S1_11_mean_Direct_Report * BMK_S1_11_mean_Direct_Report_quick_arena
-+ BMK_S1_11_mean_Peer * BMK_S1_11_mean_Peer_quick_arena +
-BMK_S1_11_mean_Boss * BMK_S1_11_mean_Boss_quick_arena +
-BMK_S1_30_mean_Self * BMK_S1_30_mean_Self_quick_arena +
-BMK_S1_30_mean_Direct_Report * BMK_S1_30_mean_Direct_Report_quick_arena
-+ BMK_S1_30_mean_Peer * BMK_S1_30_mean_Peer_quick_arena +
-BMK_S1_30_mean_Boss * BMK_S1_30_mean_Boss_quick_arena +
-BMK_S1_45_mean_Self * BMK_S1_45_mean_Self_quick_arena +
-BMK_S1_45_mean_Direct_Report * BMK_S1_45_mean_Direct_Report_quick_arena
-+ BMK_S1_45_mean_Peer * BMK_S1_45_mean_Peer_quick_arena +
-BMK_S1_45_mean_Boss * BMK_S1_45_mean_Boss_quick_arena
+BMK_S1_12_mean_Self * BMK_S1_12_mean_Self_respect_arena +
+BMK_S1_12_mean_Direct_Report *
+BMK_S1_12_mean_Direct_Report_respect_arena + BMK_S1_12_mean_Peer *
+BMK_S1_12_mean_Peer_respect_arena + BMK_S1_12_mean_Boss *
+BMK_S1_12_mean_Boss_respect_arena + BMK_S1_15_mean_Self *
+BMK_S1_15_mean_Self_respect_arena + BMK_S1_15_mean_Direct_Report *
+BMK_S1_15_mean_Direct_Report_respect_arena + BMK_S1_15_mean_Peer *
+BMK_S1_15_mean_Peer_respect_arena + BMK_S1_15_mean_Boss *
+BMK_S1_15_mean_Boss_respect_arena + BMK_S1_17_mean_Self *
+BMK_S1_17_mean_Self_respect_arena + BMK_S1_17_mean_Direct_Report *
+BMK_S1_17_mean_Direct_Report_respect_arena + BMK_S1_17_mean_Peer *
+BMK_S1_17_mean_Peer_respect_arena + BMK_S1_17_mean_Boss *
+BMK_S1_17_mean_Boss_respect_arena + BMK_S1_18_mean_Self *
+BMK_S1_18_mean_Self_respect_arena + BMK_S1_18_mean_Direct_Report *
+BMK_S1_18_mean_Direct_Report_respect_arena + BMK_S1_18_mean_Peer *
+BMK_S1_18_mean_Peer_respect_arena + BMK_S1_18_mean_Boss *
+BMK_S1_18_mean_Boss_respect_arena + BMK_S1_26_mean_Self *
+BMK_S1_26_mean_Self_respect_arena + BMK_S1_26_mean_Direct_Report *
+BMK_S1_26_mean_Direct_Report_respect_arena + BMK_S1_26_mean_Peer *
+BMK_S1_26_mean_Peer_respect_arena + BMK_S1_26_mean_Boss *
+BMK_S1_26_mean_Boss_respect_arena + BMK_S1_37_mean_Self *
+BMK_S1_37_mean_Self_respect_arena + BMK_S1_37_mean_Direct_Report *
+BMK_S1_37_mean_Direct_Report_respect_arena + BMK_S1_37_mean_Peer *
+BMK_S1_37_mean_Peer_respect_arena + BMK_S1_37_mean_Boss *
+BMK_S1_37_mean_Boss_respect_arena + BMK_S1_38_mean_Self *
+BMK_S1_38_mean_Self_respect_arena + BMK_S1_38_mean_Direct_Report *
+BMK_S1_38_mean_Direct_Report_respect_arena + BMK_S1_38_mean_Peer *
+BMK_S1_38_mean_Peer_respect_arena + BMK_S1_38_mean_Boss *
+BMK_S1_38_mean_Boss_respect_arena + BMK_S1_39_mean_Self *
+BMK_S1_39_mean_Self_respect_arena + BMK_S1_39_mean_Direct_Report *
+BMK_S1_39_mean_Direct_Report_respect_arena + BMK_S1_39_mean_Peer *
+BMK_S1_39_mean_Peer_respect_arena + BMK_S1_39_mean_Boss *
+BMK_S1_39_mean_Boss_respect_arena + BMK_S1_43_mean_Self *
+BMK_S1_43_mean_Self_respect_arena + BMK_S1_43_mean_Direct_Report *
+BMK_S1_43_mean_Direct_Report_respect_arena + BMK_S1_43_mean_Peer *
+BMK_S1_43_mean_Peer_respect_arena + BMK_S1_43_mean_Boss *
+BMK_S1_43_mean_Boss_respect_arena + BMK_S1_47_mean_Self *
+BMK_S1_47_mean_Self_respect_arena + BMK_S1_47_mean_Direct_Report *
+BMK_S1_47_mean_Direct_Report_respect_arena + BMK_S1_47_mean_Peer *
+BMK_S1_47_mean_Peer_respect_arena + BMK_S1_47_mean_Boss *
+BMK_S1_47_mean_Boss_respect_arena + BMK_S1_52_mean_Self *
+BMK_S1_52_mean_Self_respect_arena + BMK_S1_52_mean_Direct_Report *
+BMK_S1_52_mean_Direct_Report_respect_arena + BMK_S1_52_mean_Peer *
+BMK_S1_52_mean_Peer_respect_arena + BMK_S1_52_mean_Boss *
+BMK_S1_52_mean_Boss_respect_arena + BMK_S1_68_mean_Self *
+BMK_S1_68_mean_Self_respect_arena + BMK_S1_68_mean_Direct_Report *
+BMK_S1_68_mean_Direct_Report_respect_arena + BMK_S1_68_mean_Peer *
+BMK_S1_68_mean_Peer_respect_arena + BMK_S1_68_mean_Boss *
+BMK_S1_68_mean_Boss_respect_arena + BMK_S1_88_mean_Self *
+BMK_S1_88_mean_Self_respect_arena + BMK_S1_88_mean_Direct_Report *
+BMK_S1_88_mean_Direct_Report_respect_arena + BMK_S1_88_mean_Peer *
+BMK_S1_88_mean_Peer_respect_arena + BMK_S1_88_mean_Boss *
+BMK_S1_88_mean_Boss_respect_arena
 </td>
 </tr>
 </tbody>
@@ -3702,7 +4092,7 @@ BMK_S1_45_mean_Boss * BMK_S1_45_mean_Boss_quick_arena
 <table class="table table-striped table-hover table-responsive" style="margin-left: auto; margin-right: auto;border-bottom: 0;">
 <caption>
 Table 1: Item Means, Standard Deviations, and Factor Scoring Weights
-Derived from the TRI/LARI Model (Cross-validation Sample)
+Derived from the TRI/LARI Model (Normative Sample)
 </caption>
 <thead>
 <tr>
@@ -3744,314 +4134,1354 @@ Trait/Arena
 <tbody>
 <tr>
 <td style="text-align:left;">
-BMK_S1_11_mean_Self
+BMK_S1_12_mean_Self
 </td>
 <td style="text-align:left;">
-3.954 (0.755)
+3.792 (0.782)
 </td>
 <td style="text-align:left;">
-0.172
+0.049
 </td>
 <td style="text-align:left;">
--0.034
+0.000
 </td>
 <td style="text-align:left;">
--0.032
+0.000
 </td>
 <td style="text-align:left;">
--0.026
+0.000
 </td>
 <td style="text-align:left;">
--0.011
+0.000
 </td>
 <td style="text-align:left;">
-0.085
+-0.000
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-BMK_S1_30_mean_Self
+BMK_S1_15_mean_Self
 </td>
 <td style="text-align:left;">
-3.961 (0.701)
+3.723 (0.754)
 </td>
 <td style="text-align:left;">
-0.173
+0.049
 </td>
 <td style="text-align:left;">
-0.007
+-0.000
 </td>
 <td style="text-align:left;">
-0.007
+-0.002
 </td>
 <td style="text-align:left;">
-0.005
+-0.000
+</td>
+<td style="text-align:left;">
+-0.002
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_17_mean_Self
+</td>
+<td style="text-align:left;">
+3.693 (0.773)
+</td>
+<td style="text-align:left;">
+0.063
+</td>
+<td style="text-align:left;">
+0.001
 </td>
 <td style="text-align:left;">
 0.002
 </td>
 <td style="text-align:left;">
--0.018
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-BMK_S1_45_mean_Self
-</td>
-<td style="text-align:left;">
-3.928 (0.712)
-</td>
-<td style="text-align:left;">
-0.346
-</td>
-<td style="text-align:left;">
--0.018
-</td>
-<td style="text-align:left;">
--0.017
-</td>
-<td style="text-align:left;">
--0.014
-</td>
-<td style="text-align:left;">
--0.006
-</td>
-<td style="text-align:left;">
-0.046
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-BMK_S1_11_mean_Direct_Report
-</td>
-<td style="text-align:left;">
-4.231 (0.561)
-</td>
-<td style="text-align:left;">
--0.102
-</td>
-<td style="text-align:left;">
-0.175
-</td>
-<td style="text-align:left;">
--0.072
-</td>
-<td style="text-align:left;">
--0.061
-</td>
-<td style="text-align:left;">
--0.018
-</td>
-<td style="text-align:left;">
-0.178
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-BMK_S1_30_mean_Direct_Report
-</td>
-<td style="text-align:left;">
-4.393 (0.457)
-</td>
-<td style="text-align:left;">
-0.069
-</td>
-<td style="text-align:left;">
-0.224
-</td>
-<td style="text-align:left;">
--0.029
-</td>
-<td style="text-align:left;">
--0.049
-</td>
-<td style="text-align:left;">
-0.081
-</td>
-<td style="text-align:left;">
--0.121
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-BMK_S1_45_mean_Direct_Report
-</td>
-<td style="text-align:left;">
-4.262 (0.524)
-</td>
-<td style="text-align:left;">
--0.037
-</td>
-<td style="text-align:left;">
-0.335
-</td>
-<td style="text-align:left;">
--0.037
-</td>
-<td style="text-align:left;">
--0.035
+0.000
 </td>
 <td style="text-align:left;">
 0.003
 </td>
 <td style="text-align:left;">
-0.065
+-0.004
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-BMK_S1_11_mean_Peer
+BMK_S1_18_mean_Self
 </td>
 <td style="text-align:left;">
-4.174 (0.537)
+4.157 (0.663)
 </td>
 <td style="text-align:left;">
--0.105
+0.063
 </td>
 <td style="text-align:left;">
--0.086
+0.001
 </td>
 <td style="text-align:left;">
--0.085
+0.005
 </td>
 <td style="text-align:left;">
-0.164
+0.000
+</td>
+<td style="text-align:left;">
+0.008
+</td>
+<td style="text-align:left;">
+-0.009
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_26_mean_Self
+</td>
+<td style="text-align:left;">
+4.093 (0.652)
+</td>
+<td style="text-align:left;">
+0.067
+</td>
+<td style="text-align:left;">
+-0.000
+</td>
+<td style="text-align:left;">
+-0.000
+</td>
+<td style="text-align:left;">
+-0.000
+</td>
+<td style="text-align:left;">
+-0.001
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_37_mean_Self
+</td>
+<td style="text-align:left;">
+4.006 (0.692)
+</td>
+<td style="text-align:left;">
+0.056
+</td>
+<td style="text-align:left;">
+-0.001
+</td>
+<td style="text-align:left;">
+-0.004
+</td>
+<td style="text-align:left;">
+-0.000
+</td>
+<td style="text-align:left;">
+-0.006
+</td>
+<td style="text-align:left;">
+0.007
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_38_mean_Self
+</td>
+<td style="text-align:left;">
+3.959 (0.712)
+</td>
+<td style="text-align:left;">
+0.073
+</td>
+<td style="text-align:left;">
+-0.002
+</td>
+<td style="text-align:left;">
+-0.006
+</td>
+<td style="text-align:left;">
+-0.000
 </td>
 <td style="text-align:left;">
 -0.009
 </td>
 <td style="text-align:left;">
-0.182
+0.011
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-BMK_S1_30_mean_Peer
+BMK_S1_39_mean_Self
 </td>
 <td style="text-align:left;">
-4.273 (0.468)
+3.967 (0.686)
+</td>
+<td style="text-align:left;">
+0.105
+</td>
+<td style="text-align:left;">
+-0.001
+</td>
+<td style="text-align:left;">
+-0.004
+</td>
+<td style="text-align:left;">
+-0.000
+</td>
+<td style="text-align:left;">
+-0.006
+</td>
+<td style="text-align:left;">
+0.007
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_43_mean_Self
+</td>
+<td style="text-align:left;">
+3.809 (0.717)
+</td>
+<td style="text-align:left;">
+0.068
+</td>
+<td style="text-align:left;">
+-0.001
+</td>
+<td style="text-align:left;">
+-0.003
+</td>
+<td style="text-align:left;">
+-0.000
+</td>
+<td style="text-align:left;">
+-0.006
+</td>
+<td style="text-align:left;">
+0.006
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_47_mean_Self
+</td>
+<td style="text-align:left;">
+3.838 (0.717)
+</td>
+<td style="text-align:left;">
+0.068
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+0.006
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.011
+</td>
+<td style="text-align:left;">
+-0.012
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_52_mean_Self
+</td>
+<td style="text-align:left;">
+4.052 (0.684)
+</td>
+<td style="text-align:left;">
+0.060
+</td>
+<td style="text-align:left;">
+-0.000
+</td>
+<td style="text-align:left;">
+-0.001
+</td>
+<td style="text-align:left;">
+-0.000
+</td>
+<td style="text-align:left;">
+-0.002
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_68_mean_Self
+</td>
+<td style="text-align:left;">
+3.949 (0.686)
+</td>
+<td style="text-align:left;">
+0.085
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+<td style="text-align:left;">
+-0.004
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_88_mean_Self
+</td>
+<td style="text-align:left;">
+4.098 (0.757)
+</td>
+<td style="text-align:left;">
+0.048
+</td>
+<td style="text-align:left;">
+-0.000
+</td>
+<td style="text-align:left;">
+-0.000
+</td>
+<td style="text-align:left;">
+-0.000
+</td>
+<td style="text-align:left;">
+-0.001
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_12_mean_Direct_Report
+</td>
+<td style="text-align:left;">
+4.154 (0.550)
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+0.086
+</td>
+<td style="text-align:left;">
+0.004
+</td>
+<td style="text-align:left;">
+0.004
+</td>
+<td style="text-align:left;">
+-0.008
+</td>
+<td style="text-align:left;">
+-0.001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_15_mean_Direct_Report
+</td>
+<td style="text-align:left;">
+4.094 (0.569)
+</td>
+<td style="text-align:left;">
+-0.004
+</td>
+<td style="text-align:left;">
+0.074
+</td>
+<td style="text-align:left;">
+-0.001
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+-0.005
+</td>
+<td style="text-align:left;">
+0.004
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_17_mean_Direct_Report
+</td>
+<td style="text-align:left;">
+3.971 (0.623)
+</td>
+<td style="text-align:left;">
+0.011
 </td>
 <td style="text-align:left;">
 0.084
 </td>
 <td style="text-align:left;">
--0.055
+0.003
 </td>
 <td style="text-align:left;">
--0.079
+-0.003
 </td>
 <td style="text-align:left;">
-0.114
+0.015
 </td>
 <td style="text-align:left;">
-0.137
-</td>
-<td style="text-align:left;">
--0.146
+-0.010
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-BMK_S1_45_mean_Peer
+BMK_S1_18_mean_Direct_Report
 </td>
 <td style="text-align:left;">
-4.178 (0.506)
+4.177 (0.557)
 </td>
 <td style="text-align:left;">
--0.056
+0.018
 </td>
 <td style="text-align:left;">
--0.074
+0.007
 </td>
 <td style="text-align:left;">
--0.078
+-0.008
 </td>
 <td style="text-align:left;">
-0.267
+-0.017
 </td>
 <td style="text-align:left;">
-0.024
+0.052
 </td>
 <td style="text-align:left;">
-0.097
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-BMK_S1_11_mean_Boss
-</td>
-<td style="text-align:left;">
-4.238 (0.712)
-</td>
-<td style="text-align:left;">
--0.050
-</td>
-<td style="text-align:left;">
--0.039
-</td>
-<td style="text-align:left;">
-0.203
-</td>
-<td style="text-align:left;">
--0.032
-</td>
-<td style="text-align:left;">
--0.007
-</td>
-<td style="text-align:left;">
-0.087
+-0.016
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-BMK_S1_30_mean_Boss
+BMK_S1_26_mean_Direct_Report
 </td>
 <td style="text-align:left;">
-4.245 (0.673)
+4.256 (0.495)
+</td>
+<td style="text-align:left;">
+-0.004
+</td>
+<td style="text-align:left;">
+0.049
+</td>
+<td style="text-align:left;">
+-0.015
+</td>
+<td style="text-align:left;">
+-0.014
 </td>
 <td style="text-align:left;">
 0.028
 </td>
 <td style="text-align:left;">
--0.011
+0.003
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_37_mean_Direct_Report
 </td>
 <td style="text-align:left;">
-0.167
+4.252 (0.499)
 </td>
 <td style="text-align:left;">
--0.027
+-0.024
+</td>
+<td style="text-align:left;">
+-0.206
+</td>
+<td style="text-align:left;">
+-0.090
+</td>
+<td style="text-align:left;">
+-0.081
+</td>
+<td style="text-align:left;">
+0.161
+</td>
+<td style="text-align:left;">
+0.022
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_38_mean_Direct_Report
+</td>
+<td style="text-align:left;">
+4.201 (0.529)
+</td>
+<td style="text-align:left;">
+-0.035
+</td>
+<td style="text-align:left;">
+-0.229
+</td>
+<td style="text-align:left;">
+-0.108
+</td>
+<td style="text-align:left;">
+-0.094
+</td>
+<td style="text-align:left;">
+0.180
+</td>
+<td style="text-align:left;">
+0.032
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_39_mean_Direct_Report
+</td>
+<td style="text-align:left;">
+4.158 (0.557)
+</td>
+<td style="text-align:left;">
+-0.029
+</td>
+<td style="text-align:left;">
+0.113
+</td>
+<td style="text-align:left;">
+-0.023
+</td>
+<td style="text-align:left;">
+-0.010
+</td>
+<td style="text-align:left;">
+-0.003
+</td>
+<td style="text-align:left;">
+0.026
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_43_mean_Direct_Report
+</td>
+<td style="text-align:left;">
+4.056 (0.547)
+</td>
+<td style="text-align:left;">
+-0.026
+</td>
+<td style="text-align:left;">
+0.113
+</td>
+<td style="text-align:left;">
+-0.014
+</td>
+<td style="text-align:left;">
+-0.002
+</td>
+<td style="text-align:left;">
+-0.017
+</td>
+<td style="text-align:left;">
+0.023
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_47_mean_Direct_Report
+</td>
+<td style="text-align:left;">
+4.118 (0.581)
 </td>
 <td style="text-align:left;">
 0.038
 </td>
 <td style="text-align:left;">
--0.049
+0.019
+</td>
+<td style="text-align:left;">
+-0.006
+</td>
+<td style="text-align:left;">
+-0.024
+</td>
+<td style="text-align:left;">
+0.086
+</td>
+<td style="text-align:left;">
+-0.035
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-BMK_S1_45_mean_Boss
+BMK_S1_52_mean_Direct_Report
 </td>
 <td style="text-align:left;">
-4.217 (0.673)
+4.098 (0.594)
 </td>
 <td style="text-align:left;">
--0.025
+-0.010
 </td>
 <td style="text-align:left;">
--0.038
+0.034
 </td>
 <td style="text-align:left;">
-0.321
+-0.016
 </td>
 <td style="text-align:left;">
--0.041
+-0.012
 </td>
 <td style="text-align:left;">
-0.016
+0.018
 </td>
 <td style="text-align:left;">
-0.044
+0.009
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_68_mean_Direct_Report
+</td>
+<td style="text-align:left;">
+4.062 (0.637)
+</td>
+<td style="text-align:left;">
+0.018
+</td>
+<td style="text-align:left;">
+0.018
+</td>
+<td style="text-align:left;">
+-0.022
+</td>
+<td style="text-align:left;">
+-0.030
+</td>
+<td style="text-align:left;">
+0.083
+</td>
+<td style="text-align:left;">
+-0.016
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_88_mean_Direct_Report
+</td>
+<td style="text-align:left;">
+4.150 (0.682)
+</td>
+<td style="text-align:left;">
+-0.007
+</td>
+<td style="text-align:left;">
+0.033
+</td>
+<td style="text-align:left;">
+-0.006
+</td>
+<td style="text-align:left;">
+-0.003
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+0.006
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_12_mean_Peer
+</td>
+<td style="text-align:left;">
+4.004 (0.564)
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+0.040
+</td>
+<td style="text-align:left;">
+-0.000
+</td>
+<td style="text-align:left;">
+-0.001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_15_mean_Peer
+</td>
+<td style="text-align:left;">
+4.010 (0.519)
+</td>
+<td style="text-align:left;">
+-0.004
+</td>
+<td style="text-align:left;">
+0.004
+</td>
+<td style="text-align:left;">
+-0.000
+</td>
+<td style="text-align:left;">
+0.053
+</td>
+<td style="text-align:left;">
+-0.007
+</td>
+<td style="text-align:left;">
+0.004
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_17_mean_Peer
+</td>
+<td style="text-align:left;">
+3.796 (0.618)
+</td>
+<td style="text-align:left;">
+0.007
+</td>
+<td style="text-align:left;">
+-0.003
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+0.053
+</td>
+<td style="text-align:left;">
+0.010
+</td>
+<td style="text-align:left;">
+-0.007
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_18_mean_Peer
+</td>
+<td style="text-align:left;">
+4.126 (0.554)
+</td>
+<td style="text-align:left;">
+0.025
+</td>
+<td style="text-align:left;">
+-0.003
+</td>
+<td style="text-align:left;">
+0.010
+</td>
+<td style="text-align:left;">
+0.049
+</td>
+<td style="text-align:left;">
+0.026
+</td>
+<td style="text-align:left;">
+-0.023
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_26_mean_Peer
+</td>
+<td style="text-align:left;">
+4.124 (0.493)
+</td>
+<td style="text-align:left;">
+-0.004
+</td>
+<td style="text-align:left;">
+-0.000
+</td>
+<td style="text-align:left;">
+-0.002
+</td>
+<td style="text-align:left;">
+0.069
+</td>
+<td style="text-align:left;">
+-0.003
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_37_mean_Peer
+</td>
+<td style="text-align:left;">
+4.009 (0.530)
+</td>
+<td style="text-align:left;">
+-0.013
+</td>
+<td style="text-align:left;">
+-0.006
+</td>
+<td style="text-align:left;">
+-0.008
+</td>
+<td style="text-align:left;">
+0.067
+</td>
+<td style="text-align:left;">
+-0.007
+</td>
+<td style="text-align:left;">
+0.012
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_38_mean_Peer
+</td>
+<td style="text-align:left;">
+3.954 (0.560)
+</td>
+<td style="text-align:left;">
+-0.023
+</td>
+<td style="text-align:left;">
+-0.004
+</td>
+<td style="text-align:left;">
+-0.012
+</td>
+<td style="text-align:left;">
+0.084
+</td>
+<td style="text-align:left;">
+-0.017
+</td>
+<td style="text-align:left;">
+0.021
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_39_mean_Peer
+</td>
+<td style="text-align:left;">
+3.991 (0.541)
+</td>
+<td style="text-align:left;">
+-0.020
+</td>
+<td style="text-align:left;">
+0.005
+</td>
+<td style="text-align:left;">
+-0.007
+</td>
+<td style="text-align:left;">
+0.109
+</td>
+<td style="text-align:left;">
+-0.023
+</td>
+<td style="text-align:left;">
+0.019
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_43_mean_Peer
+</td>
+<td style="text-align:left;">
+3.944 (0.542)
+</td>
+<td style="text-align:left;">
+-0.019
+</td>
+<td style="text-align:left;">
+0.011
+</td>
+<td style="text-align:left;">
+-0.004
+</td>
+<td style="text-align:left;">
+0.085
+</td>
+<td style="text-align:left;">
+-0.027
+</td>
+<td style="text-align:left;">
+0.017
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_47_mean_Peer
+</td>
+<td style="text-align:left;">
+3.998 (0.550)
+</td>
+<td style="text-align:left;">
+0.037
+</td>
+<td style="text-align:left;">
+-0.016
+</td>
+<td style="text-align:left;">
+0.010
+</td>
+<td style="text-align:left;">
+0.054
+</td>
+<td style="text-align:left;">
+0.048
+</td>
+<td style="text-align:left;">
+-0.034
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_52_mean_Peer
+</td>
+<td style="text-align:left;">
+4.121 (0.491)
+</td>
+<td style="text-align:left;">
+-0.004
+</td>
+<td style="text-align:left;">
+-0.002
+</td>
+<td style="text-align:left;">
+-0.003
+</td>
+<td style="text-align:left;">
+0.065
+</td>
+<td style="text-align:left;">
+-0.002
+</td>
+<td style="text-align:left;">
+0.004
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_68_mean_Peer
+</td>
+<td style="text-align:left;">
+3.999 (0.601)
+</td>
+<td style="text-align:left;">
+0.025
+</td>
+<td style="text-align:left;">
+-0.029
+</td>
+<td style="text-align:left;">
+-0.001
+</td>
+<td style="text-align:left;">
+0.056
+</td>
+<td style="text-align:left;">
+0.048
+</td>
+<td style="text-align:left;">
+-0.022
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_88_mean_Peer
+</td>
+<td style="text-align:left;">
+4.061 (0.620)
+</td>
+<td style="text-align:left;">
+-0.003
+</td>
+<td style="text-align:left;">
+-0.001
+</td>
+<td style="text-align:left;">
+-0.002
+</td>
+<td style="text-align:left;">
+0.042
+</td>
+<td style="text-align:left;">
+-0.002
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_12_mean_Boss
+</td>
+<td style="text-align:left;">
+3.854 (0.822)
+</td>
+<td style="text-align:left;">
+-0.001
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+0.041
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+-0.003
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_15_mean_Boss
+</td>
+<td style="text-align:left;">
+4.014 (0.738)
+</td>
+<td style="text-align:left;">
+-0.002
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+0.051
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+-0.003
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_17_mean_Boss
+</td>
+<td style="text-align:left;">
+3.721 (0.806)
+</td>
+<td style="text-align:left;">
+0.004
+</td>
+<td style="text-align:left;">
+-0.003
+</td>
+<td style="text-align:left;">
+0.061
+</td>
+<td style="text-align:left;">
+-0.001
+</td>
+<td style="text-align:left;">
+0.006
+</td>
+<td style="text-align:left;">
+-0.003
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_18_mean_Boss
+</td>
+<td style="text-align:left;">
+4.250 (0.683)
+</td>
+<td style="text-align:left;">
+0.015
+</td>
+<td style="text-align:left;">
+-0.001
+</td>
+<td style="text-align:left;">
+0.060
+</td>
+<td style="text-align:left;">
+-0.001
+</td>
+<td style="text-align:left;">
+0.015
+</td>
+<td style="text-align:left;">
+-0.014
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_26_mean_Boss
+</td>
+<td style="text-align:left;">
+4.107 (0.703)
+</td>
+<td style="text-align:left;">
+-0.002
+</td>
+<td style="text-align:left;">
+-0.000
+</td>
+<td style="text-align:left;">
+0.065
+</td>
+<td style="text-align:left;">
+-0.000
+</td>
+<td style="text-align:left;">
+-0.002
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_37_mean_Boss
+</td>
+<td style="text-align:left;">
+3.992 (0.727)
+</td>
+<td style="text-align:left;">
+-0.010
+</td>
+<td style="text-align:left;">
+-0.002
+</td>
+<td style="text-align:left;">
+0.067
+</td>
+<td style="text-align:left;">
+-0.001
+</td>
+<td style="text-align:left;">
+-0.008
+</td>
+<td style="text-align:left;">
+0.009
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_38_mean_Boss
+</td>
+<td style="text-align:left;">
+3.974 (0.757)
+</td>
+<td style="text-align:left;">
+-0.013
+</td>
+<td style="text-align:left;">
+-0.001
+</td>
+<td style="text-align:left;">
+0.080
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+-0.011
+</td>
+<td style="text-align:left;">
+0.012
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_39_mean_Boss
+</td>
+<td style="text-align:left;">
+3.995 (0.750)
+</td>
+<td style="text-align:left;">
+-0.008
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+0.116
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+-0.009
+</td>
+<td style="text-align:left;">
+0.008
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_43_mean_Boss
+</td>
+<td style="text-align:left;">
+3.930 (0.755)
+</td>
+<td style="text-align:left;">
+-0.009
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+<td style="text-align:left;">
+0.073
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+-0.010
+</td>
+<td style="text-align:left;">
+0.008
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_47_mean_Boss
+</td>
+<td style="text-align:left;">
+4.003 (0.756)
+</td>
+<td style="text-align:left;">
+0.017
+</td>
+<td style="text-align:left;">
+-0.009
+</td>
+<td style="text-align:left;">
+0.062
+</td>
+<td style="text-align:left;">
+-0.004
+</td>
+<td style="text-align:left;">
+0.024
+</td>
+<td style="text-align:left;">
+-0.016
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_52_mean_Boss
+</td>
+<td style="text-align:left;">
+4.202 (0.651)
+</td>
+<td style="text-align:left;">
+-0.002
+</td>
+<td style="text-align:left;">
+-0.000
+</td>
+<td style="text-align:left;">
+0.065
+</td>
+<td style="text-align:left;">
+-0.000
+</td>
+<td style="text-align:left;">
+-0.001
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_68_mean_Boss
+</td>
+<td style="text-align:left;">
+4.054 (0.779)
+</td>
+<td style="text-align:left;">
+0.013
+</td>
+<td style="text-align:left;">
+-0.017
+</td>
+<td style="text-align:left;">
+0.068
+</td>
+<td style="text-align:left;">
+-0.007
+</td>
+<td style="text-align:left;">
+0.027
+</td>
+<td style="text-align:left;">
+-0.012
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BMK_S1_88_mean_Boss
+</td>
+<td style="text-align:left;">
+4.085 (0.788)
+</td>
+<td style="text-align:left;">
+-0.002
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.051
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+-0.002
+</td>
+<td style="text-align:left;">
+0.002
 </td>
 </tr>
 </tbody>
@@ -4063,7 +5493,7 @@ BMK_S1_45_mean_Boss
 </tr>
 <tr>
 <td style="padding: 0; " colspan="100%">
-<sup></sup> N = 6,554
+<sup></sup> N = 3,903
 </td>
 </tr>
 </tfoot>
@@ -4115,118 +5545,109 @@ Self
 <ul>
 <li></td>
 <td style="text-align:left;">
-<ul>
-<li></td>
+0.09
+</td>
 <td style="text-align:left;">
-<ul>
-<li></td>
+0.11
+</td>
 <td style="text-align:left;">
-<ul>
-<li></td>
+0.11
+</td>
 <td style="text-align:left;">
-<ul>
-<li></td>
+0.15
+</td>
 <td style="text-align:left;">
-<ul>
-<li></td>
+0.08
+</td>
 <td style="text-align:left;">
-<ul>
-<li></td>
+0.08
+</td>
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;">
 Direct Report
 </td>
 <td style="text-align:left;">
--0.07
+<ul>
+<li></td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+<td style="text-align:left;">
+-0.02
 </td>
 <td style="text-align:left;">
-<ul>
-<li></td>
+-0.05
+</td>
 <td style="text-align:left;">
-<ul>
-<li></td>
+0.22
+</td>
 <td style="text-align:left;">
-<ul>
-<li></td>
+0.02
+</td>
 <td style="text-align:left;">
-<ul>
-<li></td>
-<td style="text-align:left;">
-<ul>
-<li></td>
-<td style="text-align:left;">
-<ul>
-<li></td>
+0.13
+</td>
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;">
 Peer
 </td>
 <td style="text-align:left;">
--0.08
+<ul>
+<li></td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+<td style="text-align:left;">
+0.28
 </td>
 <td style="text-align:left;">
--0.29
+0.05
 </td>
 <td style="text-align:left;">
-<ul>
-<li></td>
+0.00
+</td>
 <td style="text-align:left;">
-<ul>
-<li></td>
-<td style="text-align:left;">
-<ul>
-<li></td>
-<td style="text-align:left;">
-<ul>
-<li></td>
-<td style="text-align:left;">
-<ul>
-<li></td>
+0.35
+</td>
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;">
 Boss
 </td>
 <td style="text-align:left;">
--0.05
+<ul>
+<li></td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+<td style="text-align:left;">
+0.03
 </td>
 <td style="text-align:left;">
--0.17
+0.03
 </td>
 <td style="text-align:left;">
--0.25
+0.35
 </td>
-<td style="text-align:left;">
-<ul>
-<li></td>
-<td style="text-align:left;">
-<ul>
-<li></td>
-<td style="text-align:left;">
-<ul>
-<li></td>
-<td style="text-align:left;">
-<ul>
-<li></td>
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;">
 Reputation
 </td>
 <td style="text-align:left;">
--0.02
-</td>
-<td style="text-align:left;">
-0.20
-</td>
-<td style="text-align:left;">
-0.56
-</td>
-<td style="text-align:left;">
-0.24
-</td>
+<ul>
+<li></td>
 <td style="text-align:left;">
 <ul>
 <li></td>
@@ -4236,55 +5657,64 @@ Reputation
 <td style="text-align:left;">
 <ul>
 <li></td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+<td style="text-align:left;">
+0.08
+</td>
+<td style="text-align:left;">
+0.51
+</td>
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;">
 Trait/Arena
 </td>
 <td style="text-align:left;">
-0.28
-</td>
+<ul>
+<li></td>
 <td style="text-align:left;">
-0.27
-</td>
-<td style="text-align:left;">
-0.29
-</td>
-<td style="text-align:left;">
-0.21
-</td>
-<td style="text-align:left;">
-0.29
-</td>
+<ul>
+<li></td>
 <td style="text-align:left;">
 <ul>
 <li></td>
 <td style="text-align:left;">
 <ul>
 <li></td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+<td style="text-align:left;">
+0.17
+</td>
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;">
 Performance
 </td>
 <td style="text-align:left;">
--0.05
-</td>
+<ul>
+<li></td>
 <td style="text-align:left;">
-0.26
-</td>
+<ul>
+<li></td>
 <td style="text-align:left;">
-0.26
-</td>
+<ul>
+<li></td>
 <td style="text-align:left;">
-0.22
-</td>
+<ul>
+<li></td>
 <td style="text-align:left;">
-0.55
-</td>
+<ul>
+<li></td>
 <td style="text-align:left;">
-0.37
-</td>
+<ul>
+<li></td>
 <td style="text-align:left;">
 <ul>
 <li></td>
@@ -4363,118 +5793,109 @@ Self
 <ul>
 <li></td>
 <td style="text-align:left;">
-<ul>
-<li></td>
+0.21
+</td>
 <td style="text-align:left;">
-<ul>
-<li></td>
+0.18
+</td>
 <td style="text-align:left;">
-<ul>
-<li></td>
+0.18
+</td>
 <td style="text-align:left;">
-<ul>
-<li></td>
+0.25
+</td>
 <td style="text-align:left;">
-<ul>
-<li></td>
+0.57
+</td>
 <td style="text-align:left;">
-<ul>
-<li></td>
+0.10
+</td>
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;">
 Direct Report
 </td>
 <td style="text-align:left;">
-0.18
+<ul>
+<li></td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+<td style="text-align:left;">
+0.29
 </td>
 <td style="text-align:left;">
-<ul>
-<li></td>
+0.37
+</td>
 <td style="text-align:left;">
-<ul>
-<li></td>
+0.72
+</td>
 <td style="text-align:left;">
-<ul>
-<li></td>
+0.69
+</td>
 <td style="text-align:left;">
-<ul>
-<li></td>
-<td style="text-align:left;">
-<ul>
-<li></td>
-<td style="text-align:left;">
-<ul>
-<li></td>
+0.49
+</td>
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;">
 Peer
 </td>
 <td style="text-align:left;">
-0.16
+<ul>
+<li></td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+<td style="text-align:left;">
+0.38
 </td>
 <td style="text-align:left;">
-0.24
+0.78
 </td>
 <td style="text-align:left;">
-<ul>
-<li></td>
+0.72
+</td>
 <td style="text-align:left;">
-<ul>
-<li></td>
-<td style="text-align:left;">
-<ul>
-<li></td>
-<td style="text-align:left;">
-<ul>
-<li></td>
-<td style="text-align:left;">
-<ul>
-<li></td>
+0.48
+</td>
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;">
 Boss
 </td>
 <td style="text-align:left;">
-0.19
+<ul>
+<li></td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+<td style="text-align:left;">
+0.75
 </td>
 <td style="text-align:left;">
-0.33
+0.70
 </td>
 <td style="text-align:left;">
-0.32
+0.51
 </td>
-<td style="text-align:left;">
-<ul>
-<li></td>
-<td style="text-align:left;">
-<ul>
-<li></td>
-<td style="text-align:left;">
-<ul>
-<li></td>
-<td style="text-align:left;">
-<ul>
-<li></td>
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;">
 All Informants
 </td>
 <td style="text-align:left;">
-0.24
-</td>
-<td style="text-align:left;">
-0.68
-</td>
-<td style="text-align:left;">
-0.77
-</td>
-<td style="text-align:left;">
-0.72
-</td>
+<ul>
+<li></td>
 <td style="text-align:left;">
 <ul>
 <li></td>
@@ -4484,55 +5905,64 @@ All Informants
 <td style="text-align:left;">
 <ul>
 <li></td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+<td style="text-align:left;">
+0.94
+</td>
+<td style="text-align:left;">
+0.66
+</td>
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;">
 All Raters
 </td>
 <td style="text-align:left;">
-0.63
-</td>
+<ul>
+<li></td>
 <td style="text-align:left;">
-0.63
-</td>
-<td style="text-align:left;">
-0.69
-</td>
-<td style="text-align:left;">
-0.66
-</td>
-<td style="text-align:left;">
-0.90
-</td>
+<ul>
+<li></td>
 <td style="text-align:left;">
 <ul>
 <li></td>
 <td style="text-align:left;">
 <ul>
 <li></td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+<td style="text-align:left;">
+0.59
+</td>
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;">
 Performance
 </td>
 <td style="text-align:left;">
-0.06
-</td>
+<ul>
+<li></td>
 <td style="text-align:left;">
-0.45
-</td>
+<ul>
+<li></td>
 <td style="text-align:left;">
-0.40
-</td>
+<ul>
+<li></td>
 <td style="text-align:left;">
-0.47
-</td>
+<ul>
+<li></td>
 <td style="text-align:left;">
-0.60
-</td>
+<ul>
+<li></td>
 <td style="text-align:left;">
-0.50
-</td>
+<ul>
+<li></td>
 <td style="text-align:left;">
 <ul>
 <li></td>
@@ -4548,8 +5978,8 @@ Performance
 <td style="padding: 0; " colspan="100%">
 <sup></sup> Correlations above the diagonal in each matrix are from the
 Normative sample, those below the diagonal are from the cross-validation
-sample.<span class="math inline">\(N_{cross-validation}\)</span> =
-6,554. Correlations ≥ |.03| are significant at p &lt; .05.
+sample.<span class="math inline">\(N_{normative}\)</span> = 3,903.
+Correlations ≥ |.03| are significant at p &lt; .05.
 </td>
 </tr>
 </tfoot>
@@ -4586,7 +6016,7 @@ sample.<span class="math inline">\(N_{cross-validation}\)</span> =
 </div>
 <div id="table-3" class="section level3">
 <h3>Table 3</h3>
-#### 3b. Cross-validation Sample
+#### 3a. Normative Sample
 <table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
 <caption>
 Correlations Among TRI/LARI-based Scores, Averaged Scores, and
@@ -4634,25 +6064,25 @@ Performance
 Self
 </td>
 <td style="text-align:left;">
-0.95
+0.98
 </td>
 <td style="text-align:left;">
-0.02
+0.17
 </td>
 <td style="text-align:left;">
-0.03
+0.16
 </td>
 <td style="text-align:left;">
-0.03
+0.17
 </td>
 <td style="text-align:left;">
-0.03
+0.22
 </td>
 <td style="text-align:left;">
-0.45
+0.53
 </td>
 <td style="text-align:left;">
--0.05
+0.08
 </td>
 </tr>
 <tr>
@@ -4660,25 +6090,25 @@ Self
 Direct Report
 </td>
 <td style="text-align:left;">
-0.01
+0.10
 </td>
 <td style="text-align:left;">
-0.91
+0.54
 </td>
 <td style="text-align:left;">
--0.03
+0.02
 </td>
 <td style="text-align:left;">
--0.03
+0.06
 </td>
 <td style="text-align:left;">
-0.35
-</td>
-<td style="text-align:left;">
-0.29
+0.27
 </td>
 <td style="text-align:left;">
 0.26
+</td>
+<td style="text-align:left;">
+0.13
 </td>
 </tr>
 <tr>
@@ -4686,25 +6116,25 @@ Direct Report
 Peer
 </td>
 <td style="text-align:left;">
-0.01
+0.11
 </td>
 <td style="text-align:left;">
--0.01
+0.02
 </td>
 <td style="text-align:left;">
--0.00
+0.28
 </td>
 <td style="text-align:left;">
-0.89
+0.92
 </td>
 <td style="text-align:left;">
-0.36
+0.52
 </td>
 <td style="text-align:left;">
-0.30
+0.48
 </td>
 <td style="text-align:left;">
-0.26
+0.35
 </td>
 </tr>
 <tr>
@@ -4712,25 +6142,25 @@ Peer
 Boss
 </td>
 <td style="text-align:left;">
-0.02
+0.11
 </td>
 <td style="text-align:left;">
--0.02
+0.00
 </td>
 <td style="text-align:left;">
-0.92
+0.95
 </td>
 <td style="text-align:left;">
--0.01
+0.27
 </td>
 <td style="text-align:left;">
-0.48
+0.58
 </td>
 <td style="text-align:left;">
-0.39
+0.54
 </td>
 <td style="text-align:left;">
-0.22
+0.35
 </td>
 </tr>
 <tr>
@@ -4738,25 +6168,25 @@ Boss
 Reputation
 </td>
 <td style="text-align:left;">
-0.07
+0.15
 </td>
 <td style="text-align:left;">
-0.48
+0.91
 </td>
 <td style="text-align:left;">
-0.51
+0.31
 </td>
 <td style="text-align:left;">
-0.79
+0.42
 </td>
 <td style="text-align:left;">
-0.80
+0.72
 </td>
 <td style="text-align:left;">
 0.67
 </td>
 <td style="text-align:left;">
-0.55
+0.51
 </td>
 </tr>
 <tr>
@@ -4764,25 +6194,25 @@ Reputation
 Trait/Arena
 </td>
 <td style="text-align:left;">
-0.51
+0.25
 </td>
 <td style="text-align:left;">
-0.58
+0.27
 </td>
 <td style="text-align:left;">
-0.47
+0.16
 </td>
 <td style="text-align:left;">
-0.57
+0.08
 </td>
 <td style="text-align:left;">
-0.73
+0.23
 </td>
 <td style="text-align:left;">
-0.81
+0.28
 </td>
 <td style="text-align:left;">
-0.37
+0.17
 </td>
 </tr>
 </tbody>
@@ -4790,8 +6220,8 @@ Trait/Arena
 </div>
 <div id="linear-models" class="section level3">
 <h3>Linear Models</h3>
-<div id="model-1-cross-validation-sample" class="section level4">
-<h4>Model 1: Cross-validation Sample</h4>
+<div id="model-1-normative-sample" class="section level4">
+<h4>Model 1: Normative Sample</h4>
 <table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;border-bottom: 0;">
 <caption>
 Associations Between Decisiveness Scores and Performance Criterion:
@@ -4836,16 +6266,16 @@ r with perf
 Self
 </td>
 <td style="text-align:left;">
--0.05
+0.08
 </td>
 <td style="text-align:left;">
--0.08
+-0.07
 </td>
 <td style="text-align:left;">
 <ul>
 <li></td>
 <td style="text-align:left;">
-<span class="math inline">\(0.11^{NS}\)</span>
+<span class="math inline">\(0.13^{NS}\)</span>
 </td>
 </tr>
 <tr>
@@ -4853,16 +6283,16 @@ Self
 Direct Report
 </td>
 <td style="text-align:left;">
-0.26
+0.13
 </td>
 <td style="text-align:left;">
-0.16
+0.05
 </td>
 <td style="text-align:left;">
 <ul>
 <li></td>
 <td style="text-align:left;">
--0.31
+0.36
 </td>
 </tr>
 <tr>
@@ -4870,16 +6300,16 @@ Direct Report
 Peer
 </td>
 <td style="text-align:left;">
-0.26
+0.35
 </td>
 <td style="text-align:left;">
-0.05*
+0.26
 </td>
 <td style="text-align:left;">
 <ul>
 <li></td>
 <td style="text-align:left;">
-<span class="math inline">\(-0.18^{NS}\)</span>
+0.91
 </td>
 </tr>
 <tr>
@@ -4887,16 +6317,16 @@ Peer
 Boss
 </td>
 <td style="text-align:left;">
-0.22
+0.35
 </td>
 <td style="text-align:left;">
-0.12
+0.27
 </td>
 <td style="text-align:left;">
 <ul>
 <li></td>
 <td style="text-align:left;">
-0.20
+0.77
 </td>
 </tr>
 <tr>
@@ -4904,16 +6334,16 @@ Boss
 Reputation
 </td>
 <td style="text-align:left;">
-0.55
+0.51
 </td>
 <td style="text-align:left;">
-0.41
+0.48
 </td>
 <td style="text-align:left;">
 <ul>
 <li></td>
 <td style="text-align:left;">
-<span class="math inline">\(-0.19^{NS}\)</span>
+1.62
 </td>
 </tr>
 <tr>
@@ -4921,16 +6351,16 @@ Reputation
 Trait/Arena
 </td>
 <td style="text-align:left;">
-0.37
+0.17
 </td>
 <td style="text-align:left;">
-0.19
+0.13
 </td>
 <td style="text-align:left;">
 <ul>
 <li></td>
 <td style="text-align:left;">
--0.31
+0.44
 </td>
 </tr>
 <tr grouplength="6">
@@ -4943,16 +6373,16 @@ Trait/Arena
 Self
 </td>
 <td style="text-align:left;">
-0.06
+0.10
 </td>
 <td style="text-align:left;">
--0.10
+-0.07
 </td>
 <td style="text-align:left;">
 <ul>
 <li></td>
 <td style="text-align:left;">
--0.15
+<span class="math inline">\(-0.20^{NS}\)</span>
 </td>
 </tr>
 <tr>
@@ -4960,7 +6390,7 @@ Self
 Direct Report
 </td>
 <td style="text-align:left;">
-0.45
+0.49
 </td>
 <td style="text-align:left;">
 0.31
@@ -4969,7 +6399,7 @@ Direct Report
 <ul>
 <li></td>
 <td style="text-align:left;">
-0.79
+-0.88
 </td>
 </tr>
 <tr>
@@ -4977,24 +6407,7 @@ Direct Report
 Boss
 </td>
 <td style="text-align:left;">
-0.40
-</td>
-<td style="text-align:left;">
-0.25
-</td>
-<td style="text-align:left;">
-<ul>
-<li></td>
-<td style="text-align:left;">
-<span class="math inline">\(0.07^{NS}\)</span>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-Peer
-</td>
-<td style="text-align:left;">
-0.47
+0.48
 </td>
 <td style="text-align:left;">
 0.30
@@ -5003,7 +6416,24 @@ Peer
 <ul>
 <li></td>
 <td style="text-align:left;">
-0.69
+-0.54
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+Peer
+</td>
+<td style="text-align:left;">
+0.51
+</td>
+<td style="text-align:left;">
+0.30
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+<td style="text-align:left;">
+-0.73
 </td>
 </tr>
 <tr>
@@ -5011,7 +6441,7 @@ Peer
 All Informants
 </td>
 <td style="text-align:left;">
-0.60
+0.66
 </td>
 <td style="text-align:left;">
 <ul>
@@ -5028,7 +6458,7 @@ All Informants
 All
 </td>
 <td style="text-align:left;">
-0.50
+0.59
 </td>
 <td style="text-align:left;">
 <ul>
@@ -5048,13 +6478,13 @@ All
 <ul>
 <li></td>
 <td style="text-align:left;">
-0.38
+0.45
 </td>
 <td style="text-align:left;">
-0.38
+0.44
 </td>
 <td style="text-align:left;">
-0.39
+0.46
 </td>
 </tr>
 </tbody>
@@ -5066,7 +6496,7 @@ All
 </tr>
 <tr>
 <td style="padding: 0; " colspan="100%">
-<sup></sup> N = 6,554. Correlations ≥ |.03| are significant at p &lt;
+<sup></sup> N = 3,903. Correlations ≥ |.03| are significant at p &lt;
 .05. NS = Not Significant.
 </td>
 </tr>
