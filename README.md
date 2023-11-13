@@ -48,7 +48,7 @@ docker compose up
 
 ## Process
 
-[]("./images/Process-map.png")
+![Process map]("./images/Process-map.png")
 
 
 ## Contributing
