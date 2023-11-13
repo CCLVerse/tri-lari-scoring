@@ -1,4 +1,4 @@
-#' Load decisive variables for analysis
+#' Load variables for analysis Decisiveness
 #'
 #' This function loads and returns a list of variables required for Lavaan analysis.
 #'
@@ -27,10 +27,10 @@
 #' \item{outcome_colname}{Name of the outcome column}
 #'
 #' @examples
-#' load_decisive_variables(data = my_data, sample_name = "Normative")
+#' load_variables_decisive(data = my_data, sample_name = "Normative")
 #'
 #' @export
-load_decisive_variables <- function(data=data.frame(), 
+load_variables_decisive <- function(data=data.frame(), 
                                     factor_name=character()) {
   
   if (is.null(data)) {

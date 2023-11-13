@@ -40,13 +40,12 @@ render_data_processing <- function(data=data.frame(),
                                    competency_cols=character(),
                                    competency_item_cols=character()){
   
-  output_filename <- sprintf("%s_%s_data_processing", tolower(sample_name), factor_name)
+  output_filename <- sprintf("%s_data_processing_%s", tolower(sample_name), factor_name)
   
   ## process data
   rmarkdown::render(input = "/home/rstudio/workspace/src/01_bmk_data_processing.Rmd", 
                     output_dir = "/home/rstudio/workspace/output",
-                    output_format = "html_document", 
-                    output_file = output_filename,
+                    output_file = NULL,
                     params = list(
                       data = data, 
                       raters = raters, 

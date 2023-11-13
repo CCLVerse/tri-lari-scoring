@@ -48,7 +48,7 @@ render_lavaan_analyses <- function(factor_name="decisive",
                    stringi::stri_trans_totitle(factor_name),  
                    stringi::stri_trans_totitle(sample_name))
   
-  output_file <- sprintf("%s_%s_lavaan", tolower(sample_name), factor_name)
+  output_file <- sprintf("%s_lavaan_%s", tolower(sample_name), factor_name)
   
   rmarkdown::render(input = "/home/rstudio/workspace/src/02_bmk_lavaan_analyses.Rmd", 
                     output_dir = "/home/rstudio/workspace/output", 

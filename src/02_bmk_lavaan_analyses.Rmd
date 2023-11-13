@@ -31,7 +31,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-```{r assign-values, echo=FALSE}
+```{r assign-values, echo=FALSE, warning=FALSE}
 
 df <- params$data
 competency_cols_names <- params$competency_cols_names
@@ -55,33 +55,60 @@ outcome_colname <- params$outcome_colname
 
 ### Perform Lavaan Analysis
 
-#### Models to Build
 
-There are two models to build:
+```{r basic-missing-statistic, echo=FALSE, cache=FALSE, warning=FALSE, include=FALSE}
 
-1. First Order Model
-2. Bifactor Model
+cat("#### Checking for missing data before building the models\n\n")
+cat("### Missing Data Counts\n\n")
 
-#### Required Values
+missing_data <- count_missing_values(df=df)
 
-Both models require the following values:
+missing_data %>%
+  DT::datatable(filter = 'top', 
+                style = "bootstrap4",
+                class = "table table-striped table-bordered",
+                options = list(paging = TRUE, 
+                               pageLength = 10, 
+                               autoWidth = TRUE),
+                caption = htmltools::tags$caption(
+                  style = 'caption-side: bottom; text-align: center;',
+                  'Table 2: ', htmltools::em('Missing data count.'))) %>%
+  DT::formatStyle(
+    'Percentage',
+    color = DT::styleInterval(0.70, c('green', 'red')),
+  ) %>% 
+  DT::formatPercentage(2) 
 
-- **competency_cols_names:** Column names that make up the competency or the regex pattern to identify the columns. When providing a regex pattern, set `regex_pattern` to TRUE. 
 
-   *Example: "BMK_S1_34|BMK_S1_73|BMK_S1_77"*
+```
 
-- **factor_name:** Name of the competency. This name is added in the `lavaan` analysis results.
 
-- **regex_pattern:** Indicate whether the `competency_cols` value is a regex pattern or column names.
-
-- **raters:** All the raters required in the analyses.
 
 
 ```{r first-order, results="asis", echo=FALSE, warning=FALSE}
 
 if(tolower(sample_name) == 'normative') {
+  cat("---\n\n")
+  cat("#### Models to Build\n\n")
+  cat("There are two models to build:\n\n")
+  cat("1. First Order Model\n\n")
+  cat("2. Bifactor Model\n\n")
+
+  cat("---\n\n")
   
-  cat("### First order model\n")
+  cat("#### Required Values\n")
+
+  cat("Both models require the following values:\n\n")
+
+  cat("- **competency_cols_names:** Column names that make up the competency or the regex pattern to identify the columns. When providing a regex pattern, set `regex_pattern` to TRUE.\n\n") 
+  cat('*Example: "BMK_S1_34|BMK_S1_73|BMK_S1_77"*\n\n')
+  cat("- **factor_name:** Name of the competency. This name is added in the `lavaan` analysis results.\n\n")
+  cat("- **regex_pattern:** Indicate whether the `competency_cols` value is a regex pattern or column names.\n\n")
+
+  cat("- **raters:** All the raters required in the analyses.\n\n")
+  
+  cat("---\n\n")
+  cat("### First order model\n\n")
 
   first_level <- build_first_level_model(df=df
                                        , competency_cols_names=competency_cols_names
@@ -98,7 +125,7 @@ if(tolower(sample_name) == 'normative') {
   
   
   fits <- lavaan_model_fit(df=df, model=first_level)
-}
+} 
 
 ```
 
@@ -123,14 +150,33 @@ if(tolower(sample_name) == 'normative'){
   
   bifactor_fits <- lavaan_model_fit(df=df, model=bifactor)
   
+} else {
+  cat("The lavaan first order and bifactor models are run only on the normative sample. Ideally, the factor weights from the normative samples generalize to new data samples with similar statistics as the normative samples. To test the generalizability, we use the same factor weights from normative sample on the cross-validation sample. Therefore, the first order and bifactor models are not run for cross-validation sample. ")
 }
 
 ```
 
 
 
+```{r factory-weights, echo=FALSE, warning=FALSE}
+
+## This will run for normative samples only. 
+
+## The condition below will get the factor scoring weights from the model fitted values. The result is a single-row dataframe of factor_weights that can be merged with the raw data frame. The factor weights will be stored in global variables for cross-validation sample to use. 
+
+if(tolower(sample_name) == 'normative'){
+  
+  factor_weights <<- get_factor_scoring_weights(fitted_values=bifactor_fits$orthogonal$fitted
+                                                , which="fsm")
+}
+
+```
+
+
 
 ```{r remove-missing-values, echo=FALSE, warning=FALSE}
+
+## remove missing values for the columns
 
 df <- df %>% 
   select(matches(columns_for_analyses)) %>% 
@@ -143,32 +189,31 @@ df <- df %>%
 
 
 
-```{r factory-weights, echo=FALSE, warning=FALSE}
 
-if(tolower(sample_name) == 'normative'){
-  
-  factor_weights <<- get_factor_scoring_weights(df=df
-                                  , fitted_values=bifactor_fits$orthogonal$fitted
-                                  , which="fsm")
-}
+```{r merge-factor-wegiths, echo=FALSE, warning=FALSE}
 
-
-## merge the factor weights with the raw item responses
+## merge the factor weights with the raw item responses. This will broadcast for all rows
 df <- df %>% 
       dplyr::bind_cols(factor_weights) %>%
       as.data.frame()
 
 
+## scale and the factor weights
 df_merged <- scale_and_center_columns(df=df
                               , column_names = colnames(factor_weights)
                               , center = FALSE)
+
+## remove df for memory maangement
+remove(df)
 
 ```
 
 
 
 
-```{r factor-score, echo=FALSE, warning=FALSE}
+```{r factor-score, echo=FALSE, results='asis', warning=FALSE}
+
+## to calculate the factor scores, we need to first create models for lavaan. The code below generates the model for all raters, reputation and arena. It creates factor scores by weighting/summing the item responses by the relevant factor scoring weights
 
 factor_score_equations <- generate_factor_scores(df=df_merged
                       , competency_cols = factor_weights_competency_cols
@@ -177,6 +222,12 @@ factor_score_equations <- generate_factor_scores(df=df_merged
                       , latent_variables=c(raters, "reputation", "arena")
                       , regex_pattern = TRUE
                       , suffix = "LV")
+
+if(show_model){
+    cat(factor_score_equations %>% 
+      kableExtra::kable(col.names = "", caption = "Equations to calculate factor scores") %>%
+      kableExtra::kable_styling())
+}
 
 
 df_merged <- calculate_factor_scores(df=df_merged
@@ -189,8 +240,10 @@ n = nrow(df_merged)
 
 
 
+
 ```{r competency-colmeans, echo=FALSE, warning=FALSE}
 
+## calculate the statistics (mean and sd) of the data. This data will be merged with the factor_weights statistics to display in table 1. 
 
 statistics <- compute_statistics(df=df_merged
                                  , columns = competency_cols_with_factor_weights
@@ -203,7 +256,7 @@ statistics <- compute_statistics(df=df_merged
 
 ### Table 1
 
-```{r statistics-table, echo=FALSE}
+```{r statistics-table, echo=FALSE, warning=FALSE}
 
 t_factor_weights <- t(factor_weights) %>% as.data.frame() %>% rownames_to_column(var="Item")
 
@@ -226,13 +279,17 @@ result_df %>%
   kableExtra::kable(caption=sprintf('Table 1: Item Means, Standard Deviations, and Factor Scoring Weights Derived from the TRI/LARI Model (%s Sample)',sample_name)) %>%
   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "responsive")) %>%
   kableExtra::add_header_above(c(" " = 2, "Factor Scoring Weights" = 6)) %>%
-  kableExtra::footnote(general = sprintf("N = %s", format(nrow(df_merged), big.mark=", ")))
+  kableExtra::footnote(general = sprintf("N = %s", format(n, big.mark=",")))
 
 
 ```
 
 
-```{r conventional-average, echo=FALSE}
+
+
+```{r conventional-average, echo=FALSE, warning=FALSE}
+
+## As a way to compute the correlation of LV with the conventional averaged values of the scores, we'll calculate conventional average of scores by each rater type.  
 
 df_merged <- calculate_rowmeans(df=df_merged
                  , new_cols=c("Self_Avg", "Direct_Report_Avg", "Boss_Avg", 
@@ -244,7 +301,9 @@ df_merged <- calculate_rowmeans(df=df_merged
 
 
 
-```{r performance-item, echo=FALSE}
+```{r performance-item, echo=FALSE, warning=FALSE}
+
+## calculate performance scores. The performance scores are in section 5 of the BMK. 
 
 outcome_rater_cols <- get_column_names(df=df_merged, pattern=outcome_raters)
 
@@ -261,8 +320,11 @@ df_merged <- aggregate_competency_cols(df=df_merged
 ### Table 2
 
 #### 2a. TRI<span style="color:gold;">/</span>LARI-Based Scores
-```{r correlation, echo=FALSE}
+```{r correlation, echo=FALSE, warning=FALSE}
 
+## generates a correlation table. 
+
+## select columns that contains _LV or _all_rater in the name. LV are all factor scores from the sample. The _all_rater is to capture the aggregated performance column. 
 
 lv_correlation <-  compute_correlation(df=df_merged
                                    , x = ".*_all_rater|LV"
@@ -289,7 +351,9 @@ lv_correlation %>%
 
 #### 2b. Averaged Scores
 
-```{r tri-lari-avg-correlation, echo=FALSE}
+```{r tri-lari-avg-correlation, echo=FALSE, warning=FALSE}
+
+## similar to above, but instead of LV scores, we'll extract conventional average values. 
 
 avg_perf_correlation <- compute_correlation(df=df_merged
                                    , x = ".*_Avg|all_rater"
@@ -314,7 +378,7 @@ avg_perf_correlation %>%
   kableExtra::kable(caption = "Correlations Among Decisiveness Scores: TRI/LARI-based Scores and Avergaed Scores") %>% 
   kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) %>%
   kableExtra::column_spec(1, bold=TRUE) %>% 
-  kableExtra::footnote(sprintf("Correlations above the diagonal in each matrix are from the Normative sample, those below the diagonal are from the cross-validation sample.$N_{%s}$ = %s. Correlations ≥ |.03| are significant at p < .05. ", tolower(sample_name), format(nrow(n), big.mark=",")))
+  kableExtra::footnote(sprintf("Correlations above the diagonal in each matrix are from the Normative sample, those below the diagonal are from the cross-validation sample.$N_{%s}$ = %s. Correlations ≥ |.03| are significant at p < .05. ", tolower(sample_name), format(n, big.mark=",")))
 
 
 ```
@@ -326,12 +390,15 @@ avg_perf_correlation %>%
 
 ```{r compute-norm-correlation, results='asis', echo=FALSE, warning=FALSE}
 
+## Generate header based on the sample name
 if(tolower(sample_name) == 'normative'){
   cat("#### 3a. Normative Sample")
 } else {
-  cat("### 3b. Cross-validation Sample")
+  cat("#### 3b. Cross-validation Sample")
 }
 
+
+## this will perform the correlation of LV and conventional scores including performance. 
 
 lv_x = get_column_names(df=df_merged, pattern = ".*_LV")
 avg_y = get_column_names(df=df_merged, pattern = ".*_(Avg|all_rater)")
@@ -365,6 +432,8 @@ correlation %>%
 
 ```{r linear-model1, results="asis", echo=FALSE, warning=FALSE}
 
+## Fit linear model for LV
+
 lv_cols <- get_column_names(df_merged, ".*_LV") %>% paste0(., collapse = " + ")
 formula <- as.formula(sprintf("%s ~ %s", outcome_colname, lv_cols))
 
@@ -388,6 +457,8 @@ std1 <- coefs1 %>%
   filter(Var != "(Intercept)")
 
 
+## extract standardized weights from the coefficient table. 
+
 std1 <- coefs1 %>% 
   mutate(Standardized = as.numeric(Standardized),  # Convert to numeric
          Standardized = case_when(
@@ -402,7 +473,9 @@ std1 <- coefs1 %>%
 
 
 
-```{r linear-model2, results="asis", echo=FALSE}
+```{r linear-model2, results="asis", echo=FALSE, warning=FALSE}
+
+## Fit linear model for conventional average score columns
 
 pattern = sprintf(".*(%s)_Avg", paste0(stringr::str_replace_all(raters, " ", "_"), collapse = "|"))
 
@@ -418,6 +491,9 @@ coefs2 <- summary2$coefficients %>%
   mutate(across(where(is.numeric), ~ formatC(., format="f", digits=2))) %>%
   rownames_to_column(var = "Var")
 
+
+## extract standardized weights from the coefficient table. 
+
 std2 <- coefs2 %>%   
   mutate(Standardized = case_when(
     `Pr(>|t|)` > 0.05 ~ sprintf("$%s^{NS}$",Standardized),
@@ -430,7 +506,9 @@ std2 <- coefs2 %>%
 
 
 
-```{r linear-model3, results="asis", echo=FALSE}
+```{r linear-model3, results="asis", echo=FALSE, warning=FALSE}
+
+## Fit linear model for LV and conventional average score columns
 
 lv_avg_cols <- paste0(c(avg_cols, lv_cols), collapse=" + ")
 formula <- as.formula(sprintf("%s ~ %s", outcome_colname, lv_avg_cols))
@@ -443,6 +521,8 @@ coefs3 <- summary3$coefficients %>%
   as.data.frame() %>%
   mutate(across(where(is.numeric), ~ formatC(., format="f", digits=2))) %>%
   rownames_to_column(var = "Var")
+
+## extract standardized weights from the coefficient table. 
 
 std3 <- coefs3 %>% 
     mutate(Standardized = case_when(
@@ -457,6 +537,8 @@ std3 <- coefs3 %>%
 
 
 ```{r reg-weights, echo=FALSE, warning=FALSE}
+
+## extract r-squared from each model to add to the table. The table consists of standardized weights for all 3 models. 
 
 r2 <- data.frame(Var = "$R^{2}$", 
                 `1` = summary1$r.squared, 
@@ -511,9 +593,16 @@ reg_weights_table %>%
   kableExtra::add_header_above(c(" " = 2, "Standardized Weights from Regression Models" = 3)) %>%
   kableExtra::pack_rows("TRI/LARI", start_row = 1, end_row = 6) %>% 
   kableExtra::pack_rows("Averaged", start_row = 7, end_row = 12) %>%
-  kableExtra::footnote(general = sprintf("N = %s. Correlations ≥ |.03| are significant at p < .05.", format(nrow(df_merged), big.mark=",")))
+  kableExtra::footnote(
+    general = sprintf("N = %s. Correlations ≥ |.03| are significant at p < .05. NS = Not Significant.", format(nrow(df_merged), big.mark=",")))
 
 
+```
+
+
+```{r garbage-collection, echo=FALSE, warning=FALSE}
+
+invisible(gc())
 
 ```
 

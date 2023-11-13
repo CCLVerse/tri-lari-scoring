@@ -3,9 +3,6 @@
 #'   Get the factor scoring weights from the lavaan output and reshape the data frame. This allows merging with raw item responses and scaling the result.
 #'      1- Get factor scoring weights from the lavaan output
 #       2- To reshape the factor weights data frame (so we can merge with raw item responses)
-#       3- Merge the factor weights to the raw scores dataset above
-#       4- Scale the result
-#' @param df Dataframe used for the calculation.
 #' @param fitted_values Lavaan's fitted values from lavPredict() method.
 #' @param which A non-empty character string specifying which attribute is to be accessed.
 #'
@@ -22,7 +19,7 @@
 # 
 #' @importFrom tibble rownames_to_column
 #' @importFrom tidyr pivot_wider
-get_factor_scoring_weights <- function(df=data.frame(), fitted_values=matrix(), which=character()){
+get_factor_scoring_weights <- function(fitted_values=matrix(), which=character()){
 
     factor_weights_decisiveness <- attr(fitted_values, which)
 

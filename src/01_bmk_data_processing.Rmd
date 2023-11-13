@@ -2,7 +2,6 @@
 title: "`r sprintf('BMK Data Processing for TRI/LARI Analyses: %s', params$factor_name)`"
 author: "Sirish Shrestha"
 date: "2023-04-28"
-output: html_document
 params: 
   data: NULL
   factor_name: NULL
@@ -35,7 +34,15 @@ research_cols <- params$research_cols
 ```
 
 
-Pre-process the dataframe and aggregate the columns
+Pre-process the data frame. The pre-processing steps: 
+
+1. Group the result by `ESI_Key` and take the average of all columns by raters
+2. Filter the `ESI_Key` (leaders) who have ratings from all raters `Self`, `Direct Report`, `Peer`, and `Boss`.
+3. Pivot the data frame in wide format so that all raters average values are in the columns
+
+The resulting data frame `avg_scores_by_raters_df` will be used in `lavaan` analyses.
+
+
 ```{r preprocess-df, echo=FALSE, warning=FALSE}
 
 ## get average item scores by rater
@@ -69,24 +76,4 @@ set_current_df(df=avg_scores_by_rater_df)
 
 
 
-```{r basic-missing-statistic, echo=FALSE, cache=FALSE, warning=FALSE}
-
-count_missing_values(df=avg_scores_by_rater_df) %>%
-  DT::datatable(filter = 'top', 
-                style = "bootstrap4",
-                class = "table table-striped table-bordered",
-                options = list(paging = TRUE, 
-                               pageLength = 10, 
-                               autoWidth = TRUE),
-                caption = htmltools::tags$caption(
-                  style = 'caption-side: bottom; text-align: center;',
-                  'Table 2: ', htmltools::em('Missing data count.'))) %>%
-  DT::formatStyle(
-    'Percentage',
-    color = DT::styleInterval(0.70, c('green', 'red')),
-  ) %>% 
-  DT::formatPercentage(2) 
-
-
-```
 
