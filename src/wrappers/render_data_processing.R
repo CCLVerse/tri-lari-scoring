@@ -5,6 +5,7 @@
 #'
 #' @param data A data frame containing the input data for processing.
 #' @param sample_name A character string specifying the sample name (default is "Normative").
+#' @param factor_name A character string specifying the factor name (default is "decisive").
 #'
 #' @details The function renders the R Markdown document located at "./src/01_bmk_data_processing.Rmd"
 #' and saves the HTML output file in the "./output" directory. It passes various parameters to the
@@ -28,8 +29,16 @@
 #' render_data_processing(data, sample_name = "Normative")
 #' }
 #'
-
-render_data_processing <- function(data, sample_name="Normative", factor_name="decisive"){
+#' @export
+render_data_processing <- function(data=data.frame(), 
+                                   raters=character(),
+                                   factor_name="decisive",
+                                   sample_name="Normative", 
+                                   research_cols=character(),
+                                   grouping_cols=character(),
+                                   required_cols=character(), 
+                                   competency_cols=character(),
+                                   competency_item_cols=character()){
   
   output_filename <- sprintf("%s_%s_data_processing", tolower(sample_name), factor_name)
   

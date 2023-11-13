@@ -24,6 +24,57 @@ BMK2018_B <- load_data(source=sprintf("%s/data/BMK2018_B.RData", getwd()), rater
 
 
 
+```{r}
+
+## Decisiveness
+decisive <- load_decisive_variables(data=BMK2018_A, 
+                                    factor_name="decisive")
+
+
+data_A <- list(BMK2018_A, "Normative") %>% setNames(c("data", "sample_name"))
+data_B <- list(BMK2018_B, "Cross-validation") %>% setNames(c("data", "sample_name"))
+
+
+## Loop through the normative and cross-validation samples to create the analyses. For each loop, the code will process the data and get it ready for the lavaan analyses. 
+sapply(list(data_A, data_B), function(x) {
+  
+  print(x$sample_name)
+  
+  ## data processing
+  render_data_processing(data=x$data, 
+                        sample_name=x$sample_name,
+                        raters=decisive$raters,
+                        factor_name=decisive$factor_name,
+                        research_cols=decisive$research_cols,
+                        grouping_cols=decisive$grouping_cols,
+                        required_cols=decisive$required_cols,
+                        competency_cols=decisive$competency_cols,
+                        competency_item_cols=decisive$competency_item_cols)
+  
+  
+  
+  ## lavan analyses for decisiveness
+  render_lavaan_analyses(
+    show_model=TRUE,
+    factor_name=decisive$factor_name,
+    sample_name=x$sample_name,
+    regex_pattern=decisive$regex_pattern,
+    outcome_raters=decisive$outcome_raters,
+    outcome_colname=decisive$outcome_colname,
+    factor_weights_cols=decisive$factor_weights_cols,
+    rowmeans_columns_list=decisive$rowmeans_columns_list,
+    competency_cols_names=decisive$competency_cols_pattern,
+    column_pattern_for_analyses=decisive$column_pattern_for_analyses,
+    factor_weights_competency_cols=decisive$factor_weights_competency_cols,
+    columns_to_remove_missing_values=decisive$columns_to_remove_missing_values,
+    competency_cols_with_factor_weights=decisive$competency_cols_with_factor_weights)
+
+})
+
+```
+
+
+
 ```{r decisiveness}
 
 rmarkdown::render(input = "./src/markdown/decisiveness.Rmd", 
