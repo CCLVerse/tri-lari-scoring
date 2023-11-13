@@ -36,13 +36,13 @@ research_cols <- params$research_cols
 
 
 Pre-process the dataframe and aggregate the columns
-```{r preprocess-df, echo=FALSE}
+```{r preprocess-df, echo=FALSE, warning=FALSE}
 
 ## get average item scores by rater
 avg_scores_by_rater_df <- avg_scores_by_raters(df=df
                                           , required_cols=required_cols
                                           , item_cols=competency_item_cols
-                                          , competency_cols=competency_cols
+                                          # , competency_cols=competency_cols
                                           , research_cols=research_cols
                                           , grouping_cols=grouping_cols)
 
@@ -69,7 +69,7 @@ set_current_df(df=avg_scores_by_rater_df)
 
 
 
-```{r basic-missing-statistic, echo=FALSE}
+```{r basic-missing-statistic, echo=FALSE, cache=FALSE, warning=FALSE}
 
 count_missing_values(df=avg_scores_by_rater_df) %>%
   DT::datatable(filter = 'top', 

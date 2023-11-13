@@ -40,13 +40,13 @@ render_data_processing <- function(data, sample_name="Normative", factor_name="d
                     output_file = output_filename,
                     params = list(
                       data = data, 
-                      factor_name = factor_name,
                       raters = raters, 
+                      factor_name = factor_name,
+                      research_cols = research_cols,
                       grouping_cols = grouping_cols,
                       required_cols = required_cols, 
-                      competency_item_cols = competency_item_cols,
                       competency_cols = competency_cols,
-                      research_cols = research_cols
+                      competency_item_cols = competency_item_cols
                     )
   )
   

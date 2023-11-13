@@ -3,7 +3,7 @@
 #'   Configure parameters needed to build a model by validating and structuring them before applying to the model.
 #'
 #' @param df Dataframe to work with.
-#' @param competency_cols A character vector of required columns for building the model. It is optional if `competency_cols_pattern` is provided.
+#' @param competency_cols_names A character vector of required columns for building the model. It is optional if `competency_cols_pattern` is provided.
 #' @param factor_name A name that describes the competency or the factor for which the model is being created.
 #' @param raters A character vector of all raters that are required in the model.
 #' @param regex_pattern Boolean to indicate whether the column names consist of a regular expression pattern or a column names vector. Default is FALSE.
@@ -21,15 +21,15 @@
 #' Generates a character string representing the model structure for the specified parameters.
 # 
 #' @importFrom dplyr
-configure_model_parameters <- function(df=data.frame(), raters=NULL, factor_name=NULL, competency_cols=NULL,regex_pattern=FALSE){
+configure_model_parameters <- function(df=data.frame(), raters=NULL, factor_name=NULL, competency_cols_names=NULL,regex_pattern=FALSE){
 
     column_names <- as.character()
 
     if(regex_pattern){
-        column_names <- get_column_names(df=df, pattern=competency_cols)
+        column_names <- get_column_names(df=df, pattern=competency_cols_names)
 
     } else {
-        column_names <- competency_cols
+        column_names <- competency_cols_names
         validate_cols(df, column_names)
     }
 

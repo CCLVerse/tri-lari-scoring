@@ -6,7 +6,6 @@ output: html_document
 params: 
   title: NULL
   data: NULL
-  competency_cols_pattern: ""
   factor_name: ""
   regex_pattern: TRUE
   raters: NULL
@@ -14,6 +13,7 @@ params:
   show_model: FALSE
   rowmeans_columns_list: NULL
   columns_for_analyses: NULL
+  competency_cols_names: ""
   columns_to_remove_missing_values: NULL
   factor_weights_competency_cols: NULL
   factor_weights_cols: NULL
@@ -34,7 +34,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r assign-values, echo=FALSE}
 
 df <- params$data
-competency_cols <- params$competency_cols_pattern
+competency_cols_names <- params$competency_cols_names
 factor_name <- params$factor_name
 raters <- params$raters
 regex_pattern <- params$regex_pattern
@@ -59,14 +59,14 @@ outcome_colname <- params$outcome_colname
 
 There are two models to build:
 
-1. First Level Model
+1. First Order Model
 2. Bifactor Model
 
 #### Required Values
 
 Both models require the following values:
 
-- **competency_cols:** Column names that make up the competency or the regex pattern to identify the columns. When providing a regex pattern, set `regex_pattern` to TRUE. 
+- **competency_cols_names:** Column names that make up the competency or the regex pattern to identify the columns. When providing a regex pattern, set `regex_pattern` to TRUE. 
 
    *Example: "BMK_S1_34|BMK_S1_73|BMK_S1_77"*
 
@@ -77,48 +77,53 @@ Both models require the following values:
 - **raters:** All the raters required in the analyses.
 
 
-
-### First level model
-
 ```{r first-order, results="asis", echo=FALSE, warning=FALSE}
 
-first_level <- build_first_level_model(df=df
-                                       , competency_cols=competency_cols
+if(tolower(sample_name) == 'normative') {
+  
+  cat("### First order model\n")
+
+  first_level <- build_first_level_model(df=df
+                                       , competency_cols_names=competency_cols_names
                                        , factor_name=factor_name
                                        , raters=raters
                                        , regex_pattern = regex_pattern)
 
-if(show_model){
-  first_level %>% 
-    kableExtra::kable(col.names = "") %>%
-    kableExtra::kable_styling()
+  if(show_model){
+    
+    cat(first_level %>% 
+      kableExtra::kable(col.names = "", caption = "Displaying `Lavaan` first order model used in analyses") %>%
+      kableExtra::kable_styling()) 
+  }
+  
+  
+  fits <- lavaan_model_fit(df=df, model=first_level)
 }
-
-
-fits <- lavaan_model_fit(df=df, model=first_level)
 
 ```
 
 
-### Bifactor model
 
 ```{r bifactor, results="asis", warning=FALSE, echo=FALSE}
 
-bifactor <- build_bifactor_model(competency_cols=competency_cols
-                                 , df=df
-                                 , factor_name=factor_name
-                                 , raters=raters
-                                 , regex_pattern = regex_pattern)
+if(tolower(sample_name) == 'normative'){ 
+  cat("### Bifactor model\n") 
 
-if(show_model){
-  bifactor %>% 
-    kableExtra::kable(col.names = "") %>%
-    kableExtra::kable_styling()
+  bifactor <- build_bifactor_model(df=df
+                                   , competency_cols_names=competency_cols_names
+                                   , factor_name=factor_name
+                                   , raters=raters
+                                   , regex_pattern = regex_pattern)
+  
+  if(show_model){
+    cat(bifactor %>% 
+      kableExtra::kable(col.names = "", caption = "Displaying `Lavaan` Bifactor model used in analyses") %>%
+      kableExtra::kable_styling())
+  }
+  
+  bifactor_fits <- lavaan_model_fit(df=df, model=bifactor)
+  
 }
-
-bifactor_fits <- lavaan_model_fit(df=df, model=bifactor)
-
-bifactor_fits <- bifactor_fits
 
 ```
 
@@ -137,12 +142,16 @@ df <- df %>%
 ```
 
 
+
 ```{r factory-weights, echo=FALSE, warning=FALSE}
 
-
-factor_weights <- get_factor_scoring_weights(df=df
+if(tolower(sample_name) == 'normative'){
+  
+  factor_weights <<- get_factor_scoring_weights(df=df
                                   , fitted_values=bifactor_fits$orthogonal$fitted
                                   , which="fsm")
+}
+
 
 ## merge the factor weights with the raw item responses
 df <- df %>% 
@@ -223,7 +232,7 @@ result_df %>%
 ```
 
 
-```{r conventional-average,echo=FALSE}
+```{r conventional-average, echo=FALSE}
 
 df_merged <- calculate_rowmeans(df=df_merged
                  , new_cols=c("Self_Avg", "Direct_Report_Avg", "Boss_Avg", 
@@ -231,14 +240,13 @@ df_merged <- calculate_rowmeans(df=df_merged
                  , mean_cols=rowmeans_columns_list)
 
 
-
 ```
 
 
 
-```{r performance-item, echo=FALSE, warning=FALSE}
+```{r performance-item, echo=FALSE}
 
-outcome_rater_cols = get_column_names(df=df_merged, pattern=outcome_raters)
+outcome_rater_cols <- get_column_names(df=df_merged, pattern=outcome_raters)
 
 ## Create new var for performance item 1 containing the average across the three rater groups.
 df_merged <- aggregate_competency_cols(df=df_merged
@@ -255,8 +263,9 @@ df_merged <- aggregate_competency_cols(df=df_merged
 #### 2a. TRI<span style="color:gold;">/</span>LARI-Based Scores
 ```{r correlation, echo=FALSE}
 
+
 lv_correlation <-  compute_correlation(df=df_merged
-                                   , x = ".*_LV|all_rater"
+                                   , x = ".*_all_rater|LV"
                                    , regex_pattern = TRUE)
 
 diag(lv_correlation) <- "-"
@@ -305,7 +314,7 @@ avg_perf_correlation %>%
   kableExtra::kable(caption = "Correlations Among Decisiveness Scores: TRI/LARI-based Scores and Avergaed Scores") %>% 
   kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) %>%
   kableExtra::column_spec(1, bold=TRUE) %>% 
-  kableExtra::footnote(sprintf("Correlations above the diagonal in each matrix are from the Normative sample, those below the diagonal are from the cross-validation sample.$N_{%s}$ = %s. Correlations ≥ |.03| are significant at p < .05. ", tolower(sample_name), n))
+  kableExtra::footnote(sprintf("Correlations above the diagonal in each matrix are from the Normative sample, those below the diagonal are from the cross-validation sample.$N_{%s}$ = %s. Correlations ≥ |.03| are significant at p < .05. ", tolower(sample_name), format(nrow(n), big.mark=",")))
 
 
 ```
@@ -315,9 +324,14 @@ avg_perf_correlation %>%
 
 ### Table 3
 
-#### 3a. Normative Sample
+```{r compute-norm-correlation, results='asis', echo=FALSE, warning=FALSE}
 
-```{r compute-norm-correlation, echo=FALSE, warning=FALSE}
+if(tolower(sample_name) == 'normative'){
+  cat("#### 3a. Normative Sample")
+} else {
+  cat("### 3b. Cross-validation Sample")
+}
+
 
 lv_x = get_column_names(df=df_merged, pattern = ".*_LV")
 avg_y = get_column_names(df=df_merged, pattern = ".*_(Avg|all_rater)")
@@ -497,7 +511,7 @@ reg_weights_table %>%
   kableExtra::add_header_above(c(" " = 2, "Standardized Weights from Regression Models" = 3)) %>%
   kableExtra::pack_rows("TRI/LARI", start_row = 1, end_row = 6) %>% 
   kableExtra::pack_rows("Averaged", start_row = 7, end_row = 12) %>%
-  kableExtra::footnote(general = sprintf("N = %s. Correlations ≥ |.03| are significant at p < .05.", format(nrow(df_merged), big.mark=", ")))
+  kableExtra::footnote(general = sprintf("N = %s. Correlations ≥ |.03| are significant at p < .05.", format(nrow(df_merged), big.mark=",")))
 
 
 

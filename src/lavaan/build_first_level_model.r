@@ -6,7 +6,7 @@
 #  You can specify the competency columns, the factor name (competency name), and the raters to include in the model.
 #
 #' @param df Dataframe containing competency assessment data.
-#' @param competency_cols A character vector of column names representing competency assessments.
+#' @param competency_cols_names A character vector of column names representing competency assessments.
 #' @param factor_name A descriptive name for the competency or latent factor.
 #' @param raters A character vector specifying the types of raters to incorporate in the model.
 #' @param regex_pattern Boolean indicating whether competency_cols are regular expression patterns or column names.
@@ -14,11 +14,11 @@
 #  
 #' @return A character string representing the SEM structure for competency analysis.
 #' @export
-build_first_level_model <- function(df=data.frame(), competency_cols=NULL, factor_name=NULL, raters=NULL, regex_pattern=FALSE){
+build_first_level_model <- function(df=data.frame(), competency_cols_names=NULL, factor_name=NULL, raters=NULL, regex_pattern=FALSE){
 
     validate_df(df)
-    
-    model_params <- configure_model_parameters(df=df, raters=raters, competency_cols=competency_cols, factor_name=factor_name, regex_pattern=regex_pattern)
+
+    model_params <- configure_model_parameters(df=df, raters=raters, competency_cols_names=competency_cols_names, factor_name=factor_name, regex_pattern=regex_pattern)
 
     raters <- model_params$raters
     factor_name <- model_params$factor_name

@@ -375,57 +375,93 @@ raters &lt;- variables$raters</code></pre>
 <pre class="r"><code>#1. Decisiveness
 
 ## Lavaan analysis
-column_pattern_for_analyses &lt;- &quot;ESI_Key|BMK_S1_34|BMK_S1_73|BMK_S1_77|BMK_S2_8|BMK_S2_13|BMK_S2_15|BMK_S2_19|BMK_S2_22|BMK_S2_17|BMK_S2_25|BMK_S2_35|BMK_S2_18|BMK_S2_21|BMK_S2_23|BMK_S2_28|BMK_S2_30|BMK_S2_34|BMK_S2_36|BMK_S2_6|BMK_S2_7|BMK_S2_12|BMK_S2_14|BMK_S2_10|BMK_S2_5|BMK_S2_16|BMK_S2_26|BMK_S2_24|BMK_S2_33|BMK_S2_2|BMK_S2_20|BMK_S2_27|BMK_S2_29|BMK_S2_31|BMK_S2_32|BMK_S2_3|BMK_S2_4|BMK_S2_1|BMK_S2_11|BMK_S2_9|BMK_S5_1|BMK_S5_2|BMK_S5_3|BMK_S5_4|BMK_S5_5|BMK_S5_6|BMK_S5_7|BMK_S5_8|BMK_S5_9&quot;
+column_pattern_for_analyses &lt;- columns_for_analyses &lt;-  &quot;ESI_Key|BMK_S1_34|BMK_S1_73|BMK_S1_77|BMK_S2_8|BMK_S2_13|BMK_S2_15|BMK_S2_19|BMK_S2_22|BMK_S2_17|BMK_S2_25|BMK_S2_35|BMK_S2_18|BMK_S2_21|BMK_S2_23|BMK_S2_28|BMK_S2_30|BMK_S2_34|BMK_S2_36|BMK_S2_6|BMK_S2_7|BMK_S2_12|BMK_S2_14|BMK_S2_10|BMK_S2_5|BMK_S2_16|BMK_S2_26|BMK_S2_24|BMK_S2_33|BMK_S2_2|BMK_S2_20|BMK_S2_27|BMK_S2_29|BMK_S2_31|BMK_S2_32|BMK_S2_3|BMK_S2_4|BMK_S2_1|BMK_S2_11|BMK_S2_9|BMK_S5_1|BMK_S5_2|BMK_S5_3|BMK_S5_4|BMK_S5_5|BMK_S5_6|BMK_S5_7|BMK_S5_8|BMK_S5_9&quot;
+
+rowmeans_columns_list &lt;- list(
+  c(&quot;BMK_S1_34_mean_Self&quot;, &quot;BMK_S1_73_mean_Self&quot;, &quot;BMK_S1_77_mean_Self&quot;),
+  c(
+    &quot;BMK_S1_34_mean_Direct_Report&quot;,
+    &quot;BMK_S1_73_mean_Direct_Report&quot;,
+    &quot;BMK_S1_77_mean_Direct_Report&quot;
+  ),
+  c(&quot;BMK_S1_34_mean_Boss&quot;, &quot;BMK_S1_73_mean_Boss&quot;, &quot;BMK_S1_77_mean_Boss&quot;),
+  c(&quot;BMK_S1_34_mean_Peer&quot;, &quot;BMK_S1_73_mean_Peer&quot;, &quot;BMK_S1_77_mean_Peer&quot;),
+  c(
+    &quot;BMK_S1_34_mean_Direct_Report&quot;,
+    &quot;BMK_S1_73_mean_Direct_Report&quot;,
+    &quot;BMK_S1_77_mean_Direct_Report&quot;,
+    &quot;BMK_S1_34_mean_Boss&quot;,
+    &quot;BMK_S1_73_mean_Boss&quot;,
+    &quot;BMK_S1_77_mean_Boss&quot;,
+    &quot;BMK_S1_34_mean_Peer&quot;,
+    &quot;BMK_S1_73_mean_Peer&quot;,
+    &quot;BMK_S1_77_mean_Peer&quot;
+  ),
+  c(
+    &quot;BMK_S1_34_mean_Self&quot;,
+    &quot;BMK_S1_73_mean_Self&quot;,
+    &quot;BMK_S1_77_mean_Self&quot;,
+    &quot;BMK_S1_34_mean_Direct_Report&quot;,
+    &quot;BMK_S1_73_mean_Direct_Report&quot;,
+    &quot;BMK_S1_77_mean_Direct_Report&quot;,
+    &quot;BMK_S1_34_mean_Boss&quot;,
+    &quot;BMK_S1_73_mean_Boss&quot;,
+    &quot;BMK_S1_77_mean_Boss&quot;,
+    &quot;BMK_S1_34_mean_Peer&quot;,
+    &quot;BMK_S1_73_mean_Peer&quot;,
+    &quot;BMK_S1_77_mean_Peer&quot;
+  )
+)
+
 
 factor_name &lt;- &quot;decisive&quot; 
 show_model &lt;- TRUE
+regex_pattern &lt;- TRUE
 competency_cols_pattern &lt;- &quot;BMK_S1_34|BMK_S1_73|BMK_S1_77&quot;
 competency_cols_with_factor_weights &lt;- &quot;BMK_S1_(34|73|77)(?!.*decisive).*&quot; 
 columns_to_remove_missing_values &lt;- &quot;ESI_Key|BMK_S1_34|BMK_S1_73|BMK_S1_77&quot;
 factor_weights_competency_cols &lt;- &quot;\\w+_S1_(34|73|77)(?!.*decisive).*&quot; 
 factor_weights_cols &lt;- &quot;\\w+_S1_(34|73|77)(.*decisive).&quot;
 outcome_raters &lt;- &quot;BMK_S5_1_mean_(?!Self)&quot;
-outcome_colname &lt;- &quot;BMK_S5_1_mean_all_rater&quot;
-
-
-print(deparse(substitute(data)))</code></pre>
-<pre><code>## [1] &quot;data&quot;</code></pre>
+outcome_colname &lt;- &quot;BMK_S5_1_mean_all_rater&quot;</code></pre>
 <pre class="r"><code>## data processing
 render_data_processing(data=data, sample_name = sample_name, factor_name = factor_name)</code></pre>
 <pre><code>## 
 ## 
 ## processing file: 01_bmk_data_processing.Rmd</code></pre>
 <pre><code>## 
-  |                                         
-  |                                   |   0%
-  |                                         
-  |....                               |  11%                          
-  |                                         
-  |........                           |  22% [setup]                  
-  |                                         
-  |............                       |  33%                          
-  |                                         
-  |................                   |  44% [data-read]              
-  |                                         
-  |...................                |  56%                          
-  |                                         
-  |.......................            |  67% [preprocess-df]          
-  |                                         
-  |...........................        |  78%                          
-  |                                         
-  |...............................    |  89% [basic-missing-statistic]
-  |                                         
-  |...................................| 100%                          </code></pre>
+  |                                                         
+  |                                                   |   0%
+  |                                                         
+  |......                                             |  11%                          
+  |                                                         
+  |...........                                        |  22% [setup]                  
+  |                                                         
+  |.................                                  |  33%                          
+  |                                                         
+  |.......................                            |  44% [data-read]              
+  |                                                         
+  |............................                       |  56%                          
+  |                                                         
+  |..................................                 |  67% [preprocess-df]          
+  |                                                         
+  |........................................           |  78%                          
+  |                                                         
+  |.............................................      |  89% [basic-missing-statistic]
+  |                                                         
+  |...................................................| 100%                          </code></pre>
 <pre><code>## output file: 01_bmk_data_processing.knit.md</code></pre>
-<pre><code>## /usr/lib/rstudio-server/bin/quarto/bin/tools/pandoc +RTS -K512m -RTS 01_bmk_data_processing.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output /home/rstudio/workspace/output/cross-validation_decisive_data_processing.html --lua-filter /usr/local/lib/R/site-library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/lib/R/site-library/rmarkdown/rmarkdown/lua/latex-div.lua --embed-resources --standalone --variable bs3=TRUE --section-divs --template /usr/local/lib/R/site-library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable &#39;mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&#39; --include-in-header /tmp/RtmpIdkq7s/rmarkdown-str7dd59ebc878.html</code></pre>
+<pre><code>## /usr/lib/rstudio-server/bin/quarto/bin/tools/pandoc +RTS -K512m -RTS 01_bmk_data_processing.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output /home/rstudio/workspace/output/cross-validation_decisive_data_processing.html --lua-filter /usr/local/lib/R/site-library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/lib/R/site-library/rmarkdown/rmarkdown/lua/latex-div.lua --embed-resources --standalone --variable bs3=TRUE --section-divs --template /usr/local/lib/R/site-library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable &#39;mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&#39; --include-in-header /tmp/RtmpGYlRUK/rmarkdown-str2d458d9455d.html</code></pre>
 <pre><code>## 
 ## Output created: /home/rstudio/workspace/output/cross-validation_decisive_data_processing.html</code></pre>
 <pre class="r"><code>## lavan analyses for decisiveness
 render_lavaan_analyses(factor_name=factor_name,
               sample_name=sample_name,
               show_model=show_model,
+              regex_pattern=regex_pattern,
+              rowmeans_columns_list=rowmeans_columns_list,
               column_pattern_for_analyses=column_pattern_for_analyses,
-              competency_cols=competency_cols_pattern,
+              competency_cols_names=competency_cols_pattern,
               competency_cols_with_factor_weights=competency_cols_with_factor_weights,
               columns_to_remove_missing_values=columns_to_remove_missing_values,
               factor_weights_competency_cols=factor_weights_competency_cols,
@@ -436,84 +472,84 @@ render_lavaan_analyses(factor_name=factor_name,
 ## 
 ## processing file: 02_bmk_lavaan_analyses.Rmd</code></pre>
 <pre><code>## 
-  |                                        
-  |                                  |   0%
-  |                                        
-  |.                                 |   3%                           
-  |                                        
-  |..                                |   5% [setup]                   
-  |                                        
-  |...                               |   8%                           
-  |                                        
-  |....                              |  11% [assign-values]           
-  |                                        
-  |.....                             |  14%                           
-  |                                        
-  |......                            |  16% [first-order]             
-  |                                        
-  |......                            |  19%                           
-  |                                        
-  |.......                           |  22% [bifactor]                
-  |                                        
-  |........                          |  24%                           
-  |                                        
-  |.........                         |  27% [remove-missing-values]   
-  |                                        
-  |..........                        |  30%                           
-  |                                        
-  |...........                       |  32% [factory-weights]         
-  |                                        
-  |............                      |  35%                           
-  |                                        
-  |.............                     |  38% [competency-colmeans]     
-  |                                        
-  |..............                    |  41%                           
-  |                                        
-  |...............                   |  43% [statistics-table]        
-  |                                        
-  |................                  |  46%                           
-  |                                        
-  |.................                 |  49% [factor-score]            
-  |                                        
-  |.................                 |  51%                           
-  |                                        
-  |..................                |  54% [correlation]             
-  |                                        
-  |...................               |  57%                           
-  |                                        
-  |....................              |  59% [conventional-average]    
-  |                                        
-  |.....................             |  62%                           
-  |                                        
-  |......................            |  65% [performance-item]        
-  |                                        
-  |.......................           |  68%                           
-  |                                        
-  |........................          |  70% [tri-lari-avg-correlation]
-  |                                        
-  |.........................         |  73%                           
-  |                                        
-  |..........................        |  76% [compute-norm-correlation]
-  |                                        
-  |...........................       |  78%                           
-  |                                        
-  |............................      |  81% [linear-model1]           
-  |                                        
-  |............................      |  84%                           
-  |                                        
-  |.............................     |  86% [linear-model2]           
-  |                                        
-  |..............................    |  89%                           
-  |                                        
-  |...............................   |  92% [linear-model3]           
-  |                                        
-  |................................  |  95%                           
-  |                                        
-  |................................. |  97% [reg-weights]             
-  |                                        
-  |..................................| 100%                           </code></pre>
+  |                                                        
+  |                                                  |   0%
+  |                                                        
+  |.                                                 |   3%                           
+  |                                                        
+  |...                                               |   5% [setup]                   
+  |                                                        
+  |....                                              |   8%                           
+  |                                                        
+  |.....                                             |  11% [assign-values]           
+  |                                                        
+  |.......                                           |  14%                           
+  |                                                        
+  |........                                          |  16% [first-order]             
+  |                                                        
+  |.........                                         |  19%                           
+  |                                                        
+  |...........                                       |  22% [bifactor]                
+  |                                                        
+  |............                                      |  24%                           
+  |                                                        
+  |..............                                    |  27% [remove-missing-values]   
+  |                                                        
+  |...............                                   |  30%                           
+  |                                                        
+  |................                                  |  32% [factory-weights]         
+  |                                                        
+  |..................                                |  35%                           
+  |                                                        
+  |...................                               |  38% [factor-score]            
+  |                                                        
+  |....................                              |  41%                           
+  |                                                        
+  |......................                            |  43% [competency-colmeans]     
+  |                                                        
+  |.......................                           |  46%                           
+  |                                                        
+  |........................                          |  49% [statistics-table]        
+  |                                                        
+  |..........................                        |  51%                           
+  |                                                        
+  |...........................                       |  54% [conventional-average]    
+  |                                                        
+  |............................                      |  57%                           
+  |                                                        
+  |..............................                    |  59% [performance-item]        
+  |                                                        
+  |...............................                   |  62%                           
+  |                                                        
+  |................................                  |  65% [correlation]             
+  |                                                        
+  |..................................                |  68%                           
+  |                                                        
+  |...................................               |  70% [tri-lari-avg-correlation]
+  |                                                        
+  |....................................              |  73%                           
+  |                                                        
+  |......................................            |  76% [compute-norm-correlation]
+  |                                                        
+  |.......................................           |  78%                           
+  |                                                        
+  |.........................................         |  81% [linear-model1]           
+  |                                                        
+  |..........................................        |  84%                           
+  |                                                        
+  |...........................................       |  86% [linear-model2]           
+  |                                                        
+  |.............................................     |  89%                           
+  |                                                        
+  |..............................................    |  92% [linear-model3]           
+  |                                                        
+  |...............................................   |  95%                           
+  |                                                        
+  |................................................. |  97% [reg-weights]             
+  |                                                        
+  |..................................................| 100%                           </code></pre>
 <pre><code>## output file: 02_bmk_lavaan_analyses.knit.md</code></pre>
-<pre><code>## /usr/lib/rstudio-server/bin/quarto/bin/tools/pandoc +RTS -K512m -RTS 02_bmk_lavaan_analyses.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output /home/rstudio/workspace/output/cross-validation_decisive_lavaan.html --lua-filter /usr/local/lib/R/site-library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/lib/R/site-library/rmarkdown/rmarkdown/lua/latex-div.lua --embed-resources --standalone --variable bs3=TRUE --section-divs --template /usr/local/lib/R/site-library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable &#39;mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&#39; --include-in-header /tmp/RtmpIdkq7s/rmarkdown-str7dd1b166b3.html</code></pre>
+<pre><code>## /usr/lib/rstudio-server/bin/quarto/bin/tools/pandoc +RTS -K512m -RTS 02_bmk_lavaan_analyses.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output /home/rstudio/workspace/output/cross-validation_decisive_lavaan.html --lua-filter /usr/local/lib/R/site-library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /usr/local/lib/R/site-library/rmarkdown/rmarkdown/lua/latex-div.lua --embed-resources --standalone --variable bs3=TRUE --section-divs --template /usr/local/lib/R/site-library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable &#39;mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&#39; --include-in-header /tmp/RtmpGYlRUK/rmarkdown-str2d442de984a.html</code></pre>
 <pre><code>## 
 ## Output created: /home/rstudio/workspace/output/cross-validation_decisive_lavaan.html</code></pre>
 </div>
