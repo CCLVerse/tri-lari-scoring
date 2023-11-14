@@ -131,7 +131,7 @@ sapply(list(data_A, data_B), function(x) {
 
 strategic <- get_variables_for_analyses(df = BMK2018_A, columns = c("BMK_S1_1", "BMK_S1_6", "BMK_S1_7", "BMK_S1_10", "BMK_S1_13", "BMK_S1_19", "BMK_S1_24", "BMK_S1_28"), factor_name = "strategic")
 
-
+strategic$competency_cols_pattern <- "BMK_S1_(1|6|7|10|13|19|24|28)_mean_(Self|Direct_Report|Peer|Boss)$"
 
 data_A <- list(BMK2018_A, "Normative") %>% setNames(c("data", "sample_name"))
 data_B <- list(BMK2018_B, "Cross-validation") %>% setNames(c("data", "sample_name"))

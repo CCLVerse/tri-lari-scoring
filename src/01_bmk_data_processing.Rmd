@@ -5,7 +5,7 @@ date: "2023-04-28"
 params: 
   data: NULL
   factor_name: NULL
-  raters: !r c("Self", "Direct Report", "Peers", "Boss")
+  raters: !r c("Self", "Direct Report", "Peer", "Boss")
   required_cols: NULL
   competency_item_cols: NULL
   competency_cols: NULL

@@ -33,7 +33,7 @@ validate_rater <- function(df=NULL, raters=NULL, rater_colname=NULL){
         stop("Raters are required.")
     }
 
-    if(!all(raters %in% df[[rater_colname]])){
+    if(any(!raters %in% df[[rater_colname]])){
         stop("Not all specified raters exist in the dataframe.")
     }
 

@@ -1,5 +1,5 @@
 #' @title Build First Level Model
-#' @description Constructs a structural equation model (SEM) for analyzing competency assessments using lavaan.
+#' @description Constructs a model for analyzing competency assessments using lavaan.
 #'
 #' This function generates a SEM to examine competency assessments, considering multiple raters' perspectives.
 #  The SEM is created with the lavaan package in R and is designed to capture relationships between competency items, latent factors (competencies), and various raters.

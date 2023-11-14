@@ -28,7 +28,7 @@ get_variables_for_analyses <- function(df=NULL, columns=NULL, factor_name=NULL){
   
   regex_pattern = TRUE
   column_pattern_for_analyses <- sprintf("ESI_Key|%s|BMK_S2_8|BMK_S2_13|BMK_S2_15|BMK_S2_19|BMK_S2_22|BMK_S2_17|BMK_S2_25|BMK_S2_35|BMK_S2_18|BMK_S2_21|BMK_S2_23|BMK_S2_28|BMK_S2_30|BMK_S2_34|BMK_S2_36|BMK_S2_6|BMK_S2_7|BMK_S2_12|BMK_S2_14|BMK_S2_10|BMK_S2_5|BMK_S2_16|BMK_S2_26|BMK_S2_24|BMK_S2_33|BMK_S2_2|BMK_S2_20|BMK_S2_27|BMK_S2_29|BMK_S2_31|BMK_S2_32|BMK_S2_3|BMK_S2_4|BMK_S2_1|BMK_S2_11|BMK_S2_9|BMK_S5_1|BMK_S5_2|BMK_S5_3|BMK_S5_4|BMK_S5_5|BMK_S5_6|BMK_S5_7|BMK_S5_8|BMK_S5_9", col_pattern)
-  competency_cols_pattern <- col_pattern
+  competency_cols_pattern <- col_pattern  #sprintf("BMK_S1_(%s)$", digit_pattern)
   competency_cols_with_factor_weights <- sprintf("BMK_S1_(%s)(?!.*%s).*", digit_pattern, tolower(factor_name))
   columns_to_remove_missing_values <- sprintf("ESI_Key|%s", col_pattern)
   factor_weights_competency_cols <- sprintf("\\w+_S1_(%s)(?!.*%s).*", digit_pattern, tolower(factor_name))
