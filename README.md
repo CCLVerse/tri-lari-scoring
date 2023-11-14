@@ -48,8 +48,7 @@ docker compose up
 
 ## Process
 
-![Process map]("./images/Process-map.png")
-
+![Process map](images/process-map.png?raw=true)
 
 ## Contributing
 If you want to contribute to this project, please open an issue or submit a pull request.
