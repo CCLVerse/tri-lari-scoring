@@ -6,12 +6,7 @@ The code is supplemental to the paper titled: [EJP Paper Title]
 
 ## Table of Contents
 - [Prerequisites](#prerequisites)
-- [Functions](#functions)
-  - [01_bmk_data_processing.Rmd](#01_bmk_data_processingRmd)
-  - [02_bmk_lavaan_analyses.Rmd](#02_bmk_lavaan_analysesRmd)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+- [Process](#process)
 
 ## Prerequisites
 
@@ -50,8 +45,3 @@ docker compose up
 
 ![Process map](images/Process-map.png?raw=true)
 
-## Contributing
-If you want to contribute to this project, please open an issue or submit a pull request.
-
-## License
-This project is licensed under the XYZ License - see the LICENSE.md file for details.
