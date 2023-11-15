@@ -31,6 +31,7 @@ compassion_cols <- c("BMK_S1_27", "BMK_S1_31", "BMK_S1_59", "BMK_S1_79", "BMK_S1
 ```
 
 
+## Decisiveness
 
 ```{r decisiveness, echo=FALSE}
 
@@ -80,7 +81,7 @@ sapply(list(data_A, data_B), function(x) {
 ```
 
 
-
+## Being a Quick Study
 
 ```{r being-a-quick-study, echo=FALSE}
 
@@ -130,7 +131,7 @@ sapply(list(data_A, data_B), function(x) {
 ```
 
 
-
+## Strategic Perspective
 
 ```{r strategic-perspective, echo=FALSE}
 
@@ -181,8 +182,7 @@ sapply(list(data_A, data_B), function(x) {
 ```
 
 
-
-
+## Leading Employees
 
 ```{r leading-employees, echo=FALSE}
 
@@ -233,8 +233,7 @@ sapply(list(data_A, data_B), function(x) {
 ```
 
 
-
-
+## Respect for Differences
 
 ```{r respect-for-differences, echo=FALSE}
 
@@ -285,8 +284,7 @@ sapply(list(data_A, data_B), function(x) {
 ```
 
 
-
-
+## Compassiona and Sensitivity
 
 ```{r compassion-sensitivity, echo=FALSE}
 
