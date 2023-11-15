@@ -21,6 +21,13 @@ BMK2018_A <- load_data(source=sprintf("%s/data/BMK2018_A.RData", getwd()), rater
 BMK2018_B <- load_data(source=sprintf("%s/data/BMK2018_B.RData", getwd()), raters=raters)
 
 
+decisive_cols <- c("BMK_S1_34", "BMK_S1_73", "BMK_S1_77")
+quick_cols <- c("BMK_S1_11", "BMK_S1_30", "BMK_S1_45")
+strategic_cols <- c("BMK_S1_1", "BMK_S1_6", "BMK_S1_7", "BMK_S1_10", "BMK_S1_13", "BMK_S1_19", "BMK_S1_24", "BMK_S1_28")
+leading_cols <- c("BMK_S1_12", "BMK_S1_15", "BMK_S1_17", "BMK_S1_18", "BMK_S1_26", "BMK_S1_47", "BMK_S1_68", "BMK_S1_88", "BMK_S1_39", "BMK_S1_43", "BMK_S1_52", "BMK_S1_37", "BMK_S1_38")
+respect_cols <- c("BMK_S1_57", "BMK_S1_67", "BMK_S1_83", "BMK_S1_86")
+compassion_cols <- c("BMK_S1_27", "BMK_S1_31", "BMK_S1_59", "BMK_S1_79", "BMK_S1_84", "BMK_S1_90")
+
 ```
 
 
@@ -28,7 +35,7 @@ BMK2018_B <- load_data(source=sprintf("%s/data/BMK2018_B.RData", getwd()), rater
 ```{r decisiveness, echo=FALSE}
 
 #  1. Decisiveness
-decisive <- get_variables_for_analyses(df = BMK2018_A, columns = c("BMK_S1_34", "BMK_S1_73", "BMK_S1_77"), factor_name = "decisive")
+decisive <- get_variables_for_analyses(df = BMK2018_A, columns = decisive_cols, factor_name = "decisive")
 
 
 
@@ -79,7 +86,7 @@ sapply(list(data_A, data_B), function(x) {
 
 # 2. Being a quick study
 
-quick <- get_variables_for_analyses(df = BMK2018_A, columns = c("BMK_S1_11", "BMK_S1_30", "BMK_S1_45"), factor_name = "quick")
+quick <- get_variables_for_analyses(df = BMK2018_A, columns = quick_cols, factor_name = "quick")
 
 
 data_A <- list(BMK2018_A, "Normative") %>% setNames(c("data", "sample_name"))
@@ -129,7 +136,7 @@ sapply(list(data_A, data_B), function(x) {
 
 # 3. Strategic perspective
 
-strategic <- get_variables_for_analyses(df = BMK2018_A, columns = c("BMK_S1_1", "BMK_S1_6", "BMK_S1_7", "BMK_S1_10", "BMK_S1_13", "BMK_S1_19", "BMK_S1_24", "BMK_S1_28"), factor_name = "strategic")
+strategic <- get_variables_for_analyses(df = BMK2018_A, columns = strategic_cols, factor_name = "strategic")
 
 strategic$competency_cols_pattern <- "BMK_S1_(1|6|7|10|13|19|24|28)_mean_(Self|Direct_Report|Peer|Boss)$"
 
@@ -181,7 +188,7 @@ sapply(list(data_A, data_B), function(x) {
 
 # 4. Leading employees
 
-leading <- get_variables_for_analyses(df = BMK2018_A, columns = c("BMK_S1_12", "BMK_S1_15", "BMK_S1_17", "BMK_S1_18", "BMK_S1_26", "BMK_S1_47", "BMK_S1_68", "BMK_S1_88", "BMK_S1_39", "BMK_S1_43", "BMK_S1_52", "BMK_S1_37", "BMK_S1_38"), factor_name = "leading")
+leading <- get_variables_for_analyses(df = BMK2018_A, columns = leading_cols, factor_name = "leading")
 
 
 
@@ -233,7 +240,7 @@ sapply(list(data_A, data_B), function(x) {
 
 # 5. Respect for differences
 
-respect <- get_variables_for_analyses(df = BMK2018_A, columns = c("BMK_S1_12", "BMK_S1_15", "BMK_S1_17", "BMK_S1_18", "BMK_S1_26", "BMK_S1_47", "BMK_S1_68", "BMK_S1_88", "BMK_S1_39", "BMK_S1_43", "BMK_S1_52", "BMK_S1_37", "BMK_S1_38"), factor_name = "respect")
+respect <- get_variables_for_analyses(df = BMK2018_A, columns = respect_cols, factor_name = "respect")
 
 
 
@@ -285,7 +292,7 @@ sapply(list(data_A, data_B), function(x) {
 
 # 6. Compassion & Sensitivity
 
-compassion <- get_variables_for_analyses(df = BMK2018_A, columns = c("BMK_S1_12", "BMK_S1_15", "BMK_S1_17", "BMK_S1_18", "BMK_S1_26", "BMK_S1_47", "BMK_S1_68", "BMK_S1_88", "BMK_S1_39", "BMK_S1_43", "BMK_S1_52", "BMK_S1_37", "BMK_S1_38"), factor_name = "compassion")
+compassion <- get_variables_for_analyses(df = BMK2018_A, columns = compassion_cols, factor_name = "compassion")
 
 
 
