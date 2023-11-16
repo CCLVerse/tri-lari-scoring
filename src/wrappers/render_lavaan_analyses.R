@@ -44,11 +44,10 @@ render_lavaan_analyses <- function(factor_name="decisive",
                                    outcome_raters="BMK_S5_1_mean_(?!Self)",
                                    outcome_colname="BMK_S5_1_mean_all_rater"){
   
-  title <- sprintf("Lavaan TRI<span style='color:gold;'>/</span>LARI Analyses for %s (%s Sample)", 
-                   stringi::stri_trans_totitle(factor_name),  
-                   stringi::stri_trans_totitle(sample_name))
-  
-  output_file <- sprintf("%s_lavaan_%s", tolower(sample_name), factor_name)
+
+  title <- get_competency_full_name(factor_name)
+
+  output_file <- sprintf("%s_%s", factor_name, tolower(sample_name))
   
   rmarkdown::render(input = "/home/rstudio/workspace/src/02_bmk_lavaan_analyses.Rmd", 
                     output_dir = "/home/rstudio/workspace/output", 

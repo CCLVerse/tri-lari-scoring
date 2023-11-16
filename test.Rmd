@@ -1,0 +1,77 @@
+---
+title: "test"
+output: html_document
+date: "2023-11-16"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{css, echo=FALSE}
+/* Include the Google Fonts stylesheet */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* Apply the font to the body */
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+th:not(:first-child), td:not(:first-child){
+  text-align: center !important;
+}
+
+td:nth-child(n+2):nth-child(-n+n):not(:last-child) {
+    background-color: #ffcccb !important; /* Set the background color for the lower triangle */
+}
+
+```
+
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars, results='asis'}
+library(tidyverse)
+cor_matrix <- cor(matrix(rnorm(36), ncol = 6))
+
+diag(cor_matrix) <- ""
+cor_matrix[lower.tri(cor_matrix)] <- "◉"
+
+cor_matrix %>% 
+  kableExtra::kable(caption = 'test') %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  kableExtra::column_spec(1, bold=TRUE) 
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+
+
+# Create a sample correlation matrix
+set.seed(123)
+cor_matrix <- cor(matrix(rnorm(36), ncol = 6))
+
+# Find the column and row numbers of the lower triangle
+lower_triangle <- lower.tri(cor_matrix, diag = FALSE)
+row_numbers <- row(lower_triangle)[lower_triangle]
+col_numbers <- col(lower_triangle)[lower_triangle]
+
+# Print the results
+cat("Row Numbers of Lower Triangle:", row_numbers, "\n")
+cat("Column Numbers of Lower Triangle:", col_numbers, "\n")
+
+
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
