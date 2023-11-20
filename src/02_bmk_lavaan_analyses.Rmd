@@ -464,6 +464,36 @@ if(tolower(sample_name) == 'normative'){
 ```
 
 
+
+```{r save-df, echo=FALSE}
+
+if(tolower(sample_name) == 'normative'){
+
+  rn <- 20
+  set.seed(1234)
+  
+  selective_colnames <- c("ESI_Key", "Self_LV", "Direct_Report_LV", "Peer_LV", "Boss_LV", "reputation_LV", "arena_LV", "Self_Avg", "Direct_Report_Avg", "Boss_Avg", "Peer_Avg", "Inf_Avg", "All_Avg", "BMK_S5_1_mean_all_rater")
+  
+  competency_name <- rep(factor_name, rn)
+  
+  # Randomly select 20 rows from the dataframe
+  selected_rows <- sample(nrow(df_merged), rn, replace = FALSE)
+  
+  # Create a new dataframe with the selected rows
+  random_sample_df <- df_merged[selected_rows, ] %>% 
+    dplyr::select(selective_colnames) %>%
+    tibble::add_column(competency = competency_name, .before="Self_LV")
+  
+  if(!exists("factors_df")){
+    factors_df <- data.frame()
+  }
+  
+  factors_df <<- dplyr::bind_rows(factors_df, random_sample_df)
+}
+
+```
+
+
 ---
 
 ### Linear Models
