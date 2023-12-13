@@ -3532,64 +3532,918 @@ text-align: center !important;
 <div id="lavaan-trilari-analyses" class="section level3">
 <h3>Lavaan TRI<span style="color:gold;">/</span>LARI Analyses</h3>
 <hr />
-<div id="models-to-build" class="section level4">
-<h4>Models to Build</h4>
-<p>There are two models to build:</p>
-<ol style="list-style-type: decimal">
-<li><p>First Order Model</p></li>
-<li><p>Bifactor Model</p></li>
-</ol>
-<hr />
-</div>
-<div id="required-values" class="section level4">
-<h4>Required Values</h4>
-<p>Both models require the following values:</p>
-<ul>
-<li><strong>competency_cols_names:</strong> Column names that make up
-the competency or the regex pattern to identify the columns. When
-providing a regex pattern, set <code>regex_pattern</code> to TRUE.</li>
-</ul>
-<p><em>Example: “BMK_S1_34|BMK_S1_73|BMK_S1_77”</em></p>
-<ul>
-<li><p><strong>factor_name:</strong> Name of the competency. This name
-is added in the <code>lavaan</code> analysis results.</p></li>
-<li><p><strong>regex_pattern:</strong> Indicate whether the
-<code>competency_cols</code> value is a regex pattern or column
-names.</p></li>
-<li><p><strong>raters:</strong> All the raters required in the
-analyses.</p></li>
-</ul>
-<hr />
-</div>
-</div>
-<div id="first-order-model" class="section level3">
-<h3>First order model</h3>
-<table class="table" style="margin-left: auto; margin-right: auto;">
+<pre><code>## #### Correlation Matrix: Items</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
 <caption>
-Displaying <code>Lavaan</code> first order model used in analyses
+Correlation among items for <span style="color:#00838f;"><strong>Respect
+for Differences</strong></span>
 </caption>
 <thead>
 <tr>
 <th style="text-align:left;">
 </th>
+<th style="text-align:right;">
+BMK_S1_57_mean_Self
+</th>
+<th style="text-align:right;">
+BMK_S1_57_mean_Direct_Report
+</th>
+<th style="text-align:right;">
+BMK_S1_57_mean_Peer
+</th>
+<th style="text-align:right;">
+BMK_S1_57_mean_Boss
+</th>
+<th style="text-align:right;">
+BMK_S1_67_mean_Self
+</th>
+<th style="text-align:right;">
+BMK_S1_67_mean_Direct_Report
+</th>
+<th style="text-align:right;">
+BMK_S1_67_mean_Peer
+</th>
+<th style="text-align:right;">
+BMK_S1_67_mean_Boss
+</th>
+<th style="text-align:right;">
+BMK_S1_83_mean_Self
+</th>
+<th style="text-align:right;">
+BMK_S1_83_mean_Direct_Report
+</th>
+<th style="text-align:right;">
+BMK_S1_83_mean_Peer
+</th>
+<th style="text-align:right;">
+BMK_S1_83_mean_Boss
+</th>
+<th style="text-align:right;">
+BMK_S1_86_mean_Self
+</th>
+<th style="text-align:right;">
+BMK_S1_86_mean_Direct_Report
+</th>
+<th style="text-align:right;">
+BMK_S1_86_mean_Peer
+</th>
+<th style="text-align:right;">
+BMK_S1_86_mean_Boss
+</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left;">
-respect_Self =~ BMK_S1_57_mean_Self + BMK_S1_67_mean_Self +
-BMK_S1_83_mean_Self + BMK_S1_86_mean_Self<br />
-respect_Direct_Report =~ BMK_S1_57_mean_Direct_Report +
-BMK_S1_67_mean_Direct_Report + BMK_S1_83_mean_Direct_Report +
-BMK_S1_86_mean_Direct_Report<br />
-respect_Peer =~ BMK_S1_57_mean_Peer + BMK_S1_67_mean_Peer +
-BMK_S1_83_mean_Peer + BMK_S1_86_mean_Peer<br />
-respect_Boss =~ BMK_S1_57_mean_Boss + BMK_S1_67_mean_Boss +
-BMK_S1_83_mean_Boss + BMK_S1_86_mean_Boss
+<td style="text-align:left;font-weight: bold;">
+BMK_S1_57_mean_Self
+</td>
+<td style="text-align:right;">
+1.0000000
+</td>
+<td style="text-align:right;">
+0.1163575
+</td>
+<td style="text-align:right;">
+0.1061164
+</td>
+<td style="text-align:right;">
+0.0791700
+</td>
+<td style="text-align:right;">
+0.5186815
+</td>
+<td style="text-align:right;">
+0.0746489
+</td>
+<td style="text-align:right;">
+0.0743862
+</td>
+<td style="text-align:right;">
+0.0661097
+</td>
+<td style="text-align:right;">
+0.4494191
+</td>
+<td style="text-align:right;">
+0.1054055
+</td>
+<td style="text-align:right;">
+0.0960066
+</td>
+<td style="text-align:right;">
+0.0668495
+</td>
+<td style="text-align:right;">
+0.5206938
+</td>
+<td style="text-align:right;">
+0.0826664
+</td>
+<td style="text-align:right;">
+0.0744338
+</td>
+<td style="text-align:right;">
+0.0644094
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+BMK_S1_57_mean_Direct_Report
+</td>
+<td style="text-align:right;">
+0.1163575
+</td>
+<td style="text-align:right;">
+1.0000000
+</td>
+<td style="text-align:right;">
+0.2487251
+</td>
+<td style="text-align:right;">
+0.1491788
+</td>
+<td style="text-align:right;">
+0.0931730
+</td>
+<td style="text-align:right;">
+0.6968220
+</td>
+<td style="text-align:right;">
+0.2280717
+</td>
+<td style="text-align:right;">
+0.1360371
+</td>
+<td style="text-align:right;">
+0.1240121
+</td>
+<td style="text-align:right;">
+0.6411382
+</td>
+<td style="text-align:right;">
+0.2352599
+</td>
+<td style="text-align:right;">
+0.1367445
+</td>
+<td style="text-align:right;">
+0.0770485
+</td>
+<td style="text-align:right;">
+0.6756359
+</td>
+<td style="text-align:right;">
+0.2069413
+</td>
+<td style="text-align:right;">
+0.1355823
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+BMK_S1_57_mean_Peer
+</td>
+<td style="text-align:right;">
+0.1061164
+</td>
+<td style="text-align:right;">
+0.2487251
+</td>
+<td style="text-align:right;">
+1.0000000
+</td>
+<td style="text-align:right;">
+0.2126784
+</td>
+<td style="text-align:right;">
+0.0928657
+</td>
+<td style="text-align:right;">
+0.2334131
+</td>
+<td style="text-align:right;">
+0.7163568
+</td>
+<td style="text-align:right;">
+0.2054143
+</td>
+<td style="text-align:right;">
+0.1663485
+</td>
+<td style="text-align:right;">
+0.2404928
+</td>
+<td style="text-align:right;">
+0.6658833
+</td>
+<td style="text-align:right;">
+0.2148511
+</td>
+<td style="text-align:right;">
+0.0729852
+</td>
+<td style="text-align:right;">
+0.2145928
+</td>
+<td style="text-align:right;">
+0.6732876
+</td>
+<td style="text-align:right;">
+0.1866774
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+BMK_S1_57_mean_Boss
+</td>
+<td style="text-align:right;">
+0.0791700
+</td>
+<td style="text-align:right;">
+0.1491788
+</td>
+<td style="text-align:right;">
+0.2126784
+</td>
+<td style="text-align:right;">
+1.0000000
+</td>
+<td style="text-align:right;">
+0.0861155
+</td>
+<td style="text-align:right;">
+0.1502123
+</td>
+<td style="text-align:right;">
+0.1999792
+</td>
+<td style="text-align:right;">
+0.6361434
+</td>
+<td style="text-align:right;">
+0.1076130
+</td>
+<td style="text-align:right;">
+0.1453882
+</td>
+<td style="text-align:right;">
+0.2211482
+</td>
+<td style="text-align:right;">
+0.5674535
+</td>
+<td style="text-align:right;">
+0.0543272
+</td>
+<td style="text-align:right;">
+0.1398276
+</td>
+<td style="text-align:right;">
+0.1891116
+</td>
+<td style="text-align:right;">
+0.6375287
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+BMK_S1_67_mean_Self
+</td>
+<td style="text-align:right;">
+0.5186815
+</td>
+<td style="text-align:right;">
+0.0931730
+</td>
+<td style="text-align:right;">
+0.0928657
+</td>
+<td style="text-align:right;">
+0.0861155
+</td>
+<td style="text-align:right;">
+1.0000000
+</td>
+<td style="text-align:right;">
+0.0812410
+</td>
+<td style="text-align:right;">
+0.0923787
+</td>
+<td style="text-align:right;">
+0.0826669
+</td>
+<td style="text-align:right;">
+0.4467844
+</td>
+<td style="text-align:right;">
+0.1102364
+</td>
+<td style="text-align:right;">
+0.0937297
+</td>
+<td style="text-align:right;">
+0.0922423
+</td>
+<td style="text-align:right;">
+0.5338875
+</td>
+<td style="text-align:right;">
+0.0840229
+</td>
+<td style="text-align:right;">
+0.0877886
+</td>
+<td style="text-align:right;">
+0.0973435
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+BMK_S1_67_mean_Direct_Report
+</td>
+<td style="text-align:right;">
+0.0746489
+</td>
+<td style="text-align:right;">
+0.6968220
+</td>
+<td style="text-align:right;">
+0.2334131
+</td>
+<td style="text-align:right;">
+0.1502123
+</td>
+<td style="text-align:right;">
+0.0812410
+</td>
+<td style="text-align:right;">
+1.0000000
+</td>
+<td style="text-align:right;">
+0.2432340
+</td>
+<td style="text-align:right;">
+0.1668982
+</td>
+<td style="text-align:right;">
+0.0797848
+</td>
+<td style="text-align:right;">
+0.6659639
+</td>
+<td style="text-align:right;">
+0.2268314
+</td>
+<td style="text-align:right;">
+0.1536955
+</td>
+<td style="text-align:right;">
+0.0524836
+</td>
+<td style="text-align:right;">
+0.6995524
+</td>
+<td style="text-align:right;">
+0.2175940
+</td>
+<td style="text-align:right;">
+0.1549475
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+BMK_S1_67_mean_Peer
+</td>
+<td style="text-align:right;">
+0.0743862
+</td>
+<td style="text-align:right;">
+0.2280717
+</td>
+<td style="text-align:right;">
+0.7163568
+</td>
+<td style="text-align:right;">
+0.1999792
+</td>
+<td style="text-align:right;">
+0.0923787
+</td>
+<td style="text-align:right;">
+0.2432340
+</td>
+<td style="text-align:right;">
+1.0000000
+</td>
+<td style="text-align:right;">
+0.2191391
+</td>
+<td style="text-align:right;">
+0.1357590
+</td>
+<td style="text-align:right;">
+0.2358791
+</td>
+<td style="text-align:right;">
+0.6552414
+</td>
+<td style="text-align:right;">
+0.2068376
+</td>
+<td style="text-align:right;">
+0.0612220
+</td>
+<td style="text-align:right;">
+0.2179111
+</td>
+<td style="text-align:right;">
+0.6826356
+</td>
+<td style="text-align:right;">
+0.1805270
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+BMK_S1_67_mean_Boss
+</td>
+<td style="text-align:right;">
+0.0661097
+</td>
+<td style="text-align:right;">
+0.1360371
+</td>
+<td style="text-align:right;">
+0.2054143
+</td>
+<td style="text-align:right;">
+0.6361434
+</td>
+<td style="text-align:right;">
+0.0826669
+</td>
+<td style="text-align:right;">
+0.1668982
+</td>
+<td style="text-align:right;">
+0.2191391
+</td>
+<td style="text-align:right;">
+1.0000000
+</td>
+<td style="text-align:right;">
+0.1030538
+</td>
+<td style="text-align:right;">
+0.1471212
+</td>
+<td style="text-align:right;">
+0.2084717
+</td>
+<td style="text-align:right;">
+0.5584739
+</td>
+<td style="text-align:right;">
+0.0561197
+</td>
+<td style="text-align:right;">
+0.1411913
+</td>
+<td style="text-align:right;">
+0.2030556
+</td>
+<td style="text-align:right;">
+0.6407565
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+BMK_S1_83_mean_Self
+</td>
+<td style="text-align:right;">
+0.4494191
+</td>
+<td style="text-align:right;">
+0.1240121
+</td>
+<td style="text-align:right;">
+0.1663485
+</td>
+<td style="text-align:right;">
+0.1076130
+</td>
+<td style="text-align:right;">
+0.4467844
+</td>
+<td style="text-align:right;">
+0.0797848
+</td>
+<td style="text-align:right;">
+0.1357590
+</td>
+<td style="text-align:right;">
+0.1030538
+</td>
+<td style="text-align:right;">
+1.0000000
+</td>
+<td style="text-align:right;">
+0.1678287
+</td>
+<td style="text-align:right;">
+0.1876747
+</td>
+<td style="text-align:right;">
+0.1429954
+</td>
+<td style="text-align:right;">
+0.4694000
+</td>
+<td style="text-align:right;">
+0.0957602
+</td>
+<td style="text-align:right;">
+0.1429725
+</td>
+<td style="text-align:right;">
+0.1138513
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+BMK_S1_83_mean_Direct_Report
+</td>
+<td style="text-align:right;">
+0.1054055
+</td>
+<td style="text-align:right;">
+0.6411382
+</td>
+<td style="text-align:right;">
+0.2404928
+</td>
+<td style="text-align:right;">
+0.1453882
+</td>
+<td style="text-align:right;">
+0.1102364
+</td>
+<td style="text-align:right;">
+0.6659639
+</td>
+<td style="text-align:right;">
+0.2358791
+</td>
+<td style="text-align:right;">
+0.1471212
+</td>
+<td style="text-align:right;">
+0.1678287
+</td>
+<td style="text-align:right;">
+1.0000000
+</td>
+<td style="text-align:right;">
+0.2812981
+</td>
+<td style="text-align:right;">
+0.1755907
+</td>
+<td style="text-align:right;">
+0.0823158
+</td>
+<td style="text-align:right;">
+0.6590325
+</td>
+<td style="text-align:right;">
+0.2199094
+</td>
+<td style="text-align:right;">
+0.1451560
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+BMK_S1_83_mean_Peer
+</td>
+<td style="text-align:right;">
+0.0960066
+</td>
+<td style="text-align:right;">
+0.2352599
+</td>
+<td style="text-align:right;">
+0.6658833
+</td>
+<td style="text-align:right;">
+0.2211482
+</td>
+<td style="text-align:right;">
+0.0937297
+</td>
+<td style="text-align:right;">
+0.2268314
+</td>
+<td style="text-align:right;">
+0.6552414
+</td>
+<td style="text-align:right;">
+0.2084717
+</td>
+<td style="text-align:right;">
+0.1876747
+</td>
+<td style="text-align:right;">
+0.2812981
+</td>
+<td style="text-align:right;">
+1.0000000
+</td>
+<td style="text-align:right;">
+0.2478650
+</td>
+<td style="text-align:right;">
+0.0810299
+</td>
+<td style="text-align:right;">
+0.2177056
+</td>
+<td style="text-align:right;">
+0.6659734
+</td>
+<td style="text-align:right;">
+0.1944270
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+BMK_S1_83_mean_Boss
+</td>
+<td style="text-align:right;">
+0.0668495
+</td>
+<td style="text-align:right;">
+0.1367445
+</td>
+<td style="text-align:right;">
+0.2148511
+</td>
+<td style="text-align:right;">
+0.5674535
+</td>
+<td style="text-align:right;">
+0.0922423
+</td>
+<td style="text-align:right;">
+0.1536955
+</td>
+<td style="text-align:right;">
+0.2068376
+</td>
+<td style="text-align:right;">
+0.5584739
+</td>
+<td style="text-align:right;">
+0.1429954
+</td>
+<td style="text-align:right;">
+0.1755907
+</td>
+<td style="text-align:right;">
+0.2478650
+</td>
+<td style="text-align:right;">
+1.0000000
+</td>
+<td style="text-align:right;">
+0.0654865
+</td>
+<td style="text-align:right;">
+0.1438085
+</td>
+<td style="text-align:right;">
+0.2146108
+</td>
+<td style="text-align:right;">
+0.5925890
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+BMK_S1_86_mean_Self
+</td>
+<td style="text-align:right;">
+0.5206938
+</td>
+<td style="text-align:right;">
+0.0770485
+</td>
+<td style="text-align:right;">
+0.0729852
+</td>
+<td style="text-align:right;">
+0.0543272
+</td>
+<td style="text-align:right;">
+0.5338875
+</td>
+<td style="text-align:right;">
+0.0524836
+</td>
+<td style="text-align:right;">
+0.0612220
+</td>
+<td style="text-align:right;">
+0.0561197
+</td>
+<td style="text-align:right;">
+0.4694000
+</td>
+<td style="text-align:right;">
+0.0823158
+</td>
+<td style="text-align:right;">
+0.0810299
+</td>
+<td style="text-align:right;">
+0.0654865
+</td>
+<td style="text-align:right;">
+1.0000000
+</td>
+<td style="text-align:right;">
+0.0888498
+</td>
+<td style="text-align:right;">
+0.0854159
+</td>
+<td style="text-align:right;">
+0.0936299
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+BMK_S1_86_mean_Direct_Report
+</td>
+<td style="text-align:right;">
+0.0826664
+</td>
+<td style="text-align:right;">
+0.6756359
+</td>
+<td style="text-align:right;">
+0.2145928
+</td>
+<td style="text-align:right;">
+0.1398276
+</td>
+<td style="text-align:right;">
+0.0840229
+</td>
+<td style="text-align:right;">
+0.6995524
+</td>
+<td style="text-align:right;">
+0.2179111
+</td>
+<td style="text-align:right;">
+0.1411913
+</td>
+<td style="text-align:right;">
+0.0957602
+</td>
+<td style="text-align:right;">
+0.6590325
+</td>
+<td style="text-align:right;">
+0.2177056
+</td>
+<td style="text-align:right;">
+0.1438085
+</td>
+<td style="text-align:right;">
+0.0888498
+</td>
+<td style="text-align:right;">
+1.0000000
+</td>
+<td style="text-align:right;">
+0.2146490
+</td>
+<td style="text-align:right;">
+0.1490838
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+BMK_S1_86_mean_Peer
+</td>
+<td style="text-align:right;">
+0.0744338
+</td>
+<td style="text-align:right;">
+0.2069413
+</td>
+<td style="text-align:right;">
+0.6732876
+</td>
+<td style="text-align:right;">
+0.1891116
+</td>
+<td style="text-align:right;">
+0.0877886
+</td>
+<td style="text-align:right;">
+0.2175940
+</td>
+<td style="text-align:right;">
+0.6826356
+</td>
+<td style="text-align:right;">
+0.2030556
+</td>
+<td style="text-align:right;">
+0.1429725
+</td>
+<td style="text-align:right;">
+0.2199094
+</td>
+<td style="text-align:right;">
+0.6659734
+</td>
+<td style="text-align:right;">
+0.2146108
+</td>
+<td style="text-align:right;">
+0.0854159
+</td>
+<td style="text-align:right;">
+0.2146490
+</td>
+<td style="text-align:right;">
+1.0000000
+</td>
+<td style="text-align:right;">
+0.1952491
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+BMK_S1_86_mean_Boss
+</td>
+<td style="text-align:right;">
+0.0644094
+</td>
+<td style="text-align:right;">
+0.1355823
+</td>
+<td style="text-align:right;">
+0.1866774
+</td>
+<td style="text-align:right;">
+0.6375287
+</td>
+<td style="text-align:right;">
+0.0973435
+</td>
+<td style="text-align:right;">
+0.1549475
+</td>
+<td style="text-align:right;">
+0.1805270
+</td>
+<td style="text-align:right;">
+0.6407565
+</td>
+<td style="text-align:right;">
+0.1138513
+</td>
+<td style="text-align:right;">
+0.1451560
+</td>
+<td style="text-align:right;">
+0.1944270
+</td>
+<td style="text-align:right;">
+0.5925890
+</td>
+<td style="text-align:right;">
+0.0936299
+</td>
+<td style="text-align:right;">
+0.1490838
+</td>
+<td style="text-align:right;">
+0.1952491
+</td>
+<td style="text-align:right;">
+1.0000000
 </td>
 </tr>
 </tbody>
 </table>
+<hr />
 </div>
 <div id="bifactor-model" class="section level3">
 <h3>Bifactor model</h3>
@@ -3627,6 +4481,176 @@ BMK_S1_67_mean_Direct_Report + BMK_S1_67_mean_Peer + BMK_S1_67_mean_Boss
 + BMK_S1_83_mean_Self + BMK_S1_83_mean_Direct_Report +
 BMK_S1_83_mean_Peer + BMK_S1_83_mean_Boss + BMK_S1_86_mean_Self +
 BMK_S1_86_mean_Direct_Report + BMK_S1_86_mean_Peer + BMK_S1_86_mean_Boss
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<caption>
+Verify that the newly created scores are identical to lavaan-generated
+scores
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+respect_Self
+</th>
+<th style="text-align:right;">
+respect_Direct_Report
+</th>
+<th style="text-align:right;">
+respect_Peer
+</th>
+<th style="text-align:right;">
+respect_Boss
+</th>
+<th style="text-align:right;">
+respect_reputation
+</th>
+<th style="text-align:right;">
+respect_arena
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Self_LV
+</td>
+<td style="text-align:right;">
+1.0000000
+</td>
+<td style="text-align:right;">
+-0.0305068
+</td>
+<td style="text-align:right;">
+-0.1107317
+</td>
+<td style="text-align:right;">
+-0.0264135
+</td>
+<td style="text-align:right;">
+-0.0502249
+</td>
+<td style="text-align:right;">
+0.2024429
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Direct_Report_LV
+</td>
+<td style="text-align:right;">
+-0.0305068
+</td>
+<td style="text-align:right;">
+1.0000000
+</td>
+<td style="text-align:right;">
+-0.2392428
+</td>
+<td style="text-align:right;">
+-0.1109090
+</td>
+<td style="text-align:right;">
+0.2484583
+</td>
+<td style="text-align:right;">
+0.2626918
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Peer_LV
+</td>
+<td style="text-align:right;">
+-0.1107317
+</td>
+<td style="text-align:right;">
+-0.2392428
+</td>
+<td style="text-align:right;">
+1.0000000
+</td>
+<td style="text-align:right;">
+-0.2142209
+</td>
+<td style="text-align:right;">
+0.5372999
+</td>
+<td style="text-align:right;">
+0.4518686
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Boss_LV
+</td>
+<td style="text-align:right;">
+-0.0264135
+</td>
+<td style="text-align:right;">
+-0.1109090
+</td>
+<td style="text-align:right;">
+-0.2142209
+</td>
+<td style="text-align:right;">
+1.0000000
+</td>
+<td style="text-align:right;">
+0.2089311
+</td>
+<td style="text-align:right;">
+0.2403308
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+reputation_LV
+</td>
+<td style="text-align:right;">
+-0.0502249
+</td>
+<td style="text-align:right;">
+0.2484583
+</td>
+<td style="text-align:right;">
+0.5372999
+</td>
+<td style="text-align:right;">
+0.2089311
+</td>
+<td style="text-align:right;">
+1.0000000
+</td>
+<td style="text-align:right;">
+0.3429306
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+arena_LV
+</td>
+<td style="text-align:right;">
+0.2024429
+</td>
+<td style="text-align:right;">
+0.2626918
+</td>
+<td style="text-align:right;">
+0.4518686
+</td>
+<td style="text-align:right;">
+0.2403308
+</td>
+<td style="text-align:right;">
+0.3429306
+</td>
+<td style="text-align:right;">
+1.0000000
 </td>
 </tr>
 </tbody>
@@ -3683,7 +4707,7 @@ Trait/Arena
 BMK_S1_57_mean_Self
 </td>
 <td style="text-align:left;">
-4.451 (0.640)
+-0.000 (0.640)
 </td>
 <td style="text-align:left;">
 0.199
@@ -3709,7 +4733,7 @@ BMK_S1_57_mean_Self
 BMK_S1_67_mean_Self
 </td>
 <td style="text-align:left;">
-4.556 (0.561)
+0.000 (0.561)
 </td>
 <td style="text-align:left;">
 0.237
@@ -3735,7 +4759,7 @@ BMK_S1_67_mean_Self
 BMK_S1_83_mean_Self
 </td>
 <td style="text-align:left;">
-4.331 (0.665)
+0.000 (0.665)
 </td>
 <td style="text-align:left;">
 0.108
@@ -3761,7 +4785,7 @@ BMK_S1_83_mean_Self
 BMK_S1_86_mean_Self
 </td>
 <td style="text-align:left;">
-4.487 (0.620)
+0.000 (0.620)
 </td>
 <td style="text-align:left;">
 0.246
@@ -3787,7 +4811,7 @@ BMK_S1_86_mean_Self
 BMK_S1_57_mean_Direct_Report
 </td>
 <td style="text-align:left;">
-4.552 (0.419)
+-0.000 (0.419)
 </td>
 <td style="text-align:left;">
 -0.010
@@ -3813,7 +4837,7 @@ BMK_S1_57_mean_Direct_Report
 BMK_S1_67_mean_Direct_Report
 </td>
 <td style="text-align:left;">
-4.593 (0.414)
+-0.000 (0.414)
 </td>
 <td style="text-align:left;">
 0.019
@@ -3839,7 +4863,7 @@ BMK_S1_67_mean_Direct_Report
 BMK_S1_83_mean_Direct_Report
 </td>
 <td style="text-align:left;">
-4.411 (0.469)
+0.000 (0.469)
 </td>
 <td style="text-align:left;">
 -0.066
@@ -3865,7 +4889,7 @@ BMK_S1_83_mean_Direct_Report
 BMK_S1_86_mean_Direct_Report
 </td>
 <td style="text-align:left;">
-4.589 (0.404)
+-0.000 (0.404)
 </td>
 <td style="text-align:left;">
 -0.003
@@ -3891,7 +4915,7 @@ BMK_S1_86_mean_Direct_Report
 BMK_S1_57_mean_Peer
 </td>
 <td style="text-align:left;">
-4.480 (0.434)
+-0.000 (0.434)
 </td>
 <td style="text-align:left;">
 -0.019
@@ -3917,7 +4941,7 @@ BMK_S1_57_mean_Peer
 BMK_S1_67_mean_Peer
 </td>
 <td style="text-align:left;">
-4.525 (0.419)
+0.000 (0.419)
 </td>
 <td style="text-align:left;">
 0.016
@@ -3943,7 +4967,7 @@ BMK_S1_67_mean_Peer
 BMK_S1_83_mean_Peer
 </td>
 <td style="text-align:left;">
-4.327 (0.476)
+0.000 (0.476)
 </td>
 <td style="text-align:left;">
 -0.083
@@ -3969,7 +4993,7 @@ BMK_S1_83_mean_Peer
 BMK_S1_86_mean_Peer
 </td>
 <td style="text-align:left;">
-4.505 (0.428)
+-0.000 (0.428)
 </td>
 <td style="text-align:left;">
 -0.015
@@ -3995,7 +5019,7 @@ BMK_S1_86_mean_Peer
 BMK_S1_57_mean_Boss
 </td>
 <td style="text-align:left;">
-4.542 (0.584)
+0.000 (0.584)
 </td>
 <td style="text-align:left;">
 -0.009
@@ -4021,7 +5045,7 @@ BMK_S1_57_mean_Boss
 BMK_S1_67_mean_Boss
 </td>
 <td style="text-align:left;">
-4.603 (0.550)
+-0.000 (0.550)
 </td>
 <td style="text-align:left;">
 0.004
@@ -4047,7 +5071,7 @@ BMK_S1_67_mean_Boss
 BMK_S1_83_mean_Boss
 </td>
 <td style="text-align:left;">
-4.358 (0.636)
+0.000 (0.636)
 </td>
 <td style="text-align:left;">
 -0.031
@@ -4073,7 +5097,7 @@ BMK_S1_83_mean_Boss
 BMK_S1_86_mean_Boss
 </td>
 <td style="text-align:left;">
-4.553 (0.577)
+-0.000 (0.577)
 </td>
 <td style="text-align:left;">
 -0.006
@@ -4966,7 +5990,7 @@ Direct Report
 0.29
 </td>
 <td style="text-align:left;">
--2.06
+-2.05
 </td>
 </tr>
 <tr>
@@ -5000,7 +6024,7 @@ Peer
 0.20
 </td>
 <td style="text-align:left;">
--2.97
+-2.96
 </td>
 </tr>
 <tr>

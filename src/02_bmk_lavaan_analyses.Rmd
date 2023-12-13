@@ -85,6 +85,9 @@ competency_full_name <- get_competency_full_name(factor_name)
 
 ```{r basic-missing-statistic, echo=FALSE, cache=FALSE, warning=FALSE, include=FALSE}
 
+log4r::info(report, sprintf("[*,02] Creating basic statistics for %s sample.", tolower(sample_name)))
+
+
 cat("#### Checking for missing data before building the models\n\n")
 cat("### Missing Data Counts\n\n")
 
@@ -110,9 +113,39 @@ missing_data %>%
 ```
 
 
+---
+
+```{r item-level-correlation-matrix, echo=FALSE}
+
+log4r::info(report, "[*,02] Item level correlation matrix")
+
+d <- df %>% 
+      dplyr::select(matches(competency_cols_names))
+
+d <- d[complete.cases(d),] 
+
+d_corr <- cor(d)
+
+cat("#### Correlation Matrix: Items\n")
+
+d_corr %>% 
+  kableExtra::kable(caption = sprintf("Correlation among items for <span style='color:#00838f;'>**%s**</span>", competency_full_name)) %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  kableExtra::column_spec(1, bold=TRUE)
 
 
-```{r first-order, results="asis", echo=FALSE, warning=FALSE}
+```
+
+---
+
+```{r first-order, results="asis", echo=FALSE, warning=FALSE, include=FALSE}
+
+log4r::info(report, "[*,02] First order model. Ignoring")
+
+df <- df %>% 
+  remove_missing_from_competency(df=.
+                                , column_names=columns_to_remove_missing_values
+                                , regex_pattern = TRUE)
 
 if(tolower(sample_name) == 'normative') {
   cat("---\n\n")
@@ -160,14 +193,20 @@ if(tolower(sample_name) == 'normative') {
 
 ```{r bifactor, results="asis", warning=FALSE, echo=FALSE}
 
+log4r::info(report, "[*,02] Bifactor Model")
+
 if(tolower(sample_name) == 'normative'){ 
   cat("### Bifactor model\n") 
 
+  log4r::info(report, "[*,02] Creating model")
   bifactor <- build_bifactor_model(df=df
                                    , competency_cols_names=competency_cols_names
                                    , factor_name=factor_name
                                    , raters=raters
                                    , regex_pattern = regex_pattern)
+  
+  log4r::info(report, sprintf("[*,02] model: %s", bifactor))
+  
   
   if(show_model){
     cat(bifactor %>% 
@@ -175,11 +214,19 @@ if(tolower(sample_name) == 'normative'){
       kableExtra::kable_styling())
   }
   
-  bifactor_fits <- lavaan_model_fit(df=df, model=bifactor)
+  log4r::info(report, "[*,02] Item level correlation matrix")
+  bifactor_fits <<- lavaan_model_fit(df=df, model=bifactor)
+
+  log4r::info(report, "[*,02] Storing factor weights - mod_scores")
+  
+  ## store the factor weights for correlating with predicted scores
+  mod_scores <<- bifactor_fits$orthogonal$fitted 
+  log4r::info(report, sprintf("[*,02] Dim: %s", dim(mod_scores)))
   
 } else {
   cat("The lavaan first order and bifactor models are run only on the normative sample. Ideally, the factor weights from the normative samples generalize to new data samples with similar statistics as the normative samples. To test the generalizability, we use the same factor weights from normative sample on the cross-validation sample. Therefore, the first order and bifactor models are not run for cross-validation sample. ")
 }
+
 
 ```
 
@@ -193,6 +240,8 @@ if(tolower(sample_name) == 'normative'){
 
 if(tolower(sample_name) == 'normative'){
   
+  log4r::info(report, "[*,02] getting factor scoring weights")
+  
   factor_weights <<- get_factor_scoring_weights(fitted_values=bifactor_fits$orthogonal$fitted
                                                 , which="fsm")
 }
@@ -204,13 +253,16 @@ if(tolower(sample_name) == 'normative'){
 ```{r remove-missing-values, echo=FALSE, warning=FALSE}
 
 ## remove missing values for the columns
+log4r::info(report, "[*,02] Remove missing values")
+log4r::info(report, sprintf("[*,02] Before: ",dim(df)))
 
 df <- df %>% 
-  select(matches(columns_for_analyses)) %>% 
+  dplyr::select(matches(columns_for_analyses)) %>% 
   remove_missing_from_competency(df=.
                                 , column_names=columns_to_remove_missing_values
                                 , regex_pattern = TRUE)
 
+log4r::info(report, sprintf("[*,02] After: ",dim(df)))
 
 ```
 
@@ -219,19 +271,23 @@ df <- df %>%
 
 ```{r merge-factor-weights, echo=FALSE, warning=FALSE}
 
+log4r::info(report, "[*,02] Merging the factor weights")
+
 ## merge the factor weights with the raw item responses. This will broadcast for all rows
+columns_to_center <- colnames(df)
 df <- df %>% 
       dplyr::bind_cols(factor_weights) %>%
       as.data.frame()
 
-
+log4r::info(report, "[*,02] centering the data")
 ## scale and the factor weights
 df_merged <- scale_and_center_columns(df=df
-                              , column_names = colnames(factor_weights)
-                              , center = FALSE)
+                              , column_names = columns_to_center
+                              , center = TRUE)
 
-## remove df for memory maangement
+## remove df for memory management
 remove(df)
+
 
 ```
 
@@ -241,6 +297,7 @@ remove(df)
 ```{r factor-score, echo=FALSE, results='asis', warning=FALSE}
 
 ## to calculate the factor scores, we need to first create models for lavaan. The code below generates the model for all raters, reputation and arena. It creates factor scores by weighting/summing the item responses by the relevant factor scoring weights
+log4r::info(report, "[*,02] Generate factor scores")
 
 factor_score_equations <- generate_factor_scores(df=df_merged
                       , competency_cols = factor_weights_competency_cols
@@ -250,18 +307,47 @@ factor_score_equations <- generate_factor_scores(df=df_merged
                       , regex_pattern = TRUE
                       , suffix = "LV")
 
+log4r::info(report, sprintf("[*,02] equation: %s", factor_score_equations))
+
 # if(show_model){
 #     cat(factor_score_equations %>% 
 #       kableExtra::kable(col.names = "", caption = "Equations to calculate factor scores") %>%
 #       kableExtra::kable_styling())
 # }
 
+log4r::info(report, "[*,02] Calculate factor scores")
 
 df_merged <- calculate_factor_scores(df=df_merged
                                      , factor_score_equations=factor_score_equations)
 
+log4r::info(report, sprintf("[*,02] data with factor scores - dim: %s", dim(df_merged)))
+
 
 n = nrow(df_merged)
+
+
+```
+
+
+
+```{r factor-scores-correlation, echo=FALSE}
+
+if(tolower(sample_name) == 'normative'){
+  
+  log4r::info(report, "[*,02] Factor scores correlation")
+
+  df_merged_names <<- colnames(df_merged)
+  
+  corr_df <- df_merged %>% 
+    dplyr::select(Self_LV, Direct_Report_LV, Peer_LV, Boss_LV, reputation_LV, arena_LV)
+  
+  cc <- cor(corr_df, as.data.frame(mod_scores))
+  
+  cc %>% 
+    kableExtra::kable(caption = sprintf("Verify that the newly created scores are identical to lavaan-generated scores")) %>%
+    kableExtra::kable_styling(bootstrap_options = c("striped", "hover"))
+  
+}
 
 ```
 
@@ -484,11 +570,11 @@ if(tolower(sample_name) == 'normative'){
     dplyr::select(selective_colnames) %>%
     tibble::add_column(competency = competency_name, .before="Self_LV")
   
-  if(!exists("factors_df")){
-    factors_df <- data.frame()
+  if(!exists("random_factors_df")){
+    random_factors_df <- data.frame()
   }
   
-  factors_df <<- dplyr::bind_rows(factors_df, random_sample_df)
+  random_factors_df <<- dplyr::bind_rows(random_factors_df, random_sample_df)
 }
 
 ```

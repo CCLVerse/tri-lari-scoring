@@ -19,11 +19,14 @@
 calculate_factor_scores <- function(df=data.frame(), factor_score_equations=character()){
 
     validate_df(df)
-
+  
+    log4r::info(report, "[*, calc-factor-scores] Calculating factor scores.")
     edf <- purrr::map_dfc(factor_score_equations, ~ evaluate_function(df, .))
+    log4r::info(report, "[*, calc-factor-scores] complete.")
+    log4r::info(report, sprintf("[*, dim] Edf dim: ", ncol(edf)))
 
     df <- cbind(df, edf)
-
+    df_bk <<- df
     return(df)
 }
 

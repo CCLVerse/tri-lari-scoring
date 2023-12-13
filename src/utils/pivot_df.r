@@ -27,6 +27,8 @@ pivot_df <- function(df=NULL, var=NULL, id_column=NULL){
         validate_df(df)
     }
 
+    log4r::info(report, "[*,pivot_df] Pivoting data wider")
+  
     df <- df %>% 
         tidyr::pivot_wider(
               id_cols = c(id_column)
@@ -34,6 +36,9 @@ pivot_df <- function(df=NULL, var=NULL, id_column=NULL){
             , values_from = setdiff(names(df), c(id_column, var))
         )
 
+    log4r::info(report, "[*,pivot_df] Replace NaN with NA")
+    log4r::info(report, "[*,pivot_df] Remove spaces")
+    
     ## replace nan with na
     ## rename the columns to remove spaces
     df <- df %>%

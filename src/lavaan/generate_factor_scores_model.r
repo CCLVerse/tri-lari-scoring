@@ -89,6 +89,8 @@ generate_factor_scores <- function(df=data.frame(), competency_cols=character(),
     latent_variables <- clean_raters(latent_variables)
 
     latent_variable_names <- sprintf("%s_%s", latent_variables, suffix)
+    log4r::info(report, sprintf("[*,02] suffix: %s", latent_variable_names))
+    
 
     result <- invisible(
         lapply(latent_variables, function(x) {

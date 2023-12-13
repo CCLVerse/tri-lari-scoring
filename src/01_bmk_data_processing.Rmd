@@ -46,6 +46,9 @@ The resulting data frame `avg_scores_by_raters_df` will be used in `lavaan` anal
 
 ```{r preprocess-df, echo=FALSE, warning=FALSE}
 
+log4r::info(report, "[*,01] Getting average item scores by rater")
+
+
 ## get average item scores by rater
 avg_scores_by_rater_df <- avg_scores_by_raters(df=df
                                           , required_cols=required_cols
@@ -55,6 +58,8 @@ avg_scores_by_rater_df <- avg_scores_by_raters(df=df
                                           , grouping_cols=grouping_cols)
 
 
+log4r::info(report, "[*,01] Filter rows for all leaders")
+
 ## Filter the rows for all leaders with all required raters
 avg_scores_by_rater_df <- filter_rows_with_all_raters(df=avg_scores_by_rater_df
                           , id_column = "ESI_Key"
@@ -62,6 +67,7 @@ avg_scores_by_rater_df <- filter_rows_with_all_raters(df=avg_scores_by_rater_df
                           , rater_colname = c("RaterType"))
 
 
+log4r::info(report, "[*,01] Pivoting data for raters average scores on the columns")
 
 ## Pivot the dataframe such that raters average scores are the columns
 avg_scores_by_rater_df <<- pivot_df(df=avg_scores_by_rater_df

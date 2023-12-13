@@ -28,7 +28,7 @@ lavaan_model_fit <- function(df=data.frame(), model=as.character()){
         stop("Model doesn't seem to be proper format.")
     }
 
-
+    log4r::info(report, "[*,lavaan fit] oblique fit")
     ## Oblique fit
     oblique.fit <- lavaan::cfa(model, data=df)
     oblique.summary <- get_fit_summary(fit=oblique.fit)
@@ -38,6 +38,7 @@ lavaan_model_fit <- function(df=data.frame(), model=as.character()){
                     summary=oblique.summary,
                     fitted=oblique.fitted)
 
+    log4r::info(report, "[*, lavaan fit] orthogonal fit")
     ## orthogonal fit
     ortho.fit <- lavaan::cfa(model, data=df, orthogonal=TRUE)
     ortho.summary <- get_fit_summary(fit=ortho.fit)
@@ -72,6 +73,8 @@ get_fit_summary <- function(fit=NULL){
     if(is.null(fit) && is.na(fit)){
         stop("Model fit is required.")
     }
+    
+    log4r::info(report, "[*, get fit summary] Get sumary fit")
     s <- lavaan::summary(fit, fit.measures = TRUE)
 
     return(s)

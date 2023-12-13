@@ -17,6 +17,8 @@ source("./src/init.R")
 
 ```{r}
 
+log4r::info(report, "[*,main] Initiating analyses")
+
 BMK2018_A <- load_data(source=sprintf("%s/data/BMK2018_A.RData", getwd()), raters=raters)
 
 BMK2018_B <- load_data(source=sprintf("%s/data/BMK2018_B.RData", getwd()), raters=raters)
@@ -40,12 +42,18 @@ data_B <- list(BMK2018_B, "Cross-validation") %>% setNames(c("data", "sample_nam
 
 ```{r decisiveness, echo=FALSE}
 
+log4r::info(report, "[*,main] Analyzing decisiveness data")
+
+
 #  1. Decisiveness
 decisive <- get_variables_for_analyses(df = BMK2018_A, columns = decisive_cols, factor_name = "decisive")
 
 
 ## Loop through the normative and cross-validation samples to create the analyses. For each loop, the code will process the data and get it ready for the lavaan analyses. 
 sapply(list(data_A, data_B), function(x) {
+  
+  log4r::info(report, "[*,main] Rendering first file - BMK2018_A")
+
   
   ## data processing
   render_data_processing(data=x$data, 
@@ -59,6 +67,8 @@ sapply(list(data_A, data_B), function(x) {
                         competency_item_cols=decisive$competency_item_cols)
   
   
+  
+  log4r::info(report, "[*,main] Rendering second file - BMK2018_A")
   
   ## lavan analyses for decisiveness
   render_lavaan_analyses(
@@ -314,5 +324,10 @@ sapply(list(data_A, data_B), function(x) {
 
 ```
 
+```{r save-factors-df, echo=FALSE}
 
+write.csv(random_factors_df, "random_sample_20_ldrs.csv")
+
+
+```
 

@@ -54,3 +54,9 @@ rsconnect/
 datamaps/
 data/
 misc/
+
+# all csv files
+*.csv
+
+# logs
+logs/
