@@ -115,7 +115,7 @@ missing_data %>%
 
 ---
 
-```{r item-level-correlation-matrix, echo=FALSE}
+```{r item-level-correlation-matrix, results='asis', echo=FALSE}
 
 log4r::info(report, "[*,02] Item level correlation matrix")
 
@@ -124,9 +124,9 @@ d <- df %>%
 
 d <- d[complete.cases(d),] 
 
-d_corr <- cor(d)
+d_corr <- round(cor(d),3)
 
-cat("#### Correlation Matrix: Items\n")
+cat("#### Correlation Matrix: Items\n\n")
 
 d_corr %>% 
   kableExtra::kable(caption = sprintf("Correlation among items for <span style='color:#00838f;'>**%s**</span>", competency_full_name)) %>%
@@ -196,7 +196,7 @@ if(tolower(sample_name) == 'normative') {
 log4r::info(report, "[*,02] Bifactor Model")
 
 if(tolower(sample_name) == 'normative'){ 
-  cat("### Bifactor model\n") 
+  cat("### Bifactor model\n\n") 
 
   log4r::info(report, "[*,02] Creating model")
   bifactor <- build_bifactor_model(df=df
@@ -268,6 +268,18 @@ log4r::info(report, sprintf("[*,02] After: ",dim(df)))
 
 
 
+```{r competency-statistics, echo=FALSE, warning=FALSE}
+
+## calculate the statistics (mean and sd) of the data. This data will be merged with the factor_weights statistics to display in table 1. 
+
+statistics <- compute_statistics(df=df
+                                 , columns = competency_cols_with_factor_weights
+                                 , regex_pattern = TRUE)
+
+
+```
+
+
 
 ```{r merge-factor-weights, echo=FALSE, warning=FALSE}
 
@@ -284,6 +296,8 @@ log4r::info(report, "[*,02] centering the data")
 df_merged <- scale_and_center_columns(df=df
                               , column_names = columns_to_center
                               , center = TRUE)
+
+df_merged <- df
 
 ## remove df for memory management
 remove(df)
@@ -351,19 +365,6 @@ if(tolower(sample_name) == 'normative'){
 
 ```
 
-
-
-
-```{r competency-statistics, echo=FALSE, warning=FALSE}
-
-## calculate the statistics (mean and sd) of the data. This data will be merged with the factor_weights statistics to display in table 1. 
-
-statistics <- compute_statistics(df=df_merged
-                                 , columns = competency_cols_with_factor_weights
-                                 , regex_pattern = TRUE)
-
-
-```
 
 ---
 
@@ -550,8 +551,28 @@ if(tolower(sample_name) == 'normative'){
 ```
 
 
+```{r, store_data_for_diff, echo=FALSE}
 
-```{r save-df, echo=FALSE}
+if(tolower(sample_name) == 'cross-validation'){
+  lam_vars <- c("Self_LV", "Direct_Report_LV", "Boss_LV", "Peer_LV","reputation_LV", "arena_LV")
+  sam_vars <- c("Self_Avg", "Direct_Report_Avg", "Boss_Avg", "Peer_Avg", "Inf_Avg", "All_Avg")
+  
+  # factor_df <- df_merged %>% 
+  #   dplyr::select(ESI_Key, matches(competency_cols_names), all_of(lam_vars), all_of(sam_vars))
+  # 
+  factor_df <- df_merged %>%
+      mutate(abs_diff = abs(Inf_Avg) - abs(reputation_LV),
+             percent_diff = (abs_diff / abs(Inf_Avg)) * 100
+             )
+  
+  assign(sprintf("%s_df", tolower(factor_name)), factor_df, envir = .GlobalEnv)
+}
+
+```
+
+
+
+```{r 20-random-ldrs-df, echo=FALSE}
 
 if(tolower(sample_name) == 'normative'){
 
