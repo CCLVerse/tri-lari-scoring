@@ -2,7 +2,7 @@
 
 This repository contains a set of R functions designed for data processing and Bi-Factor Leadership Arena, Reputation, and Identity analyses using the `lavaan` package. These functions aim to streamline the process of preparing the data and running LARI model for benchmark studies. 
 
-The code is supplemental to the paper titled: [EJP Paper Title]
+The code is supplemental to the paper titled: TBD
 
 ## Table of Contents
 - [Prerequisites](#prerequisites)
@@ -28,7 +28,7 @@ pkgs <- c("remotes",
 		  "log4r", 
 		  "lm.beta")
 
-
+load_packages(pkgs)
 
 
 ```
