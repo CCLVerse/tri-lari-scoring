@@ -1,5 +1,3 @@
-# Improved README File
-
 ## Evaluating a Novel Method for Scoring Multi-Rater Assessments of Leadership Competencies
 
 In the field of leadership development, 360-degree assessments are crucial tools. These multi-rater instruments allow leaders to evaluate themselves on various competencies while also receiving feedback from a wide range of stakeholders, including peers, direct reports, and supervisors. Despite the value of 360-degree assessments, challenges in scoring these instruments persist. Our research introduces a Latent Approximation Method (LAM) as a novel scoring approach. Leveraging recent advancements in modeling multi-rater data, we offer a preliminary empirical evaluation of the LAM. By applying this method to data from an international sample involving approximately 17,000 leaders and 150,000 raters, we explored the utility of LAM scoring in depth.
