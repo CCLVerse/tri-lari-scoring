@@ -16,6 +16,9 @@ source("./src/globals.r")
 # load all required packages
 load_packages(c('tidyverse', 
                 'log4r', 
+                'DT',
+                'kableExtra',
+                'lavaan',
                 'lm.beta'))
 
 

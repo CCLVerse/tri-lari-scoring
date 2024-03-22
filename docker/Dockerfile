@@ -12,16 +12,16 @@ COPY ./docker/rstudio-prefs.json /home/rstudio/.config/rstudio/
 RUN chown rstudio:rstudio /home/rstudio/.config/rstudio/rstudio-prefs.json
 
 ## Install R Package
-RUN install2.r remotes \
-                devtools \
-                DT \
-                rmarkdown \
-                tidyverse \
-                knitr \
-                kableExtra \
-                lavaan \
-                rlang \
-                log4r \
-                lm.beta \
-                && rm -rf /tmp/downloaded_packages
+#RUN install2.r remotes \
+#                devtools \
+#                DT \
+#                rmarkdown \
+#                tidyverse \
+#                knitr \
+#                kableExtra \
+#                lavaan \
+#                rlang \
+#                log4r \
+#                lm.beta \
+#                && rm -rf /tmp/downloaded_packages
 
