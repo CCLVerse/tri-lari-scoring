@@ -15,7 +15,7 @@ load_R_scripts_recursive <- function(directory) {
     files <- list.files(x, full.names = TRUE)
     
     # Load all R script files in the directory
-    R_files <- files[grepl("\\.r$", files, ignore.case = TRUE)]
+    R_files <- files[grepl("\\.R|r$", files, ignore.case = TRUE)]
     
     if (length(R_files) > 0) {
       invisible(sapply(R_files, source))
