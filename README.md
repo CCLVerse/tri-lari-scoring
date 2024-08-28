@@ -59,6 +59,8 @@ docker-compose up
 
 Once the prerequisites have been set up, you can proceed with the data processing and analysis as detailed in the repository. The process is illustrated in the provided process map, guiding you through the steps necessary to prepare your data and execute the LARI model analysis.
 
+![Process flow](images/Process-map.png)
+
 ### License
 
 Please refer to the LICENSE file for details on the distribution, usage, and contribution guidelines.
