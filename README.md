@@ -64,7 +64,3 @@ Once the prerequisites have been set up, you can proceed with the data processin
 ### License
 
 Please refer to the LICENSE file for details on the distribution, usage, and contribution guidelines.
-
-### Contact
-
-For inquiries or further information regarding this project, please contact the repository maintainers.
