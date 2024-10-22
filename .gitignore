@@ -57,10 +57,11 @@ misc/
 
 # all csv files
 *.csv
-.DS_Store
+.DS_Store/
 
 output/
 
 # logs
 logs/
 documentation.md
+main.ipynb
